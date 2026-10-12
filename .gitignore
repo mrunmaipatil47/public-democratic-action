@@ -1,0 +1,9 @@
+# generated output
+site/
+exports/
+# tooling
+node_modules/
+*.log
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,58 @@
+{
+  "items": [
+    {
+      "id": "evidence",
+      "name": "Evidence",
+      "description": "verify one public claim, identify its source and denominator, and record what remains uncertain."
+    },
+    {
+      "id": "law-and-jurisdiction",
+      "name": "Law and jurisdiction",
+      "description": "correct one owner/remedy map and explain the governing procedure."
+    },
+    {
+      "id": "research-and-data",
+      "name": "Research and data",
+      "description": "audit public records, clean datasets or examine repeated service failures without exposing personal identities."
+    },
+    {
+      "id": "language-and-communication",
+      "name": "Language and communication",
+      "description": "translate one issue brief into Marathi, Hindi or another relevant language; check meaning with users."
+    },
+    {
+      "id": "accessibility",
+      "name": "Accessibility",
+      "description": "review an intake journey or document with disabled participants and compensate specialist review where possible."
+    },
+    {
+      "id": "design-and-software",
+      "name": "Design and software",
+      "description": "test a synthetic intake/appeal workflow for routing, privacy, failure recovery and harmful automation."
+    },
+    {
+      "id": "deliberation",
+      "name": "Deliberation",
+      "description": "facilitate a small remote session that records evidence, counterarguments, agreement and dissent."
+    },
+    {
+      "id": "on-ground-connection",
+      "name": "On-ground connection",
+      "description": "ask affected people what the draft misunderstands; relay their corrections with consent and attribution preferences."
+    }
+  ],
+  "form": {
+    "fields": [
+      "issue ID",
+      "proposed correction/task",
+      "evidence link",
+      "method",
+      "effort and availability chosen by the contributor",
+      "privacy needs",
+      "reviewer",
+      "expected output",
+      "credit/consent preference"
+    ],
+    "caveat": "Do not imply that a volunteer promises unpaid professional legal representation or indefinite support."
+  }
+}

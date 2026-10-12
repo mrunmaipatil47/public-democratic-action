@@ -1,0 +1,212 @@
+[
+  {
+    "id": "d01",
+    "slug": "democracy-public-voice-and-media",
+    "name": "Democracy, public voice and media",
+    "range": [
+      "001",
+      "010"
+    ],
+    "issueIds": [
+      "001",
+      "002",
+      "003",
+      "004",
+      "005",
+      "006",
+      "007",
+      "008",
+      "009",
+      "010"
+    ]
+  },
+  {
+    "id": "d02",
+    "slug": "justice-safety-and-the-rule-of-law",
+    "name": "Justice, safety and the rule of law",
+    "range": [
+      "011",
+      "020"
+    ],
+    "issueIds": [
+      "011",
+      "012",
+      "013",
+      "014",
+      "015",
+      "016",
+      "017",
+      "018",
+      "019",
+      "020"
+    ]
+  },
+  {
+    "id": "d03",
+    "slug": "livelihoods-work-and-household-economics",
+    "name": "Livelihoods, work and household economics",
+    "range": [
+      "021",
+      "030"
+    ],
+    "issueIds": [
+      "021",
+      "022",
+      "023",
+      "024",
+      "025",
+      "026",
+      "027",
+      "028",
+      "029",
+      "030"
+    ]
+  },
+  {
+    "id": "d04",
+    "slug": "health-nutrition-and-care",
+    "name": "Health, nutrition and care",
+    "range": [
+      "031",
+      "040"
+    ],
+    "issueIds": [
+      "031",
+      "032",
+      "033",
+      "034",
+      "035",
+      "036",
+      "037",
+      "038",
+      "039",
+      "040"
+    ]
+  },
+  {
+    "id": "d05",
+    "slug": "education-knowledge-and-opportunity",
+    "name": "Education, knowledge and opportunity",
+    "range": [
+      "041",
+      "050"
+    ],
+    "issueIds": [
+      "041",
+      "042",
+      "043",
+      "044",
+      "045",
+      "046",
+      "047",
+      "048",
+      "049",
+      "050"
+    ]
+  },
+  {
+    "id": "d06",
+    "slug": "equality-dignity-and-social-protection",
+    "name": "Equality, dignity and social protection",
+    "range": [
+      "051",
+      "060"
+    ],
+    "issueIds": [
+      "051",
+      "052",
+      "053",
+      "054",
+      "055",
+      "056",
+      "057",
+      "058",
+      "059",
+      "060"
+    ]
+  },
+  {
+    "id": "d07",
+    "slug": "housing-local-services-and-mobility",
+    "name": "Housing, local services and mobility",
+    "range": [
+      "061",
+      "070"
+    ],
+    "issueIds": [
+      "061",
+      "062",
+      "063",
+      "064",
+      "065",
+      "066",
+      "067",
+      "068",
+      "069",
+      "070"
+    ]
+  },
+  {
+    "id": "d08",
+    "slug": "agriculture-rural-livelihoods-and-food-systems",
+    "name": "Agriculture, rural livelihoods and food systems",
+    "range": [
+      "071",
+      "080"
+    ],
+    "issueIds": [
+      "071",
+      "072",
+      "073",
+      "074",
+      "075",
+      "076",
+      "077",
+      "078",
+      "079",
+      "080"
+    ]
+  },
+  {
+    "id": "d09",
+    "slug": "environment-climate-and-natural-resources",
+    "name": "Environment, climate and natural resources",
+    "range": [
+      "081",
+      "090"
+    ],
+    "issueIds": [
+      "081",
+      "082",
+      "083",
+      "084",
+      "085",
+      "086",
+      "087",
+      "088",
+      "089",
+      "090"
+    ]
+  },
+  {
+    "id": "d10",
+    "slug": "digital-rights-finance-and-long-term-public-capacity",
+    "name": "Digital rights, finance and long-term public capacity",
+    "range": [
+      "091",
+      "100"
+    ],
+    "issueIds": [
+      "091",
+      "092",
+      "093",
+      "094",
+      "095",
+      "096",
+      "097",
+      "098",
+      "099",
+      "100"
+    ]
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "name": "public-democratic-action",
+  "version": "0.1.0",
+  "description": "Public Voice Between Elections: a discussion pack, structured data, accessible site and synthetic case-workflow prototype for continuous public participation in India.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "import": "python3 -I tools/import-pack.py content/source/public-voice-between-elections-v0.1.md data content/pack",
+    "validate": "node scripts/validate.mjs",
+    "export:csv": "node scripts/export-csv.mjs",
+    "build": "node scripts/build-site.mjs",
+    "serve": "node scripts/serve.mjs",
+    "simulate": "node src/cli.mjs simulate",
+    "test": "node --test tests/",
+    "typecheck": "npx -y -p typescript@5.6.3 tsc -p tsconfig.json",
+    "check": "npm run validate && npm test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrunmaipatil47/public-democratic-action"
+  }
+}

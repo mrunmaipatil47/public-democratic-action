@@ -1,0 +1,88 @@
+{
+  "sourceText": "Suggested process targets: receipt immediately digitally or within two working days with assistance; routing within seven calendar days; ordinary response within 21 calendar days unless governing law specifies otherwise; systemic admission decision within 30 days; hearing/decision normally within 60/90 days of admission. These are design targets. Applicable law and urgent safety procedures take precedence.",
+  "caveat": "These are design targets. Applicable law and urgent safety procedures take precedence.",
+  "targets": [
+    {
+      "id": "receipt-digital",
+      "stage": "receipt",
+      "description": "Receipt issued immediately for digital filings",
+      "days": 0,
+      "dayType": "calendar",
+      "from": "received",
+      "appliesTo": [
+        "digital"
+      ]
+    },
+    {
+      "id": "receipt-assisted",
+      "stage": "receipt",
+      "description": "Receipt issued within two working days when filing is assisted, offline, by telephone or by post",
+      "days": 2,
+      "dayType": "working",
+      "from": "received",
+      "appliesTo": [
+        "assisted",
+        "offline",
+        "telephone",
+        "postal"
+      ]
+    },
+    {
+      "id": "routing",
+      "stage": "routing",
+      "description": "Verified lead office, co-owners, applicable rules and response date set within seven calendar days",
+      "days": 7,
+      "dayType": "calendar",
+      "from": "received"
+    },
+    {
+      "id": "ordinary-response",
+      "stage": "response",
+      "description": "Reasoned response within 21 calendar days unless governing law specifies otherwise",
+      "days": 21,
+      "dayType": "calendar",
+      "from": "received",
+      "overridableByLaw": true
+    },
+    {
+      "id": "systemic-admission",
+      "stage": "admission",
+      "description": "Systemic admission decision within 30 days",
+      "days": 30,
+      "dayType": "calendar",
+      "from": "received",
+      "appliesTo": [
+        "systemic-review"
+      ]
+    },
+    {
+      "id": "systemic-hearing",
+      "stage": "hearing",
+      "description": "Hearing normally within 60 days of admission",
+      "days": 60,
+      "dayType": "calendar",
+      "from": "admitted",
+      "appliesTo": [
+        "systemic-review"
+      ]
+    },
+    {
+      "id": "systemic-decision",
+      "stage": "decision",
+      "description": "Decision normally within 90 days of admission",
+      "days": 90,
+      "dayType": "calendar",
+      "from": "admitted",
+      "appliesTo": [
+        "systemic-review"
+      ]
+    }
+  ],
+  "existingLawReference": {
+    "text": "DARPG’s August 2024 grievance guidelines generally use a 21-day framework with interim explanations where additional time is needed. RTI ordinarily has a 30-day response rule and a 48-hour life-or-liberty information provision, subject to the Act. Neither is a universal guarantee of a public hearing or policy change. \\[Sources 1–3\\]",
+    "cpgramsDays": 21,
+    "rtiDays": 30,
+    "rtiLifeOrLibertyHours": 48,
+    "note": "Existing statutory and administrative timelines are quoted from the pack's sources, not asserted as universal guarantees."
+  }
+}

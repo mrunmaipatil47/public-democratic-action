@@ -1,0 +1,45 @@
+{
+  "intro": "Institutional sources were checked on 13 October 2026. The 100-item taxonomy and suggested tasks are original proposals. Organisation descriptions are based on the official links in Section 7; willingness is an inference to test, not an established fact. Source statistics are not quoted as proof of national severity rankings.",
+  "items": [
+    {
+      "number": 1,
+      "title": "DARPG public-grievance guidelines, August 2024",
+      "url": "https://pgportal.gov.in/Home/Preview/Q29tcHJlaGVuc2l2ZUd1aWRlbGluZXNGb3JIYW5kbGluZ1RoZVB1YmxpY0dyaWV2YW5jZXMucGRm"
+    },
+    {
+      "number": 2,
+      "title": "DoPT, Right to Information Act—updated text",
+      "url": "https://dopt.gov.in/sites/default/files/RTI%20Act%202005%20%28updated%20as%20on%2018-11-2025%29.pdf"
+    },
+    {
+      "number": 3,
+      "title": "Lok Sabha Committee on Petitions—introduction",
+      "url": "https://www.sansad.in/getFile/LSSCOMMITTEE/Petitions/Introduction/Introduction..pdf?source=loksabhadocs"
+    },
+    {
+      "number": 4,
+      "title": "MoSPI, India SDG dashboard—coverage and indicator framework",
+      "url": "https://www.sdgindia2030.mospi.gov.in/dashboard/"
+    },
+    {
+      "number": 5,
+      "title": "NHRC FAQ—powers, procedures and recommendations",
+      "url": "https://nhrc.nic.in/faq"
+    },
+    {
+      "number": 6,
+      "title": "NALSA FAQ—legal services and eligibility",
+      "url": "https://nalsa.gov.in/faqs/"
+    },
+    {
+      "number": 7,
+      "title": "NIC, NeVA—legislative digitisation",
+      "url": "https://www.nic.gov.in/project/neva-national-e-vidhan/"
+    },
+    {
+      "number": 8,
+      "title": "ECI/PIB, proposed remote voting for domestic migrants, December 2022",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1887248"
+    }
+  ]
+}

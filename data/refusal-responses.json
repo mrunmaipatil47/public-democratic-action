@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "id": "silence",
+      "situation": "Silence",
+      "response": "preserve filing time, notify the responsible supervisor and enable review; record overdue status safely."
+    },
+    {
+      "id": "wrong-office",
+      "situation": "Wrong office",
+      "response": "coordinate a verified transfer; do not call a referral a resolved problem."
+    },
+    {
+      "id": "boilerplate-closure",
+      "situation": "Boilerplate closure",
+      "response": "request case-specific reasons, evidence and appeal information; preserve the challenge."
+    },
+    {
+      "id": "denied-entitlement",
+      "situation": "Denied entitlement",
+      "response": "use the applicable administrative, specialist or legal remedy after checking jurisdiction and deadlines."
+    },
+    {
+      "id": "systemic-failure",
+      "situation": "Systemic failure",
+      "response": "seek a hearing, representative scrutiny, eligible petition or audit review; retain lawful organising outside the platform."
+    },
+    {
+      "id": "retaliation-or-credible-harm",
+      "situation": "Retaliation or credible harm",
+      "response": "use protected referrals and appropriate rights/legal support; do not expose the person on a dashboard."
+    },
+    {
+      "id": "alleged-corruption",
+      "situation": "Alleged corruption",
+      "response": "preserve evidence and use competent vigilance/investigation channels. Allegations are not findings of guilt."
+    }
+  ],
+  "caveat": "No automatic fine, removal, court order or mandatory hearing is invented by this proposal. Any new enforceable consequence requires lawful authority and due process. Peaceful collective action, journalism and association must remain available outside the software."
+}

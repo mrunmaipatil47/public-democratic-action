@@ -1,0 +1,2627 @@
+[
+  {
+    "id": "001",
+    "slug": "fair-electoral-rolls-and-wrongful-exclusion",
+    "title": "Fair electoral rolls and wrongful exclusion",
+    "domainId": "d01",
+    "raise": [
+      "Voters",
+      "migrants",
+      "election observers"
+    ],
+    "answer": [
+      "Electoral Registration Officer",
+      "election authorities"
+    ],
+    "possibleChange": "Correct entries; publish review procedures and audit results",
+    "evidence": [
+      "Deletion notices",
+      "appeals",
+      "reversals",
+      "roll audit"
+    ],
+    "challengeRoutes": [
+      "A",
+      "I",
+      "P"
+    ]
+  },
+  {
+    "id": "002",
+    "slug": "portable-and-accessible-voting",
+    "title": "Portable and accessible voting",
+    "domainId": "d01",
+    "raise": [
+      "Absent voters",
+      "disabled voters",
+      "carers"
+    ],
+    "answer": [
+      "Election authorities",
+      "lawmakers for legal changes"
+    ],
+    "possibleChange": "Authorised remote/postal access; accessible polling",
+    "evidence": [
+      "Journey costs",
+      "failed journeys",
+      "polling access audits"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P",
+      "J"
+    ]
+  },
+  {
+    "id": "003",
+    "slug": "political-finance-transparency",
+    "title": "Political finance transparency",
+    "domainId": "d01",
+    "raise": [
+      "Citizens",
+      "researchers",
+      "parties"
+    ],
+    "answer": [
+      "Election authorities",
+      "relevant finance/enforcement bodies",
+      "Parliament"
+    ],
+    "possibleChange": "Disclosure rules; lawful investigations; funding reform",
+    "evidence": [
+      "Disclosed contributions",
+      "expenditure",
+      "compliance records"
+    ],
+    "challengeRoutes": [
+      "I",
+      "V",
+      "P"
+    ]
+  },
+  {
+    "id": "004",
+    "slug": "public-corruption-and-bribery",
+    "title": "Public corruption and bribery",
+    "domainId": "d01",
+    "raise": [
+      "Service users",
+      "workers",
+      "protected informants"
+    ],
+    "answer": [
+      "Department head",
+      "competent vigilance or anti-corruption authority"
+    ],
+    "possibleChange": "Investigate allegations; repair controls; lawful disciplinary action",
+    "evidence": [
+      "Transaction records",
+      "protected testimony",
+      "inquiry findings"
+    ],
+    "challengeRoutes": [
+      "V",
+      "J"
+    ]
+  },
+  {
+    "id": "005",
+    "slug": "procurement-and-public-contract-integrity",
+    "title": "Procurement and public contract integrity",
+    "domainId": "d01",
+    "raise": [
+      "Residents",
+      "bidders",
+      "workers",
+      "auditors"
+    ],
+    "answer": [
+      "Procuring authority",
+      "oversight/audit bodies"
+    ],
+    "possibleChange": "Publish contract changes; investigate conflicts; improve procurement",
+    "evidence": [
+      "Tender criteria",
+      "awards",
+      "amendments",
+      "delivery verification"
+    ],
+    "challengeRoutes": [
+      "I",
+      "V",
+      "P"
+    ]
+  },
+  {
+    "id": "006",
+    "slug": "local-government-powers-and-funding",
+    "title": "Local-government powers and funding",
+    "domainId": "d01",
+    "raise": [
+      "Residents",
+      "panchayats",
+      "ward groups"
+    ],
+    "answer": [
+      "Local executive",
+      "state local-government/finance departments"
+    ],
+    "possibleChange": "Devolve responsibilities; fund services; public budget hearings",
+    "evidence": [
+      "Mandates",
+      "transfers",
+      "spending",
+      "service outcomes"
+    ],
+    "challengeRoutes": [
+      "A",
+      "I",
+      "P"
+    ]
+  },
+  {
+    "id": "007",
+    "slug": "federal-coordination-and-inter-state-accountability",
+    "title": "Federal coordination and inter-state accountability",
+    "domainId": "d01",
+    "raise": [
+      "Affected residents",
+      "state institutions"
+    ],
+    "answer": [
+      "Responsible Union/state departments",
+      "intergovernmental forums"
+    ],
+    "possibleChange": "Joint action plans; clarify duties and dispute routes",
+    "evidence": [
+      "Unresolved referrals",
+      "agreements",
+      "implementation dates"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "008",
+    "slug": "information-access-and-official-secrecy",
+    "title": "Information access and official secrecy",
+    "domainId": "d01",
+    "raise": [
+      "Citizens",
+      "journalists",
+      "researchers"
+    ],
+    "answer": [
+      "Public authority PIO",
+      "RTI appellate bodies"
+    ],
+    "possibleChange": "Disclose lawful records; improve proactive publication",
+    "evidence": [
+      "Request delays",
+      "lawful exemptions",
+      "appeal outcomes"
+    ],
+    "challengeRoutes": [
+      "I",
+      "J"
+    ]
+  },
+  {
+    "id": "009",
+    "slug": "journalist-safety-and-editorial-independence",
+    "title": "Journalist safety and editorial independence",
+    "domainId": "d01",
+    "raise": [
+      "Journalists",
+      "sources",
+      "readers"
+    ],
+    "answer": [
+      "Police for threats",
+      "relevant public authorities",
+      "media bodies within remit"
+    ],
+    "possibleChange": "Protect people; investigate threats; disclose state advertising policy",
+    "evidence": [
+      "Threat reports",
+      "investigations",
+      "advertising allocations"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "I",
+      "P"
+    ]
+  },
+  {
+    "id": "010",
+    "slug": "media-ownership-misinformation-and-public-interest-debate",
+    "title": "Media ownership, misinformation and public-interest debate",
+    "domainId": "d01",
+    "raise": [
+      "Audiences",
+      "researchers",
+      "affected communities"
+    ],
+    "answer": [
+      "Relevant information/competition authorities",
+      "publishers",
+      "legislatures"
+    ],
+    "possibleChange": "Ownership transparency; corrections; pluralism; lawful policy reform",
+    "evidence": [
+      "Ownership records",
+      "correction logs",
+      "ad transparency"
+    ],
+    "challengeRoutes": [
+      "R",
+      "P",
+      "I"
+    ]
+  },
+  {
+    "id": "011",
+    "slug": "police-complaints-and-refusal-to-register-offences",
+    "title": "Police complaints and refusal to register offences",
+    "domainId": "d02",
+    "raise": [
+      "Complainants",
+      "witnesses",
+      "authorised supporters"
+    ],
+    "answer": [
+      "Station leadership",
+      "supervisory police",
+      "competent magistrate"
+    ],
+    "possibleChange": "Lawful registration/inquiry; reasoned decisions; supervision",
+    "evidence": [
+      "Complaint receipts",
+      "refusal records",
+      "follow-up actions"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "J"
+    ]
+  },
+  {
+    "id": "012",
+    "slug": "custodial-violence-and-deaths",
+    "title": "Custodial violence and deaths",
+    "domainId": "d02",
+    "raise": [
+      "Detainees",
+      "families",
+      "lawyers",
+      "witnesses"
+    ],
+    "answer": [
+      "Police/prison leadership",
+      "competent investigating body"
+    ],
+    "possibleChange": "Protect people; preserve evidence; independent lawful investigation",
+    "evidence": [
+      "Medical records",
+      "custody records",
+      "inquiry findings"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J"
+    ]
+  },
+  {
+    "id": "013",
+    "slug": "court-delay-and-procedural-access",
+    "title": "Court delay and procedural access",
+    "domainId": "d02",
+    "raise": [
+      "Litigants",
+      "lawyers",
+      "researchers"
+    ],
+    "answer": [
+      "Court administration",
+      "justice departments for resources"
+    ],
+    "possibleChange": "Scheduling and staffing improvements; accessible filing",
+    "evidence": [
+      "Pendency by case type",
+      "age",
+      "vacancies",
+      "waiting times"
+    ],
+    "challengeRoutes": [
+      "P",
+      "I",
+      "J"
+    ]
+  },
+  {
+    "id": "014",
+    "slug": "undertrial-detention-and-prison-conditions",
+    "title": "Undertrial detention and prison conditions",
+    "domainId": "d02",
+    "raise": [
+      "Prisoners",
+      "families",
+      "lawyers"
+    ],
+    "answer": [
+      "Prison administration",
+      "legal-services institutions",
+      "competent courts"
+    ],
+    "possibleChange": "Legal assistance; bail review; healthcare and conditions",
+    "evidence": [
+      "Detention duration",
+      "legal access",
+      "inspections"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "J"
+    ]
+  },
+  {
+    "id": "015",
+    "slug": "affordable-legal-aid",
+    "title": "Affordable legal aid",
+    "domainId": "d02",
+    "raise": [
+      "Eligible people",
+      "community organisations"
+    ],
+    "answer": [
+      "District/state legal-services authorities"
+    ],
+    "possibleChange": "Assign counsel; explain eligibility; improve assistance",
+    "evidence": [
+      "Application outcomes",
+      "counsel access",
+      "client experience"
+    ],
+    "challengeRoutes": [
+      "A",
+      "J"
+    ]
+  },
+  {
+    "id": "016",
+    "slug": "sexual-violence-and-survivor-centred-justice",
+    "title": "Sexual violence and survivor-centred justice",
+    "domainId": "d02",
+    "raise": [
+      "Survivors",
+      "consented advocates",
+      "clinicians"
+    ],
+    "answer": [
+      "Police",
+      "health services",
+      "prosecution and support agencies"
+    ],
+    "possibleChange": "Protection, medical care, lawful investigation, support",
+    "evidence": [
+      "Private service-access records",
+      "delay and attrition"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "A"
+    ]
+  },
+  {
+    "id": "017",
+    "slug": "communal-violence-and-hate-based-intimidation",
+    "title": "Communal violence and hate-based intimidation",
+    "domainId": "d02",
+    "raise": [
+      "Targeted communities",
+      "witnesses",
+      "residents"
+    ],
+    "answer": [
+      "Police/district administration",
+      "relevant rights bodies"
+    ],
+    "possibleChange": "Protection; impartial investigation; relief and prevention",
+    "evidence": [
+      "Incident verification",
+      "protection requests",
+      "relief delivery"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "P"
+    ]
+  },
+  {
+    "id": "018",
+    "slug": "trafficking-bonded-labour-and-forced-work",
+    "title": "Trafficking, bonded labour and forced work",
+    "domainId": "d02",
+    "raise": [
+      "Affected workers",
+      "families",
+      "witnesses"
+    ],
+    "answer": [
+      "District administration",
+      "labour department",
+      "police"
+    ],
+    "possibleChange": "Rescue with safeguards; wages; rehabilitation; investigation",
+    "evidence": [
+      "Verified cases",
+      "recovery",
+      "rehabilitation access"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "A"
+    ]
+  },
+  {
+    "id": "019",
+    "slug": "internal-conflict-civilian-protection-and-displacement",
+    "title": "Internal conflict, civilian protection and displacement",
+    "domainId": "d02",
+    "raise": [
+      "Affected residents",
+      "displaced people",
+      "rights observers"
+    ],
+    "answer": [
+      "Competent civil/security authorities",
+      "Union/state departments"
+    ],
+    "possibleChange": "Civilian safeguards; relief; lawful accountability; dialogue",
+    "evidence": [
+      "Verified harm",
+      "relief access",
+      "independent findings"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "P"
+    ]
+  },
+  {
+    "id": "020",
+    "slug": "border-community-safety-and-public-emergency-communication",
+    "title": "Border-community safety and public emergency communication",
+    "domainId": "d02",
+    "raise": [
+      "Border residents",
+      "families",
+      "local responders"
+    ],
+    "answer": [
+      "District/state authorities",
+      "relevant Union ministries"
+    ],
+    "possibleChange": "Shelters, warnings, compensation and accountable response",
+    "evidence": [
+      "Warning reach",
+      "evacuation access",
+      "compensation records"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "P"
+    ]
+  },
+  {
+    "id": "021",
+    "slug": "youth-employment-and-dignified-job-access",
+    "title": "Youth employment and dignified job access",
+    "domainId": "d03",
+    "raise": [
+      "Jobseekers",
+      "workers",
+      "employers",
+      "educators"
+    ],
+    "answer": [
+      "State employment/skills departments",
+      "relevant Union departments"
+    ],
+    "possibleChange": "Recruitment reform; employment programmes; local job plans",
+    "evidence": [
+      "Vacancies",
+      "recruitment delays",
+      "employment quality"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P",
+      "I"
+    ]
+  },
+  {
+    "id": "022",
+    "slug": "wage-theft-and-delayed-payment",
+    "title": "Wage theft and delayed payment",
+    "domainId": "d03",
+    "raise": [
+      "Workers",
+      "unions",
+      "authorised advocates"
+    ],
+    "answer": [
+      "Employer",
+      "competent labour authority"
+    ],
+    "possibleChange": "Recover lawful dues; inspect; enforce applicable protections",
+    "evidence": [
+      "Payslips",
+      "attendance",
+      "dues and recovery records"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "J"
+    ]
+  },
+  {
+    "id": "023",
+    "slug": "informal-worker-recognition-and-benefits",
+    "title": "Informal-worker recognition and benefits",
+    "domainId": "d03",
+    "raise": [
+      "Informal workers",
+      "worker organisations"
+    ],
+    "answer": [
+      "Labour department",
+      "scheme administrators"
+    ],
+    "possibleChange": "Accessible registration; portable benefits; exclusions review",
+    "evidence": [
+      "Registration failures",
+      "benefit receipt",
+      "coverage gaps"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "024",
+    "slug": "gig-and-platform-worker-protections",
+    "title": "Gig and platform-worker protections",
+    "domainId": "d03",
+    "raise": [
+      "Platform workers",
+      "associations",
+      "customers"
+    ],
+    "answer": [
+      "Relevant labour/transport departments",
+      "platforms"
+    ],
+    "possibleChange": "Fair terms, grievance channels, lawful benefit reform",
+    "evidence": [
+      "Contracts",
+      "deductions",
+      "deactivations",
+      "appeals"
+    ],
+    "challengeRoutes": [
+      "R",
+      "P",
+      "J"
+    ]
+  },
+  {
+    "id": "025",
+    "slug": "occupational-safety-and-hazardous-work",
+    "title": "Occupational safety and hazardous work",
+    "domainId": "d03",
+    "raise": [
+      "Workers",
+      "neighbours",
+      "families"
+    ],
+    "answer": [
+      "Labour/safety inspectorate",
+      "employer",
+      "relevant regulators"
+    ],
+    "possibleChange": "Inspection; hazard removal; lawful compensation",
+    "evidence": [
+      "Injury records",
+      "inspections",
+      "hazard controls"
+    ],
+    "challengeRoutes": [
+      "R",
+      "H",
+      "J"
+    ]
+  },
+  {
+    "id": "026",
+    "slug": "pension-and-social-security-access",
+    "title": "Pension and social-security access",
+    "domainId": "d03",
+    "raise": [
+      "Eligible workers",
+      "retirees",
+      "families"
+    ],
+    "answer": [
+      "Relevant pension/social-security agency"
+    ],
+    "possibleChange": "Correct accounts; release dues; accessible claims",
+    "evidence": [
+      "Pending claims",
+      "errors",
+      "payment continuity"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "J"
+    ]
+  },
+  {
+    "id": "027",
+    "slug": "cost-of-living-and-essential-price-pressure",
+    "title": "Cost of living and essential-price pressure",
+    "domainId": "d03",
+    "raise": [
+      "Households",
+      "consumer groups",
+      "researchers"
+    ],
+    "answer": [
+      "Relevant food/consumer/finance authorities"
+    ],
+    "possibleChange": "Explain price drivers; lawful relief and market measures",
+    "evidence": [
+      "Price series",
+      "household burden",
+      "programme reach"
+    ],
+    "challengeRoutes": [
+      "P",
+      "R",
+      "I"
+    ]
+  },
+  {
+    "id": "028",
+    "slug": "small-business-and-cooperative-viability",
+    "title": "Small-business and cooperative viability",
+    "domainId": "d03",
+    "raise": [
+      "Small firms",
+      "cooperatives",
+      "self-employed people"
+    ],
+    "answer": [
+      "Relevant state/Union enterprise departments",
+      "lenders"
+    ],
+    "possibleChange": "Payment recovery; simplify services; fair credit access",
+    "evidence": [
+      "Delayed invoices",
+      "approval times",
+      "credit decisions"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "029",
+    "slug": "fair-taxation-and-accessible-compliance",
+    "title": "Fair taxation and accessible compliance",
+    "domainId": "d03",
+    "raise": [
+      "Taxpayers",
+      "small enterprises",
+      "researchers"
+    ],
+    "answer": [
+      "Competent tax authority",
+      "finance departments",
+      "legislatures"
+    ],
+    "possibleChange": "Correct assessments; improve procedures; deliberate tax changes",
+    "evidence": [
+      "Appeals",
+      "compliance costs",
+      "revenue/distribution analysis"
+    ],
+    "challengeRoutes": [
+      "A",
+      "J",
+      "P"
+    ]
+  },
+  {
+    "id": "030",
+    "slug": "consumer-debt-and-abusive-recovery",
+    "title": "Consumer debt and abusive recovery",
+    "domainId": "d03",
+    "raise": [
+      "Borrowers",
+      "families",
+      "consumer advocates"
+    ],
+    "answer": [
+      "Lender",
+      "applicable regulator/ombudsman",
+      "police for threats"
+    ],
+    "possibleChange": "Correct charges; fair recovery; lawful redress",
+    "evidence": [
+      "Loan terms",
+      "collection records",
+      "complaint outcomes"
+    ],
+    "challengeRoutes": [
+      "R",
+      "J"
+    ]
+  },
+  {
+    "id": "031",
+    "slug": "accessible-primary-healthcare",
+    "title": "Accessible primary healthcare",
+    "domainId": "d04",
+    "raise": [
+      "Patients",
+      "residents",
+      "health workers"
+    ],
+    "answer": [
+      "District health administration",
+      "state health department"
+    ],
+    "possibleChange": "Staff clinics; ensure medicines and opening hours",
+    "evidence": [
+      "Vacancies",
+      "stockouts",
+      "travel and waiting times"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "032",
+    "slug": "public-hospital-capacity-and-quality",
+    "title": "Public hospital capacity and quality",
+    "domainId": "d04",
+    "raise": [
+      "Patients",
+      "staff",
+      "carers"
+    ],
+    "answer": [
+      "Hospital leadership",
+      "state health department"
+    ],
+    "possibleChange": "Improve staffing, beds, referral and safety systems",
+    "evidence": [
+      "Waiting times",
+      "referrals",
+      "audits",
+      "service availability"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "033",
+    "slug": "medical-costs-and-insurance-exclusions",
+    "title": "Medical costs and insurance exclusions",
+    "domainId": "d04",
+    "raise": [
+      "Patients",
+      "families",
+      "consumer groups"
+    ],
+    "answer": [
+      "Provider/insurer",
+      "applicable regulator",
+      "health authorities"
+    ],
+    "possibleChange": "Explain charges; correct denial; review financial protection",
+    "evidence": [
+      "Bills",
+      "denial reasons",
+      "appeals",
+      "out-of-pocket burden"
+    ],
+    "challengeRoutes": [
+      "R",
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "034",
+    "slug": "maternal-and-reproductive-healthcare",
+    "title": "Maternal and reproductive healthcare",
+    "domainId": "d04",
+    "raise": [
+      "Women",
+      "pregnant people",
+      "carers",
+      "clinicians"
+    ],
+    "answer": [
+      "District/state health services"
+    ],
+    "possibleChange": "Safe care, referral, informed consent and continuity",
+    "evidence": [
+      "Care access",
+      "referral delay",
+      "verified clinical outcomes"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "R"
+    ]
+  },
+  {
+    "id": "035",
+    "slug": "child-nutrition-and-anaemia-prevention",
+    "title": "Child nutrition and anaemia prevention",
+    "domainId": "d04",
+    "raise": [
+      "Families",
+      "children through safeguards",
+      "frontline workers"
+    ],
+    "answer": [
+      "Women/child development and health departments"
+    ],
+    "possibleChange": "Improve nutrition services, supply and outreach",
+    "evidence": [
+      "Service coverage",
+      "stockouts",
+      "consented health data"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "036",
+    "slug": "mental-healthcare-and-suicide-prevention",
+    "title": "Mental healthcare and suicide prevention",
+    "domainId": "d04",
+    "raise": [
+      "Service users",
+      "carers",
+      "clinicians"
+    ],
+    "answer": [
+      "Health department",
+      "relevant mental-health authorities"
+    ],
+    "possibleChange": "Accessible treatment, crisis referral, rights safeguards",
+    "evidence": [
+      "Availability",
+      "waiting times",
+      "rights complaints"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "P"
+    ]
+  },
+  {
+    "id": "037",
+    "slug": "addiction-care-and-rehabilitation-rights",
+    "title": "Addiction care and rehabilitation rights",
+    "domainId": "d04",
+    "raise": [
+      "Service users",
+      "families",
+      "care workers"
+    ],
+    "answer": [
+      "Health/social-justice departments",
+      "facility oversight bodies"
+    ],
+    "possibleChange": "Voluntary evidence-based care; inspect facilities; protect rights",
+    "evidence": [
+      "Consent records",
+      "complaints",
+      "treatment continuity"
+    ],
+    "challengeRoutes": [
+      "H",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "038",
+    "slug": "infectious-disease-preparedness",
+    "title": "Infectious-disease preparedness",
+    "domainId": "d04",
+    "raise": [
+      "Residents",
+      "clinicians",
+      "public-health researchers"
+    ],
+    "answer": [
+      "District/state public health",
+      "relevant Union agencies"
+    ],
+    "possibleChange": "Surveillance, vaccination, supplies and clear communication",
+    "evidence": [
+      "Testing access",
+      "supply readiness",
+      "verified outbreak data"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P",
+      "I"
+    ]
+  },
+  {
+    "id": "039",
+    "slug": "chronic-disease-treatment-continuity",
+    "title": "Chronic disease treatment continuity",
+    "domainId": "d04",
+    "raise": [
+      "Patients",
+      "carers",
+      "clinicians"
+    ],
+    "answer": [
+      "Health services and scheme administrators"
+    ],
+    "possibleChange": "Reliable medicines, screening and follow-up",
+    "evidence": [
+      "Medicine availability",
+      "follow-up access",
+      "affordability"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "040",
+    "slug": "rehabilitation-palliative-and-long-term-care",
+    "title": "Rehabilitation, palliative and long-term care",
+    "domainId": "d04",
+    "raise": [
+      "Disabled people",
+      "older people",
+      "carers"
+    ],
+    "answer": [
+      "Health/social-care departments",
+      "providers"
+    ],
+    "possibleChange": "Accessible rehabilitation and pain/care support",
+    "evidence": [
+      "Service availability",
+      "consent and continuity"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "041",
+    "slug": "foundational-learning-and-school-quality",
+    "title": "Foundational learning and school quality",
+    "domainId": "d05",
+    "raise": [
+      "Students with safeguards",
+      "parents",
+      "teachers"
+    ],
+    "answer": [
+      "School leadership",
+      "district/state education department"
+    ],
+    "possibleChange": "Teaching support; appropriate assessments; school improvement",
+    "evidence": [
+      "Learning evidence",
+      "attendance",
+      "facilities"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "042",
+    "slug": "teacher-vacancies-workload-and-support",
+    "title": "Teacher vacancies, workload and support",
+    "domainId": "d05",
+    "raise": [
+      "Teachers",
+      "students",
+      "parents"
+    ],
+    "answer": [
+      "Education administration",
+      "teacher employers"
+    ],
+    "possibleChange": "Fill posts; improve training and workload allocation",
+    "evidence": [
+      "Vacancies",
+      "non-teaching duties",
+      "support access"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P",
+      "I"
+    ]
+  },
+  {
+    "id": "043",
+    "slug": "school-inclusion-and-dropout-prevention",
+    "title": "School inclusion and dropout prevention",
+    "domainId": "d05",
+    "raise": [
+      "Learners",
+      "families",
+      "community groups"
+    ],
+    "answer": [
+      "School/district education and welfare authorities"
+    ],
+    "possibleChange": "Accessible support; remove exclusion; re-entry routes",
+    "evidence": [
+      "Dropout/re-entry",
+      "exclusion notices",
+      "attendance barriers"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "P"
+    ]
+  },
+  {
+    "id": "044",
+    "slug": "higher-education-affordability-and-access",
+    "title": "Higher-education affordability and access",
+    "domainId": "d05",
+    "raise": [
+      "Students",
+      "families",
+      "institutions"
+    ],
+    "answer": [
+      "Institution",
+      "relevant higher-education department/regulator"
+    ],
+    "possibleChange": "Scholarship correction; fee transparency; access policy",
+    "evidence": [
+      "Fees",
+      "aid delays",
+      "enrolment barriers"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "045",
+    "slug": "exam-integrity-and-recruitment-fairness",
+    "title": "Exam integrity and recruitment fairness",
+    "domainId": "d05",
+    "raise": [
+      "Candidates",
+      "teachers",
+      "employers"
+    ],
+    "answer": [
+      "Exam/recruitment authority",
+      "relevant investigating bodies"
+    ],
+    "possibleChange": "Publish decisions; investigate breaches; lawful remedy",
+    "evidence": [
+      "Exam incidents",
+      "timelines",
+      "inquiry and remedy records"
+    ],
+    "challengeRoutes": [
+      "A",
+      "V",
+      "J"
+    ]
+  },
+  {
+    "id": "046",
+    "slug": "vocational-skills-and-apprenticeships",
+    "title": "Vocational skills and apprenticeships",
+    "domainId": "d05",
+    "raise": [
+      "Learners",
+      "workers",
+      "employers"
+    ],
+    "answer": [
+      "Skills departments",
+      "training/apprenticeship bodies"
+    ],
+    "possibleChange": "Relevant training; fair terms; outcome verification",
+    "evidence": [
+      "Completion",
+      "placements",
+      "wages",
+      "employer feedback"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "047",
+    "slug": "research-freedom-and-public-knowledge",
+    "title": "Research freedom and public knowledge",
+    "domainId": "d05",
+    "raise": [
+      "Researchers",
+      "students",
+      "public users"
+    ],
+    "answer": [
+      "Institutions",
+      "funding bodies",
+      "relevant departments"
+    ],
+    "possibleChange": "Transparent grants; due process; accessible research outputs",
+    "evidence": [
+      "Grant decisions",
+      "restrictions",
+      "publication access"
+    ],
+    "challengeRoutes": [
+      "A",
+      "I",
+      "P"
+    ]
+  },
+  {
+    "id": "048",
+    "slug": "adult-literacy-and-lifelong-learning",
+    "title": "Adult literacy and lifelong learning",
+    "domainId": "d05",
+    "raise": [
+      "Adult learners",
+      "workers",
+      "educators"
+    ],
+    "answer": [
+      "Education/local authorities",
+      "training providers"
+    ],
+    "possibleChange": "Flexible programmes; accessible materials and recognition",
+    "evidence": [
+      "Participation barriers",
+      "learning outcomes",
+      "provision"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "049",
+    "slug": "language-access-in-public-education",
+    "title": "Language access in public education",
+    "domainId": "d05",
+    "raise": [
+      "Learners",
+      "families",
+      "linguistic communities"
+    ],
+    "answer": [
+      "State education authorities",
+      "institutions"
+    ],
+    "possibleChange": "Accessible language support and lawful curriculum choices",
+    "evidence": [
+      "Materials",
+      "teacher availability",
+      "comprehension barriers"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "P"
+    ]
+  },
+  {
+    "id": "050",
+    "slug": "safe-educational-institutions-and-student-voice",
+    "title": "Safe educational institutions and student voice",
+    "domainId": "d05",
+    "raise": [
+      "Students",
+      "parents",
+      "staff",
+      "consented advocates"
+    ],
+    "answer": [
+      "Institution leadership",
+      "applicable education/rights bodies"
+    ],
+    "possibleChange": "Safeguarding; fair grievance process; student participation",
+    "evidence": [
+      "Private complaints",
+      "response quality",
+      "retaliation reports"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "R"
+    ]
+  },
+  {
+    "id": "051",
+    "slug": "caste-discrimination-and-exclusion",
+    "title": "Caste discrimination and exclusion",
+    "domainId": "d06",
+    "raise": [
+      "Affected people",
+      "community groups",
+      "witnesses"
+    ],
+    "answer": [
+      "Relevant public authority",
+      "police for offences",
+      "competent commissions"
+    ],
+    "possibleChange": "Protection; lawful investigation; institutional reform",
+    "evidence": [
+      "Verified complaints",
+      "service denial",
+      "remedial action"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "A"
+    ]
+  },
+  {
+    "id": "052",
+    "slug": "adivasi-land-forest-and-participation-rights",
+    "title": "Adivasi land, forest and participation rights",
+    "domainId": "d06",
+    "raise": [
+      "Affected communities",
+      "Gram Sabhas",
+      "authorised advocates"
+    ],
+    "answer": [
+      "Competent district/forest/tribal-welfare authorities"
+    ],
+    "possibleChange": "Lawful claims review; consultation; remedy displacement",
+    "evidence": [
+      "Claim decisions",
+      "consent/consultation records",
+      "appeals"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "J"
+    ]
+  },
+  {
+    "id": "053",
+    "slug": "gender-equality-in-work-and-public-life",
+    "title": "Gender equality in work and public life",
+    "domainId": "d06",
+    "raise": [
+      "Women",
+      "worker groups",
+      "employers",
+      "residents"
+    ],
+    "answer": [
+      "Employers",
+      "labour/equality-related authorities",
+      "legislatures"
+    ],
+    "possibleChange": "Equal access; fair procedures; care-compatible policies",
+    "evidence": [
+      "Pay/access analysis",
+      "complaints",
+      "participation barriers"
+    ],
+    "challengeRoutes": [
+      "R",
+      "H",
+      "P"
+    ]
+  },
+  {
+    "id": "054",
+    "slug": "domestic-violence-and-safe-housing",
+    "title": "Domestic violence and safe housing",
+    "domainId": "d06",
+    "raise": [
+      "Survivors",
+      "consented supporters",
+      "service workers"
+    ],
+    "answer": [
+      "Protection officers",
+      "police",
+      "support services",
+      "competent courts"
+    ],
+    "possibleChange": "Protection, shelter, financial and legal assistance",
+    "evidence": [
+      "Confidential access records",
+      "protection and service delays"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "A"
+    ]
+  },
+  {
+    "id": "055",
+    "slug": "child-safety-and-protection-systems",
+    "title": "Child safety and protection systems",
+    "domainId": "d06",
+    "raise": [
+      "Children through safe channels",
+      "carers",
+      "witnesses"
+    ],
+    "answer": [
+      "Child-protection bodies",
+      "police",
+      "relevant welfare departments"
+    ],
+    "possibleChange": "Safe placement, support, investigation and prevention",
+    "evidence": [
+      "Protected case records",
+      "service and placement audits"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "A"
+    ]
+  },
+  {
+    "id": "056",
+    "slug": "lgbtq-dignity-and-discrimination",
+    "title": "LGBTQ+ dignity and discrimination",
+    "domainId": "d06",
+    "raise": [
+      "Affected people",
+      "groups",
+      "consented advocates"
+    ],
+    "answer": [
+      "Responsible service authority",
+      "competent rights bodies"
+    ],
+    "possibleChange": "Correct service denial; lawful protection; policy review",
+    "evidence": [
+      "Protected complaints",
+      "access and remedy records"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "P"
+    ]
+  },
+  {
+    "id": "057",
+    "slug": "disability-access-and-reasonable-accommodation",
+    "title": "Disability access and reasonable accommodation",
+    "domainId": "d06",
+    "raise": [
+      "Disabled people",
+      "carers",
+      "access auditors"
+    ],
+    "answer": [
+      "Service owner",
+      "competent disability commissioner/regulator"
+    ],
+    "possibleChange": "Accessible buildings/services; accommodations and remediation",
+    "evidence": [
+      "Access audits",
+      "requests",
+      "refusal and remediation"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "R"
+    ]
+  },
+  {
+    "id": "058",
+    "slug": "older-person-protection-and-income-security",
+    "title": "Older-person protection and income security",
+    "domainId": "d06",
+    "raise": [
+      "Older people",
+      "carers",
+      "community groups"
+    ],
+    "answer": [
+      "Social-welfare authority",
+      "relevant maintenance/support bodies"
+    ],
+    "possibleChange": "Pension access; protection; community and care services",
+    "evidence": [
+      "Payment gaps",
+      "abuse reports",
+      "service access"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "J"
+    ]
+  },
+  {
+    "id": "059",
+    "slug": "migrant-entitlements-and-cross-state-access",
+    "title": "Migrant entitlements and cross-state access",
+    "domainId": "d06",
+    "raise": [
+      "Migrant workers",
+      "families",
+      "support organisations"
+    ],
+    "answer": [
+      "Relevant home/host-state service departments"
+    ],
+    "possibleChange": "Portable services; coordinated remedy; documentation support",
+    "evidence": [
+      "Cross-state refusals",
+      "transfers",
+      "service continuity"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "P"
+    ]
+  },
+  {
+    "id": "060",
+    "slug": "religious-freedom-and-equal-public-treatment",
+    "title": "Religious freedom and equal public treatment",
+    "domainId": "d06",
+    "raise": [
+      "Affected people",
+      "communities",
+      "witnesses"
+    ],
+    "answer": [
+      "Responsible public authority",
+      "police for threats",
+      "rights bodies"
+    ],
+    "possibleChange": "Protection; correct discrimination; lawful policy review",
+    "evidence": [
+      "Verified denials",
+      "threats",
+      "response and remedies"
+    ],
+    "challengeRoutes": [
+      "H",
+      "J",
+      "P"
+    ]
+  },
+  {
+    "id": "061",
+    "slug": "affordable-housing-and-homelessness",
+    "title": "Affordable housing and homelessness",
+    "domainId": "d07",
+    "raise": [
+      "Residents",
+      "tenants",
+      "unhoused people",
+      "advocates"
+    ],
+    "answer": [
+      "Local housing authority",
+      "state housing department"
+    ],
+    "possibleChange": "Shelters, rental/housing policy, allocation review",
+    "evidence": [
+      "Availability",
+      "applications",
+      "affordability",
+      "occupancy"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "062",
+    "slug": "evictions-tenure-and-rehabilitation",
+    "title": "Evictions, tenure and rehabilitation",
+    "domainId": "d07",
+    "raise": [
+      "Affected occupants",
+      "tenants",
+      "consented advocates"
+    ],
+    "answer": [
+      "Competent land/housing authority",
+      "applicable tribunal/court"
+    ],
+    "possibleChange": "Due process; review entitlement; lawful rehabilitation",
+    "evidence": [
+      "Notices",
+      "hearings",
+      "titles",
+      "rehabilitation records"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "J"
+    ]
+  },
+  {
+    "id": "063",
+    "slug": "safe-and-reliable-drinking-water",
+    "title": "Safe and reliable drinking water",
+    "domainId": "d07",
+    "raise": [
+      "Residents",
+      "schools",
+      "workers"
+    ],
+    "answer": [
+      "Local water utility",
+      "relevant state department"
+    ],
+    "possibleChange": "Test supply; repair systems; emergency provision",
+    "evidence": [
+      "Water tests",
+      "supply gaps",
+      "repair completion"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "064",
+    "slug": "accessible-toilets-and-sanitation",
+    "title": "Accessible toilets and sanitation",
+    "domainId": "d07",
+    "raise": [
+      "Residents",
+      "sanitation workers",
+      "users"
+    ],
+    "answer": [
+      "Local government",
+      "relevant rural/urban department"
+    ],
+    "possibleChange": "Provide and maintain safe accessible facilities",
+    "evidence": [
+      "Functionality",
+      "maintenance and access audits"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "065",
+    "slug": "waste-collection-and-worker-dignity",
+    "title": "Waste collection and worker dignity",
+    "domainId": "d07",
+    "raise": [
+      "Residents",
+      "waste workers",
+      "informal recyclers"
+    ],
+    "answer": [
+      "Local government",
+      "contractors",
+      "labour authorities"
+    ],
+    "possibleChange": "Reliable collection; worker safety; inclusive contracts",
+    "evidence": [
+      "Missed collection",
+      "safety",
+      "payment",
+      "disposal records"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "066",
+    "slug": "sewer-safety-and-sewage-treatment",
+    "title": "Sewer safety and sewage treatment",
+    "domainId": "d07",
+    "raise": [
+      "Residents",
+      "sewer workers",
+      "downstream users"
+    ],
+    "answer": [
+      "Local utility",
+      "pollution-control authority",
+      "labour oversight"
+    ],
+    "possibleChange": "Eliminate hazardous practices; repair and treat sewage",
+    "evidence": [
+      "Discharges",
+      "incidents",
+      "treatment and safety records"
+    ],
+    "challengeRoutes": [
+      "R",
+      "H",
+      "A"
+    ]
+  },
+  {
+    "id": "067",
+    "slug": "affordable-public-transport-and-accessibility",
+    "title": "Affordable public transport and accessibility",
+    "domainId": "d07",
+    "raise": [
+      "Passengers",
+      "disabled people",
+      "workers"
+    ],
+    "answer": [
+      "Transport operator",
+      "state/local transport authority"
+    ],
+    "possibleChange": "Routes, fares, accessible vehicles and service improvements",
+    "evidence": [
+      "Coverage",
+      "reliability",
+      "affordability",
+      "access audits"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "068",
+    "slug": "road-safety-and-safe-walking-cycling",
+    "title": "Road safety and safe walking/cycling",
+    "domainId": "d07",
+    "raise": [
+      "Road users",
+      "residents",
+      "families"
+    ],
+    "answer": [
+      "Road-owning authority",
+      "traffic police",
+      "transport department"
+    ],
+    "possibleChange": "Safe design; maintenance; lawful enforcement",
+    "evidence": [
+      "Crash locations",
+      "design audits",
+      "repair outcomes"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "069",
+    "slug": "reliable-electricity-and-fair-billing",
+    "title": "Reliable electricity and fair billing",
+    "domainId": "d07",
+    "raise": [
+      "Consumers",
+      "small firms",
+      "workers"
+    ],
+    "answer": [
+      "Distribution utility",
+      "electricity regulator"
+    ],
+    "possibleChange": "Correct bills; restore supply; improve service standards",
+    "evidence": [
+      "Outages",
+      "bills",
+      "complaints and decisions"
+    ],
+    "challengeRoutes": [
+      "R",
+      "A"
+    ]
+  },
+  {
+    "id": "070",
+    "slug": "urban-planning-public-space-and-resident-participation",
+    "title": "Urban planning, public space and resident participation",
+    "domainId": "d07",
+    "raise": [
+      "Residents",
+      "street vendors",
+      "workers",
+      "communities"
+    ],
+    "answer": [
+      "Planning/local authority",
+      "relevant state department"
+    ],
+    "possibleChange": "Participatory plans; lawful vending/public-space access",
+    "evidence": [
+      "Plans",
+      "hearings",
+      "access",
+      "displacement impacts"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P",
+      "J"
+    ]
+  },
+  {
+    "id": "071",
+    "slug": "farm-income-viability-and-fair-returns",
+    "title": "Farm-income viability and fair returns",
+    "domainId": "d08",
+    "raise": [
+      "Farmers",
+      "farm workers",
+      "producer groups"
+    ],
+    "answer": [
+      "Agriculture/marketing departments",
+      "relevant Union agencies"
+    ],
+    "possibleChange": "Market support; costs review; locally suited programmes",
+    "evidence": [
+      "Costs",
+      "prices",
+      "income variability",
+      "programme access"
+    ],
+    "challengeRoutes": [
+      "P",
+      "R",
+      "A"
+    ]
+  },
+  {
+    "id": "072",
+    "slug": "irrigation-access-and-water-allocation",
+    "title": "Irrigation access and water allocation",
+    "domainId": "d08",
+    "raise": [
+      "Farmers",
+      "downstream residents",
+      "water-user groups"
+    ],
+    "answer": [
+      "Water-resources authority",
+      "agriculture/local bodies"
+    ],
+    "possibleChange": "Repair systems; transparent allocations; conservation",
+    "evidence": [
+      "Delivery records",
+      "allocation decisions",
+      "disputes"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P",
+      "J"
+    ]
+  },
+  {
+    "id": "073",
+    "slug": "crop-insurance-claim-fairness",
+    "title": "Crop-insurance claim fairness",
+    "domainId": "d08",
+    "raise": [
+      "Insured farmers",
+      "producer groups"
+    ],
+    "answer": [
+      "Insurer",
+      "scheme administrator",
+      "applicable regulator"
+    ],
+    "possibleChange": "Explain and correct claims; improve assessment",
+    "evidence": [
+      "Assessment records",
+      "claim delays",
+      "appeals"
+    ],
+    "challengeRoutes": [
+      "R",
+      "A",
+      "J"
+    ]
+  },
+  {
+    "id": "074",
+    "slug": "land-records-and-tenant-farmer-access",
+    "title": "Land records and tenant-farmer access",
+    "domainId": "d08",
+    "raise": [
+      "Owners",
+      "tenants",
+      "cultivators",
+      "advocates"
+    ],
+    "answer": [
+      "Revenue/land authority",
+      "relevant agriculture department"
+    ],
+    "possibleChange": "Correct records; review lawful benefit access",
+    "evidence": [
+      "Records",
+      "applications",
+      "decisions",
+      "dispute outcomes"
+    ],
+    "challengeRoutes": [
+      "A",
+      "J",
+      "P"
+    ]
+  },
+  {
+    "id": "075",
+    "slug": "farm-markets-storage-and-supply-chains",
+    "title": "Farm markets, storage and supply chains",
+    "domainId": "d08",
+    "raise": [
+      "Farmers",
+      "traders",
+      "consumers",
+      "cooperatives"
+    ],
+    "answer": [
+      "Marketing/food departments",
+      "relevant market bodies"
+    ],
+    "possibleChange": "Storage and market access; fair rules; loss reduction",
+    "evidence": [
+      "Market access",
+      "storage capacity",
+      "payment and losses"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "076",
+    "slug": "food-safety-and-adulteration",
+    "title": "Food safety and adulteration",
+    "domainId": "d08",
+    "raise": [
+      "Consumers",
+      "workers",
+      "producers"
+    ],
+    "answer": [
+      "Competent food-safety authority"
+    ],
+    "possibleChange": "Inspect; test; recall/enforce within law",
+    "evidence": [
+      "Lab results",
+      "inspections",
+      "traceable enforcement"
+    ],
+    "challengeRoutes": [
+      "R",
+      "J"
+    ]
+  },
+  {
+    "id": "077",
+    "slug": "ration-access-and-food-security-exclusions",
+    "title": "Ration access and food-security exclusions",
+    "domainId": "d08",
+    "raise": [
+      "Eligible households",
+      "ration workers",
+      "advocates"
+    ],
+    "answer": [
+      "Food/civil-supplies department",
+      "statutory grievance bodies"
+    ],
+    "possibleChange": "Restore entitlement; alternatives to failed authentication",
+    "evidence": [
+      "Denials",
+      "stock",
+      "delivery and appeal records"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "J"
+    ]
+  },
+  {
+    "id": "078",
+    "slug": "climate-resilience-for-farmers",
+    "title": "Climate resilience for farmers",
+    "domainId": "d08",
+    "raise": [
+      "Farmers",
+      "farm workers",
+      "researchers"
+    ],
+    "answer": [
+      "Agriculture/water departments",
+      "disaster authorities"
+    ],
+    "possibleChange": "Advisories, adaptation support and loss response",
+    "evidence": [
+      "Warning reach",
+      "losses",
+      "adoption and recovery"
+    ],
+    "challengeRoutes": [
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "079",
+    "slug": "fisheries-coastal-livelihoods-and-livestock-care",
+    "title": "Fisheries, coastal livelihoods and livestock care",
+    "domainId": "d08",
+    "raise": [
+      "Fishers",
+      "pastoralists",
+      "small producers"
+    ],
+    "answer": [
+      "Relevant fisheries/animal-husbandry departments"
+    ],
+    "possibleChange": "Resource access; veterinary support; risk protection",
+    "evidence": [
+      "Access restrictions",
+      "disease/service records",
+      "losses"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "080",
+    "slug": "rural-employment-and-timely-wage-payment",
+    "title": "Rural employment and timely wage payment",
+    "domainId": "d08",
+    "raise": [
+      "Workers",
+      "Gram Sabhas",
+      "social-audit groups"
+    ],
+    "answer": [
+      "Relevant rural-development implementing authorities"
+    ],
+    "possibleChange": "Provide lawful work; pay dues; social-audit follow-up",
+    "evidence": [
+      "Demand",
+      "work allocation",
+      "payment delays",
+      "audit findings"
+    ],
+    "challengeRoutes": [
+      "A",
+      "V",
+      "J"
+    ]
+  },
+  {
+    "id": "081",
+    "slug": "air-pollution-and-exposure-reduction",
+    "title": "Air pollution and exposure reduction",
+    "domainId": "d09",
+    "raise": [
+      "Residents",
+      "workers",
+      "patients",
+      "researchers"
+    ],
+    "answer": [
+      "Pollution-control bodies",
+      "relevant source-owning authorities"
+    ],
+    "possibleChange": "Monitor; control emissions; enforce; health protection",
+    "evidence": [
+      "Calibrated monitoring",
+      "source records",
+      "compliance"
+    ],
+    "challengeRoutes": [
+      "R",
+      "P",
+      "J"
+    ]
+  },
+  {
+    "id": "082",
+    "slug": "river-and-lake-pollution",
+    "title": "River and lake pollution",
+    "domainId": "d09",
+    "raise": [
+      "Residents",
+      "downstream users",
+      "fishers"
+    ],
+    "answer": [
+      "Pollution-control bodies",
+      "local utility",
+      "relevant water authority"
+    ],
+    "possibleChange": "Stop unlawful discharge; treatment; restoration",
+    "evidence": [
+      "Water tests",
+      "discharge records",
+      "enforcement"
+    ],
+    "challengeRoutes": [
+      "R",
+      "J",
+      "P"
+    ]
+  },
+  {
+    "id": "083",
+    "slug": "groundwater-depletion-and-contamination",
+    "title": "Groundwater depletion and contamination",
+    "domainId": "d09",
+    "raise": [
+      "Residents",
+      "farmers",
+      "local groups"
+    ],
+    "answer": [
+      "Competent groundwater/water authorities"
+    ],
+    "possibleChange": "Testing, extraction controls and safe supply",
+    "evidence": [
+      "Levels",
+      "quality",
+      "permits",
+      "supply outcomes"
+    ],
+    "challengeRoutes": [
+      "R",
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "084",
+    "slug": "extreme-heat-and-worker-protection",
+    "title": "Extreme heat and worker protection",
+    "domainId": "d09",
+    "raise": [
+      "Workers",
+      "residents",
+      "carers",
+      "clinicians"
+    ],
+    "answer": [
+      "Local/state authorities",
+      "employers",
+      "labour/health departments"
+    ],
+    "possibleChange": "Heat plans; water/shelter; lawful work protections",
+    "evidence": [
+      "Heat exposure",
+      "warning reach",
+      "protective measures"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "085",
+    "slug": "flooding-drought-and-disaster-recovery",
+    "title": "Flooding, drought and disaster recovery",
+    "domainId": "d09",
+    "raise": [
+      "Affected residents",
+      "responders",
+      "communities"
+    ],
+    "answer": [
+      "Disaster-management bodies",
+      "local/state service authorities"
+    ],
+    "possibleChange": "Early warning; relief; resilient infrastructure",
+    "evidence": [
+      "Warning delivery",
+      "relief",
+      "damage and recovery"
+    ],
+    "challengeRoutes": [
+      "A",
+      "H",
+      "P"
+    ]
+  },
+  {
+    "id": "086",
+    "slug": "forest-protection-and-community-stewardship",
+    "title": "Forest protection and community stewardship",
+    "domainId": "d09",
+    "raise": [
+      "Forest communities",
+      "residents",
+      "researchers"
+    ],
+    "answer": [
+      "Forest/tribal authorities",
+      "relevant community institutions"
+    ],
+    "possibleChange": "Protect ecosystems and lawful community rights",
+    "evidence": [
+      "Forest records",
+      "rights claims",
+      "decisions",
+      "impacts"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "J"
+    ]
+  },
+  {
+    "id": "087",
+    "slug": "biodiversity-and-habitat-loss",
+    "title": "Biodiversity and habitat loss",
+    "domainId": "d09",
+    "raise": [
+      "Communities",
+      "fishers",
+      "researchers",
+      "conservation groups"
+    ],
+    "answer": [
+      "Relevant environment/forest/biodiversity authorities"
+    ],
+    "possibleChange": "Review impacts; protect habitats; lawful mitigation",
+    "evidence": [
+      "Habitat surveys",
+      "approvals",
+      "monitoring"
+    ],
+    "challengeRoutes": [
+      "R",
+      "P",
+      "J"
+    ]
+  },
+  {
+    "id": "088",
+    "slug": "plastic-hazardous-and-electronic-waste",
+    "title": "Plastic, hazardous and electronic waste",
+    "domainId": "d09",
+    "raise": [
+      "Residents",
+      "waste workers",
+      "producers"
+    ],
+    "answer": [
+      "Pollution-control bodies",
+      "local government",
+      "obligated producers"
+    ],
+    "possibleChange": "Safe collection/treatment; enforce producer duties",
+    "evidence": [
+      "Waste flows",
+      "compliance",
+      "worker exposure"
+    ],
+    "challengeRoutes": [
+      "R",
+      "A",
+      "P"
+    ]
+  },
+  {
+    "id": "089",
+    "slug": "mining-impacts-and-rehabilitation",
+    "title": "Mining impacts and rehabilitation",
+    "domainId": "d09",
+    "raise": [
+      "Affected communities",
+      "workers",
+      "downstream users"
+    ],
+    "answer": [
+      "Mining/environment authorities",
+      "district administration"
+    ],
+    "possibleChange": "Inspect impacts; lawful safeguards and rehabilitation",
+    "evidence": [
+      "Approvals",
+      "monitoring",
+      "restoration and compensation"
+    ],
+    "challengeRoutes": [
+      "R",
+      "H",
+      "J"
+    ]
+  },
+  {
+    "id": "090",
+    "slug": "fair-energy-transition-and-climate-finance",
+    "title": "Fair energy transition and climate finance",
+    "domainId": "d09",
+    "raise": [
+      "Workers",
+      "consumers",
+      "affected communities"
+    ],
+    "answer": [
+      "Relevant energy/finance departments",
+      "regulators"
+    ],
+    "possibleChange": "Transition support; fair tariffs; transparent spending",
+    "evidence": [
+      "Employment impacts",
+      "access",
+      "finance and emissions data"
+    ],
+    "challengeRoutes": [
+      "P",
+      "R",
+      "I"
+    ]
+  },
+  {
+    "id": "091",
+    "slug": "personal-data-protection-and-surveillance-limits",
+    "title": "Personal-data protection and surveillance limits",
+    "domainId": "d10",
+    "raise": [
+      "Affected people",
+      "researchers",
+      "public-interest groups"
+    ],
+    "answer": [
+      "Data-controlling authority",
+      "legally competent regulator/oversight body"
+    ],
+    "possibleChange": "Limit collection; correct misuse; lawful safeguards",
+    "evidence": [
+      "Data flows",
+      "legal grounds",
+      "access and retention records"
+    ],
+    "challengeRoutes": [
+      "R",
+      "I",
+      "J",
+      "P"
+    ]
+  },
+  {
+    "id": "092",
+    "slug": "digital-identity-failures-and-benefit-exclusion",
+    "title": "Digital identity failures and benefit exclusion",
+    "domainId": "d10",
+    "raise": [
+      "Service users",
+      "frontline workers",
+      "advocates"
+    ],
+    "answer": [
+      "Service-owning department",
+      "relevant identity authority"
+    ],
+    "possibleChange": "Correct records; alternative verification; restore access",
+    "evidence": [
+      "Failure logs",
+      "denial and correction outcomes"
+    ],
+    "challengeRoutes": [
+      "A",
+      "R",
+      "P"
+    ]
+  },
+  {
+    "id": "093",
+    "slug": "cyber-fraud-and-public-system-security",
+    "title": "Cyber fraud and public-system security",
+    "domainId": "d10",
+    "raise": [
+      "Victims",
+      "users",
+      "researchers through safe channels"
+    ],
+    "answer": [
+      "Institution security team",
+      "bank",
+      "cybercrime police as relevant"
+    ],
+    "possibleChange": "Contain harm; investigate; lawful recovery; secure services",
+    "evidence": [
+      "Protected incident records",
+      "response and remediation"
+    ],
+    "challengeRoutes": [
+      "R",
+      "J",
+      "A"
+    ]
+  },
+  {
+    "id": "094",
+    "slug": "internet-shutdowns-and-connectivity-access",
+    "title": "Internet shutdowns and connectivity access",
+    "domainId": "d10",
+    "raise": [
+      "Residents",
+      "workers",
+      "students",
+      "journalists"
+    ],
+    "answer": [
+      "Order-issuing authority",
+      "relevant telecom bodies"
+    ],
+    "possibleChange": "Publish lawful reasons; review restrictions; improve access",
+    "evidence": [
+      "Orders",
+      "duration",
+      "review records",
+      "service impacts"
+    ],
+    "challengeRoutes": [
+      "I",
+      "J",
+      "P"
+    ]
+  },
+  {
+    "id": "095",
+    "slug": "platform-accountability-and-algorithmic-visibility",
+    "title": "Platform accountability and algorithmic visibility",
+    "domainId": "d10",
+    "raise": [
+      "Users",
+      "creators",
+      "workers",
+      "researchers"
+    ],
+    "answer": [
+      "Platform grievance function",
+      "applicable regulator",
+      "lawmakers"
+    ],
+    "possibleChange": "Explain decisions; appeals; lawful transparency and reform",
+    "evidence": [
+      "Moderation/appeal records",
+      "ads and policy changes"
+    ],
+    "challengeRoutes": [
+      "R",
+      "P",
+      "J"
+    ]
+  },
+  {
+    "id": "096",
+    "slug": "ai-in-public-decisions-and-automation-harms",
+    "title": "AI in public decisions and automation harms",
+    "domainId": "d10",
+    "raise": [
+      "Affected applicants",
+      "workers",
+      "researchers"
+    ],
+    "answer": [
+      "Deploying department",
+      "procurement owner",
+      "competent oversight"
+    ],
+    "possibleChange": "Human review; impact assessment; correct harmful decisions",
+    "evidence": [
+      "Decision logs",
+      "error tests",
+      "appeals",
+      "contracts"
+    ],
+    "challengeRoutes": [
+      "A",
+      "I",
+      "P",
+      "J"
+    ]
+  },
+  {
+    "id": "097",
+    "slug": "banking-access-payments-and-financial-exclusion",
+    "title": "Banking access, payments and financial exclusion",
+    "domainId": "d10",
+    "raise": [
+      "Customers",
+      "small merchants",
+      "excluded households"
+    ],
+    "answer": [
+      "Bank/payment provider",
+      "applicable regulator/ombudsman"
+    ],
+    "possibleChange": "Correct failures; accessible accounts and redress",
+    "evidence": [
+      "Failures",
+      "charges",
+      "access and complaint outcomes"
+    ],
+    "challengeRoutes": [
+      "R",
+      "A"
+    ]
+  },
+  {
+    "id": "098",
+    "slug": "public-budgets-debt-and-spending-priorities",
+    "title": "Public budgets, debt and spending priorities",
+    "domainId": "d10",
+    "raise": [
+      "Residents",
+      "researchers",
+      "elected bodies"
+    ],
+    "answer": [
+      "Finance departments",
+      "spending departments",
+      "legislatures"
+    ],
+    "possibleChange": "Participatory priorities; transparent commitments; audit follow-up",
+    "evidence": [
+      "Budgets",
+      "actuals",
+      "liabilities",
+      "outcomes"
+    ],
+    "challengeRoutes": [
+      "I",
+      "V",
+      "P"
+    ]
+  },
+  {
+    "id": "099",
+    "slug": "official-statistics-and-evidence-integrity",
+    "title": "Official statistics and evidence integrity",
+    "domainId": "d10",
+    "raise": [
+      "Researchers",
+      "communities",
+      "service users"
+    ],
+    "answer": [
+      "Producing statistical agency",
+      "relevant department"
+    ],
+    "possibleChange": "Publish methods, revisions and disaggregated lawful data",
+    "evidence": [
+      "Methods",
+      "release calendars",
+      "gaps",
+      "uncertainty"
+    ],
+    "challengeRoutes": [
+      "I",
+      "P"
+    ]
+  },
+  {
+    "id": "100",
+    "slug": "infrastructure-reliability-and-intergenerational-planning",
+    "title": "Infrastructure reliability and intergenerational planning",
+    "domainId": "d10",
+    "raise": [
+      "Residents",
+      "young people",
+      "workers",
+      "future-interest advocates"
+    ],
+    "answer": [
+      "Asset-owning authority",
+      "planning/finance departments"
+    ],
+    "possibleChange": "Maintain assets; review long-term costs and resilience",
+    "evidence": [
+      "Asset condition",
+      "lifecycle budgets",
+      "risk and equity analysis"
+    ],
+    "challengeRoutes": [
+      "A",
+      "I",
+      "P",
+      "V"
+    ]
+  }
+]

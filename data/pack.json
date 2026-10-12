@@ -1,0 +1,20 @@
+{
+  "title": "Public Voice Between Elections",
+  "subtitle": "A discussion pack for civic and activist groups in India",
+  "tagline": "100 public-interest issues • practical routes for participation • existing organisations and remote contributions",
+  "version": "v0.1",
+  "dateText": "13 October 2026",
+  "date": "2026-10-13",
+  "purpose": "Prepared for discussion, correction and possible collaboration",
+  "disclaimer": "This is a proposal, not an endorsed movement platform. No organisation listed here has agreed to participate. The specific movement or coalition has not been identified; affiliations are therefore not asserted.",
+  "workingContext": "Working context: this pack adapts the India Public-Interest Agenda 100 v0.1 and the portable-voting rights specification from this conversation. It does not claim legal certification, existing institutional adoption or endorsement by any listed organisation.",
+  "aiAssistedNotice": "AI-assisted preparation. Check substantive claims, legal routes, translations and participant consent before adopting the text as a movement statement. Corrections and disagreement are welcome.",
+  "sourceDocument": "https://docs.google.com/document/d/1An_lifVztuO6YpC2VEJX4jfV9z8WT7DjQ2RfXCGYAio/",
+  "counts": {
+    "issues": 100,
+    "domains": 10,
+    "routes": 7,
+    "organisations": 13,
+    "sources": 8
+  }
+}

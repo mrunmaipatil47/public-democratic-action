@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "id": "open-intake",
+      "name": "Open intake",
+      "description": "people can raise concerns through assisted, offline, telephone, postal and accessible digital channels. No mandatory Aadhaar, smartphone or English proficiency."
+    },
+    {
+      "id": "named-responsibility",
+      "name": "Named responsibility",
+      "description": "every case has a verified lead office, relevant co-owners, applicable rules and an accountable response date."
+    },
+    {
+      "id": "reasoned-response",
+      "name": "Reasoned response",
+      "description": "explain evidence, jurisdiction, proposed action or refusal, and how to challenge the decision."
+    },
+    {
+      "id": "affected-person-deliberation",
+      "name": "Affected-person deliberation",
+      "description": "serious systemic issues receive a fair hearing, including counterarguments and preserved dissent."
+    },
+    {
+      "id": "evidence-of-change",
+      "name": "Evidence of change",
+      "description": "distinguish action promised, action completed and outcome independently verified."
+    },
+    {
+      "id": "protection",
+      "name": "Protection",
+      "description": "collect only necessary personal information; obtain consent for attribution; protect people from exposure and retaliation."
+    },
+    {
+      "id": "rights-before-popularity",
+      "name": "Rights before popularity",
+      "description": "low-volume harms are not discarded because they lack signatures, followers or media attention."
+    }
+  ],
+  "caveat": "These are proposed commitments requiring adoption. They are not existing universal legal guarantees. Electoral participation, RTI eligibility, statutory appeals and institutional mandates retain their own rules."
+}

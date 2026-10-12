@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "code": "A",
+      "name": "Administrative review",
+      "slug": "administrative-review",
+      "description": "Relevant service complaint, supervisor, statutory departmental appeal or CPGRAMS/state system where admissible. Check exclusions and deadlines."
+    },
+    {
+      "code": "I",
+      "name": "Information / RTI",
+      "slug": "information-rti",
+      "description": "Existing records through lawful disclosure or RTI for eligible citizens, with appropriate appeals. Information access does not itself enforce a remedy."
+    },
+    {
+      "code": "R",
+      "name": "Regulator or specialist redress",
+      "slug": "regulator-or-specialist-redress",
+      "description": "Competent regulator, ombudsman or statutory grievance body only within its remit and after applicable prerequisites."
+    },
+    {
+      "code": "H",
+      "name": "Rights or protection route",
+      "slug": "rights-or-protection-route",
+      "description": "Appropriate commission, protection service or specialist authority, subject to mandate and confidentiality. A recommendation is not necessarily a binding executable order."
+    },
+    {
+      "code": "J",
+      "name": "Qualified legal review / competent court or tribunal",
+      "slug": "qualified-legal-review-competent-court-or-tribunal",
+      "description": "Qualified advice, eligible legal aid and proper judicial/tribunal procedure. No guaranteed admission, relief or timing."
+    },
+    {
+      "code": "P",
+      "name": "Policy hearing / legislative scrutiny / lawful advocacy",
+      "slug": "policy-hearing-legislative-scrutiny-lawful-advocacy",
+      "description": "Proposed affected-person hearing, eligible petition, representative scrutiny, consultation or lawful advocacy. Automatic hearings require institutional adoption."
+    },
+    {
+      "code": "V",
+      "name": "Vigilance or audit referral",
+      "slug": "vigilance-or-audit-referral",
+      "description": "Competent vigilance, anti-corruption, social-audit or audit process. A referral is not a finding of guilt or a guarantee of compensation."
+    }
+  ],
+  "caveat": "These routes are options, not a compulsory ladder. Urgent protection and individual relief must not wait for a public hearing."
+}
