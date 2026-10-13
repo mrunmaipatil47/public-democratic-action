@@ -2,6 +2,8 @@
  * Module 3 tests: the site builds into a temporary directory and every generated page
  * satisfies the accessibility and traceability rules in docs/architecture.md.
  */
+// @ts-nocheck -- the assertions index Map.get() and String.match() results that the preceding
+// assertions have already proved present; guarding each one would hide the test's intent.
 
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -13,10 +15,10 @@ import { after, before, describe, test } from 'node:test';
 
 import { REPO_ROOT, build, escapingPaths, normaliseBaseUrl, searchIndex, sitemapXml } from '../scripts/build-site.mjs';
 import { contentTypeFor, createServer, languageRoots, resolveWithinRoot } from '../scripts/serve.mjs';
-import { STANDALONE_STYLE, en, langAttr, makeTranslator, relRootFor, safeUrl } from '../src/site/html.mjs';
-import { loadSite, throwProblems } from '../src/site/load.mjs';
+import { STANDALONE_STYLE, en, langAttr, makeTranslator, relRootFor, safeUrl, table } from '../src/site/html.mjs';
+import { loadSite, must, throwProblems } from '../src/site/load.mjs';
 import { escapeHtml, isSafeUrl, markdownToHtml, parseFrontmatter, renderInline, slugify } from '../src/site/markdown.mjs';
-import { APPENDIX_A_INTRO, APPENDIX_B_TITLE, FOUR_QUESTIONS, PACK_STATUS, VALIDATION_QUOTE, packVersionLabel } from '../src/site/pages/shared.mjs';
+import { APPENDIX_A_INTRO, APPENDIX_B_TITLE, FOUR_QUESTIONS, ORGANISATIONS_CAVEAT, PACK_STATUS, VALIDATION_QUOTE, packVersionLabel } from '../src/site/pages/shared.mjs';
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'pda-site-test-'));
 after(() => fs.rmSync(tmp, { recursive: true, force: true }));
@@ -194,6 +196,14 @@ describe('markdown converter', () => {
     assert.equal(renderInline('write to [us](mailto:someone@example.org)'), 'write to <a href="mailto:someone@example.org">us</a>');
   });
 
+  test('emphasis markers inside a URL never reach the href or the link text; emphasis around and inside a link still works', () => {
+    assert.equal(renderInline('see <https://example.org/a*b*c>'), 'see <a href="https://example.org/a*b*c">https://example.org/a*b*c</a>');
+    assert.equal(renderInline('see [docs](https://example.org/x**y**z) now'), 'see <a href="https://example.org/x**y**z">docs</a> now');
+    assert.equal(renderInline('*see [the docs](https://example.org/p*q) now*'), '<em>see <a href="https://example.org/p*q">the docs</a> now</em>');
+    assert.equal(renderInline('[**bold** link](https://example.org/)'), '<a href="https://example.org/"><strong>bold</strong> link</a>');
+    assert.equal(renderInline('a\0b <https://example.org/\0>'), 'ab <a href="https://example.org/">https://example.org/</a>', 'NUL is dropped, never confused with a parked link');
+  });
+
   test('only http, https and mailto URLs become links; javascript:, data:, vbscript:, relative and protocol-relative stay literal', () => {
     for (const url of ['javascript:alert(1)', 'JavaScript:alert(1)', 'data:text/html,hi', 'vbscript:msgbox', '../x.html', '//evil.example/', 'ftp://x.example/', 'https://']) {
       assert.equal(isSafeUrl(url), false, url);
@@ -287,6 +297,21 @@ describe('html helpers', () => {
     assert.equal(normaliseBaseUrl('https://example.org/site/'), 'https://example.org/site/');
     assert.throws(() => normaliseBaseUrl('not a url'), /absolute URL/);
     assert.throws(() => normaliseBaseUrl('ftp://example.org/'), /http or https/);
+    // A page path is appended to the base, so `…?x=1/index.html` or `…#f/index.html` would be wrong everywhere.
+    assert.throws(() => normaliseBaseUrl('https://example.org/sub?x=1'), /query string or fragment/);
+    assert.throws(() => normaliseBaseUrl('https://example.org/sub#f'), /query string or fragment/);
+  });
+
+  test('must returns the value or names what was missing; table() refuses an unsafe id', () => {
+    assert.equal(must(0, 'zero'), 0);
+    assert.equal(must('x', 'x'), 'x');
+    assert.throws(() => must(undefined, 'issue 999'), /Missing issue 999/);
+    assert.throws(() => must(null, 'route Z'), /Missing route Z/);
+    assert.throws(() => table({ id: 'bad id', caption: 'c', head: ['a'], rows: [] }), /unsafe id/);
+    assert.throws(() => table({ id: '1x', caption: 'c', head: ['a'], rows: [] }), /unsafe id/);
+    const html = table({ id: 'demo', caption: 'A <title>', head: ['H'], rows: [['r1', 'c1']] });
+    assert.ok(html.startsWith('<p class="table-title" id="demo-title" aria-hidden="true">A &lt;title&gt;</p>\n<div class="table-wrap" tabindex="0" role="region" aria-labelledby="demo-caption">'));
+    assert.ok(html.includes('<caption id="demo-caption" class="visually-hidden">A &lt;title&gt;</caption>'));
   });
 
   test('escapingPaths and throwProblems', () => {
@@ -310,6 +335,7 @@ describe('pack text quoted in the generator', () => {
     assert.ok(source.includes(`four questions: ${FOUR_QUESTIONS.join(' ')}`), 'FOUR_QUESTIONS in order');
     for (const question of FOUR_QUESTIONS) assert.ok(source.includes(question), question);
     assert.ok(source.includes(APPENDIX_B_TITLE), 'APPENDIX_B_TITLE');
+    assert.ok(source.includes(ORGANISATIONS_CAVEAT), 'ORGANISATIONS_CAVEAT');
   });
 
   test('the version is shown as the pack labels itself', () => {
@@ -410,8 +436,10 @@ describe('site build (English)', () => {
       assert.match(html, /<meta charset="utf-8">/, `${file}: charset`);
       assert.match(html, /<meta name="viewport" content="width=device-width, initial-scale=1">/, `${file}: viewport`);
       assert.match(html, /<meta name="description" content="[^"]+">/, `${file}: description`);
+      // Issue pages cover sensitive subjects, so no external site learns which page a visitor came from.
+      assert.match(html, /<meta name="referrer" content="no-referrer">/, `${file}: referrer policy`);
       assert.match(html, /<nav aria-label="Main"/, `${file}: main nav`);
-      for (const item of ['Home', 'Issues', 'Routes', 'Organisations', 'Process', 'Contribute', 'Sources', 'About']) {
+      for (const item of ['Home', 'Issues', 'Challenge routes', 'Organisations', 'Process', 'Contribute', 'Organising cycle', 'Sources', 'About']) {
         assert.match(html, new RegExp(`<li><a href="[^"]*"( aria-current="page")?>${item}</a></li>`), `${file}: nav ${item}`);
       }
       assert.match(html, /<footer class="site-footer">/, `${file}: footer`);
@@ -419,15 +447,26 @@ describe('site build (English)', () => {
       assert.ok(html.includes(escapeHtml(pack.aiAssistedNotice)), `${file}: AI-assisted notice`);
       assert.ok(html.includes(`<time datetime="${pack.date}">`), `${file}: pack date`);
       assert.ok(html.includes(pack.sourceDocument), `${file}: source document link`);
-      assert.ok(html.includes(`Version ${PACK_STATUS} ${pack.version} · Pack date`), `${file}: the pack's own status word next to the version`);
+      // The pack's own label ("Draft v0.1"), then the date once, human-readable, with the ISO form only in `datetime`.
+      assert.ok(
+        html.includes(`${PACK_STATUS} ${pack.version} · Pack date <time datetime="${pack.date}">${pack.dateText}</time></p>`),
+        `${file}: the pack's own status word next to the version, the date once`,
+      );
+      assert.doesNotMatch(html, /Version Draft|<\/time> \(/, `${file}: no "Version" prefix, no repeated date`);
       // Only <html> carries lang="en" on English pages (the language list on about.html names each language in itself).
       assert.equal((html.replace('<span lang="en">English</span>', '').match(/ lang="en"/g) || []).length, 1, `${file}: redundant lang="en" marks`);
     }
   });
 
-  test('every page carries the pack disclaimer verbatim as a note', () => {
+  test('every page carries the pack disclaimer verbatim as a note inside the header landmark', () => {
     const expected = `<p role="note" class="disclaimer">${escapeHtml(pack.disclaimer)}</p>`;
-    for (const [file, html] of pages) assert.ok(html.includes(expected), `${file}: disclaimer`);
+    for (const [file, html] of pages) {
+      assert.ok(html.includes(expected), `${file}: disclaimer`);
+      // Inside <header>, so screen-reader users who move by landmark do not skip it.
+      const header = html.match(/<header class="site-header">.*?<\/header>/s)[0];
+      assert.ok(header.includes(expected), `${file}: disclaimer inside the header`);
+      assert.doesNotMatch(html, /<\/header>\s*<p role="note"/, `${file}: nothing between the header and main`);
+    }
   });
 
   test('heading levels never skip', () => {
@@ -518,12 +557,30 @@ describe('site build (English)', () => {
     assert.ok(html.includes(`href="${BASE}issues/index.html"`));
   });
 
-  test('tables have scoped headers and captions', () => {
+  test('tables have scoped headers and captions, a visible title outside the scroll container, and a focusable labelled scroll region', () => {
+    let checked = 0;
     for (const [file, html] of pages) {
       for (const m of html.matchAll(/<th\b([^>]*)>/g)) assert.match(m[1], /scope="(col|row)"/, `${file}: th without scope`);
       const tables = (html.match(/<table\b/g) || []).length;
-      assert.equal((html.match(/<caption>/g) || []).length, tables, `${file}: every table has a caption`);
+      assert.equal((html.match(/<caption[\s>]/g) || []).length, tables, `${file}: every table has a caption`);
+      const wraps = [...html.matchAll(/<div class="table-wrap"([^>]*)>/g)];
+      assert.equal(wraps.length, tables, `${file}: every table sits in a scroll container`);
+      for (const wrap of wraps) {
+        // Keyboard users can reach columns that overflow at phone widths, and hear what the tab stop is.
+        const labelled = /^ tabindex="0" role="region" aria-labelledby="([a-z0-9-]+)"$/.exec(wrap[1]);
+        assert.ok(labelled, `${file}: scroll container is focusable and labelled: ${wrap[0]}`);
+        const captionId = labelled[1];
+        const caption = new RegExp(`<caption id="${captionId}" class="visually-hidden">([^<]+)</caption>`).exec(html);
+        assert.ok(caption, `${file}: the label is the table's caption`);
+        // The same title is shown as a block before the container, so it wraps instead of being clipped with the table.
+        const titleId = captionId.replace(/-caption$/, '-title');
+        const before = html.slice(0, wrap.index);
+        assert.ok(before.endsWith(`<p class="table-title" id="${titleId}" aria-hidden="true">${caption[1]}</p>\n`), `${file}: visible title precedes the container`);
+        assert.equal((html.match(new RegExp(` id="${captionId}"`, 'g')) || []).length, 1, `${file}: ${captionId} unique`);
+        checked++;
+      }
     }
+    assert.ok(checked >= 2, `checked ${checked} tables`);
   });
 
   test('the stylesheet follows the design rules', () => {
@@ -538,6 +595,45 @@ describe('site build (English)', () => {
     assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
     assert.match(css, /\.not-stated \{/);
     for (const code of ['A', 'I', 'R', 'H', 'J', 'P', 'V']) assert.match(css, new RegExp(`\\.badge-${code} \\{`));
+    // Tables: the title block outside the scroll container, a scroll cue drawn without images, the
+    // sentence column of the targets table wide enough to read, and no clipping on paper.
+    assert.match(css, /\.table-title \{/);
+    assert.match(css, /\.table-wrap \{[^}]*background-attachment: local, local, scroll, scroll/);
+    assert.doesNotMatch(css.replace(/\/\*[\s\S]*?\*\//g, ''), /url\(/, 'no url() in any rule, so the scroll cue makes no request');
+    assert.match(css, /\.targets td:nth-child\(2\) \{\s*min-width: 16rem/);
+    assert.match(css, /@media print \{[\s\S]*\.table-wrap \{\s*overflow: visible;\s*background: none;/);
+    // The route key pairs each badge with its name even when the name wraps.
+    assert.match(css, /\.route-key-list li \{\s*display: flex;\s*align-items: baseline/);
+    // Route badges are at least 24 × 24 CSS px at the 16px base (WCAG 2.5.8), computed from the rule itself.
+    const badge = /\.badge \{([^}]*)\}/.exec(css)[1];
+    const fontRem = Number(/font-size: ([\d.]+)rem/.exec(badge)[1]);
+    const lineHeight = Number(/line-height: ([\d.]+)/.exec(badge)[1]);
+    const minWidthEm = Number(/min-width: ([\d.]+)em/.exec(badge)[1]);
+    const borderPx = Number(/border: (\d+)px solid/.exec(badge)[1]);
+    assert.ok(fontRem * 16 * lineHeight + 2 * borderPx >= 24, `badge height ${fontRem * 16 * lineHeight + 2 * borderPx}px`);
+    assert.ok(fontRem * 16 * minWidthEm >= 24, `badge width ${fontRem * 16 * minWidthEm}px`);
+    // The disclaimer and the translation notice fill the header's content box instead of adding their own gutter.
+    assert.doesNotMatch(css, /\.site-header,\s*\.disclaimer/);
+  });
+
+  test('the print stylesheet breaks pages only before the appendices and drops the footer notice the closing section repeats', () => {
+    const css = fs.readFileSync(path.join(out, 'assets/print.css'), 'utf8');
+    assert.match(css, /\.print-pack #appendix-a,\s*\.print-pack #appendix-b,\s*\.print-pack #appendix-c \{\s*break-before: page/);
+    assert.doesNotMatch(css, /\.pack-section \{\s*break-before: page/, 'sections 1–9 flow on (a break before each left pages half empty)');
+    assert.doesNotMatch(css, /#appendix-a h3 \{\s*break-before: page/, 'domain groups flow on');
+    assert.match(css, /main\.print-pack \+ \.site-footer \.ai-notice \{\s*display: none/);
+    assert.doesNotMatch(css, /url\(|@import/);
+  });
+
+  test('enhance.js writes the live result count once typing has paused, and only when it changed', () => {
+    // enhance.js runs only in a browser; without a DOM harness the test reads the source.
+    const js = fs.readFileSync(path.join(out, 'assets/enhance.js'), 'utf8');
+    assert.match(js, /function announce\(text, immediately\)/);
+    assert.match(js, /if \(count\.textContent !== text\) count\.textContent = text;/);
+    assert.match(js, /announceTimer = window\.setTimeout\(write, \d{3}\)/);
+    assert.equal((js.match(/count\.textContent =/g) || []).length, 1, 'the live region is written in one place');
+    assert.match(js, /addEventListener\('input', function \(\) \{\s*apply\(true, false\);/, 'typing defers the announcement');
+    assert.match(js, /addEventListener\('change', function \(\) \{\s*apply\(true, true\);/, 'a select change announces at once');
   });
 
   test('colour contrast computed from the tokens: text pairs >= 4.5:1, focus ring >= 3:1, in light and dark mode, in both stylesheets', () => {
@@ -601,9 +697,12 @@ describe('site build (English)', () => {
     assert.match(html, /<title>077\. Ration access and food-security exclusions · Public Voice Between Elections<\/title>/);
     assert.match(html, /Domain: <a href="\.\.\/domains\/agriculture-rural-livelihoods-and-food-systems\.html">071–080\. Agriculture, rural livelihoods and food systems<\/a>/);
     const routeList = html.match(/<ul class="route-links">(.*?)<\/ul>/s)[1];
-    const names = [...routeList.matchAll(/<a href="\.\.\/routes\.html#([AIRHJPV])">\1 — ([^<]+)<\/a>/g)].map((m) => m[2]);
+    // One link per route with the code as a badge inside it, so the letter is not printed twice.
+    const names = [...routeList.matchAll(/<a class="route-link" href="\.\.\/routes\.html#([AIRHJPV])"><span class="badge badge-\1">\1<\/span> ([^<]+)<\/a>/g)].map((m) => m[2]);
     assert.deepEqual(names, ['Administrative review', 'Regulator or specialist redress', 'Qualified legal review / competent court or tribunal']);
     assert.equal((routeList.match(/<li>/g) || []).length, 3);
+    assert.equal((routeList.match(/<a\b/g) || []).length, 3, 'no second link per route');
+    assert.doesNotMatch(routeList, /<\/span> [AIRHJPV] — /, 'the code appears once per route');
     for (const label of ['Who can raise', 'Who must answer (indicative owner)', 'Possible change', 'Evidence to collect', 'Challenge routes']) {
       assert.match(html, new RegExp(`<dt>${label.replace(/[()]/g, '\\$&')}</dt>`), label);
     }
@@ -612,6 +711,9 @@ describe('site build (English)', () => {
     assert.ok(html.includes('<q>Owners require current state/sector validation. No evidence listed below is asserted to have already been collected.</q>'));
     assert.match(html, /<h2>Organisations the pack suggests approaching about this issue \(section 7\)<\/h2>/);
     assert.doesNotMatch(html, /whose suggested agenda/, 'the heading no longer implies the organisation suggested an agenda');
+    // The section 7 caveat is quoted whole, not paraphrased without "with the movement" and "remote arrangements".
+    assert.ok(html.includes(`<p class="hint">From section 7 of the pack. ${escapeHtml(ORGANISATIONS_CAVEAT)}</p>`), 'section 7 caveat verbatim');
+    assert.doesNotMatch(html, /Willingness, capacity and affiliation remain/, 'no shortened paraphrase');
     assert.match(html, /<a href="\.\.\/organisations\.html#org-05">05\. Mazdoor Kisan Shakti Sangathan \(MKSS\)<\/a>/);
     assert.ok(html.includes('Grassroots movement with relevant practice; no current remote invitation verified.'));
     assert.match(html, /<a rel="prev" href="076\.html">Previous: 076\. Food safety and adulteration<\/a>/);
@@ -669,7 +771,12 @@ describe('site build (English)', () => {
     assert.ok(html.includes(escapeHtml(targets.caveat)));
     const refusalTable = html.match(/<table class="refusals">.*?<\/table>/s)[0];
     assert.equal((refusalTable.match(/<tr><th scope="row">/g) || []).length, 7);
-    for (const item of refusals.items) assert.ok(refusalTable.includes(`<th scope="row">${escapeHtml(item.situation)}</th><td>${escapeHtml(item.response)}</td>`), item.id);
+    // The data keeps the pack's lower-case continuation after "Situation:"; the cell starts the sentence with a capital.
+    for (const item of refusals.items) {
+      const shown = item.response.charAt(0).toUpperCase() + item.response.slice(1);
+      assert.ok(refusalTable.includes(`<th scope="row">${escapeHtml(item.situation)}</th><td>${escapeHtml(shown)}</td>`), item.id);
+    }
+    assert.doesNotMatch(refusalTable, /<td>[a-z]/, 'no response cell starts in lower case');
     assert.ok(html.includes(escapeHtml(refusals.caveat)), 'no-invented-consequence paragraph verbatim');
     assert.ok(html.includes('A poll does not create legal authority.'));
   });
@@ -711,7 +818,12 @@ describe('site build (English)', () => {
 
   test('routes page: seven sections with ids matching the codes and the caveat', () => {
     const html = pages.get('routes.html');
-    for (const code of ['A', 'I', 'R', 'H', 'J', 'P', 'V']) assert.match(html, new RegExp(`<section id="${code}" class="route card"`));
+    for (const code of ['A', 'I', 'R', 'H', 'J', 'P', 'V']) {
+      assert.match(html, new RegExp(`<section id="${code}" class="route card"`));
+      // The heading shows the code once, as a badge that is read out, followed by the name.
+      assert.match(html, new RegExp(`<h2 id="route-${code}-heading"><span class="badge badge-${code}">${code}</span> [^<]+</h2>`), `${code} heading`);
+    }
+    assert.doesNotMatch(html, /<\/span> [AIRHJPV] — /, 'the code is not printed twice');
     assert.ok(html.includes('A recommendation is not necessarily a binding executable order.'));
     assert.ok(html.includes('Urgent protection and individual relief must not wait for a public hearing.'));
     const named = [...html.matchAll(/Named on (\d+) of the 100 issue cards/g)].map((m) => Number(m[1]));
@@ -742,6 +854,7 @@ describe('site build (English)', () => {
     assert.ok(about.includes(`<dt>Pack version</dt><dd>${PACK_STATUS} ${pack.version}</dd>`));
     assert.doesNotMatch(about, /nothing is hand-edited/);
     assert.ok(about.includes('Interface labels are maintained in i18n/.'));
+    assert.equal(about.split(escapeHtml(pack.disclaimer)).length - 1, 1, 'the disclaimer appears once (the banner), not again under it');
   });
 
   test('print pack contains sections 1–9, all 100 cards, the routes and the sources', () => {
@@ -755,6 +868,9 @@ describe('site build (English)', () => {
     assert.ok(html.includes(escapeHtml(pack.workingContext)));
     assert.ok(html.includes('Additional network lead:'));
     assert.ok(html.includes(`<p class="meta">${PACK_STATUS} ${pack.version} · `));
+    // The contents list is printed too (the hint above it is not); it is the only overview a postal copy has.
+    assert.match(html, /<nav aria-label="Contents" class="toc">/);
+    assert.match(html, /<p class="hint no-print">/);
   });
 
   test('sitemap, robots, search index and 404', () => {
@@ -847,10 +963,10 @@ describe('site build (English + Hindi + Marathi)', () => {
     assert.ok(html.includes(`<dt>${escapeHtml(hi['issue.raise'])}</dt><dd><span lang="en">Eligible households, ration workers, advocates</span></dd>`), 'Hindi label, English content marked');
     assert.match(html, /<main id="main" tabindex="-1">/, 'main carries no lang: it mixes Hindi labels and English content');
     assert.match(html, /<h1 lang="en">077\. Ration access and food-security exclusions<\/h1>/);
-    assert.ok(html.includes(`<p role="note" class="translation-notice"><span lang="hi">${escapeHtml(hi['lang.notice'])}</span> <span lang="en">Content translation pending; interface strings are a draft.</span></p>`));
+    assert.ok(html.includes(`<p role="note" class="translation-notice"><span lang="hi">${escapeHtml(hi['lang.notice'])}</span> <span lang="en">The pack text is still in English. The menus and labels are a draft translation that has not yet been reviewed.</span></p>`));
     assert.ok(html.includes(`<p role="note" class="disclaimer" lang="en">${escapeHtml(pack.disclaimer)}</p>`), 'disclaimer stays verbatim English and is marked');
     assert.ok(html.includes(`<span lang="en">${PACK_STATUS} ${pack.version}</span>`));
-    assert.ok(html.includes(`(<span lang="en">${pack.dateText}</span>)`));
+    assert.ok(html.includes(`<time datetime="${pack.date}"><span lang="en">${pack.dateText}</span></time>`));
     assert.match(html, /<nav aria-label="भाषा" class="lang-nav">/);
     assert.match(html, /<a href="\.\.\/\.\.\/issues\/077\.html" hreflang="en" lang="en">English<\/a>/);
     assert.match(html, /<a href="\.\.\/\.\.\/hi\/issues\/077\.html" hreflang="hi" lang="hi" aria-current="page">हिन्दी<\/a>/);
@@ -873,7 +989,7 @@ describe('site build (English + Hindi + Marathi)', () => {
       [
         pack.disclaimer, pack.dateText, pack.workingContext, pack.title, pack.subtitle, pack.purpose,
         `${PACK_STATUS} ${pack.version}`, `077. ${issue077.title}`, issue077.title, issue077.raise.join(', '), issue077.possibleChange,
-        VALIDATION_QUOTE, APPENDIX_A_INTRO, routes.caveat, ...FOUR_QUESTIONS,
+        VALIDATION_QUOTE, APPENDIX_A_INTRO, ORGANISATIONS_CAVEAT, routes.caveat, ...FOUR_QUESTIONS,
         ...orgs.items.map((o) => o.status), ...orgs.items.map((o) => o.documentedRelevance),
         ...routes.items.map((r) => r.description), ...routes.items.map((r) => `${r.code} — ${r.name}`),
         ...refusals.items.map((r) => r.response), ...refusals.items.map((r) => r.situation),
@@ -968,8 +1084,9 @@ describe('hostile fixtures', () => {
     assert.ok(issue.includes('<h1>077. Ration &lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &quot;quotes&quot;</h1>'));
     assert.ok(issue.includes('<title>077. Ration &lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &quot;quotes&quot; · Public Voice Between Elections</title>'));
     assert.ok(issue.includes('05. MKSS &lt;b&gt;&amp; &quot;Co&quot;&lt;/b&gt;</a>'));
-    assert.ok(issue.includes('title="Administrative &lt;img src=x onerror=alert(1)&gt; &quot;review&quot;"'), 'route badge title attribute escaped');
+    assert.ok(issue.includes('<span class="badge badge-A">A</span> Administrative &lt;img src=x onerror=alert(1)&gt; &quot;review&quot;</a>'), 'route link text escaped');
     const list = pages.get('issues/index.html');
+    assert.ok(list.includes('title="Administrative &lt;img src=x onerror=alert(1)&gt; &quot;review&quot;"'), 'route badge title attribute escaped');
     assert.match(list, /data-text="077 ration &lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt; &amp; &quot;quotes&quot;/);
     assert.match(list, /<option value="A">A — Administrative &lt;img src=x onerror=alert\(1\)&gt; &quot;review&quot;<\/option>/);
     const contribute = pages.get('contribute.html');

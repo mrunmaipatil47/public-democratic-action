@@ -17,15 +17,19 @@ import { after, describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import {
+  CHANNELS,
   CSV_LIST_SEPARATOR,
   DATA_FILES,
   DEFAULT_ROOT,
   PACK_DISCLAIMER_SENTENCE,
   PARTICIPATION_ROUTE_IDS,
+  RESPONSE_TARGET_ID,
   ROUTES_CAVEAT_SENTENCE,
   ROUTE_CODES,
   ROUTE_NAMES,
   SECTION_FRONTMATTER_KEYS,
+  STAGES_PER_CASE,
+  STAGES_SYSTEMIC,
   checkDataAgainstSchemas,
   checkSchema,
   crossCheck,
@@ -270,6 +274,25 @@ describe('data invariants (real data/ and content/pack/)', () => {
     assert.match(processTargets.caveat, /design targets/);
   });
 
+  it('process targets: every channel and route has exactly one receipt, routing and response target; the engine finds "ordinary-response" by id', () => {
+    const t = processTargets.targets;
+    // Mirrors applies() in src/workflow/deadlines.mjs: no appliesTo means every case.
+    const applies = (x, channel, route) => !x.appliesTo || x.appliesTo.includes(channel) || x.appliesTo.includes(route);
+    for (const channel of CHANNELS) {
+      for (const route of PARTICIPATION_ROUTE_IDS) {
+        for (const stage of STAGES_PER_CASE) {
+          const n = t.filter((x) => x.stage === stage && applies(x, channel, route)).length;
+          assert.equal(n, 1, `${stage} targets for a ${channel} filing on the ${route} route`);
+        }
+      }
+    }
+    const response = t.find((x) => x.id === RESPONSE_TARGET_ID);
+    assert.ok(response, `a target with id ${RESPONSE_TARGET_ID}`);
+    assert.equal(response.stage, 'response');
+    assert.equal(response.overridableByLaw, true, 'section 4: "unless governing law specifies otherwise"');
+    for (const x of t.filter((x) => STAGES_SYSTEMIC.includes(x.stage))) assert.deepEqual(x.appliesTo, ['systemic-review'], x.id);
+  });
+
   it('participation routes: exactly individual-remedy, systemic-review, policy-or-law', () => {
     assert.deepEqual(participationRoutes.items.map((p) => p.id), PARTICIPATION_ROUTE_IDS);
   });
@@ -485,6 +508,11 @@ describe('parseFrontmatter and expandIdSpec', () => {
     assert.ok(!isIsoDate('2026-02-30'));
     assert.ok(!isIsoDate('13 October 2026'));
     assert.ok(!isIsoDate(20261013));
+    // Years 0000–0099 are real ISO dates, as in src/workflow/calendar.mjs (the full ISO string form
+    // never applies the two-digit-year rule of Date.UTC).
+    assert.ok(isIsoDate('0099-12-31'));
+    assert.ok(isIsoDate('0000-02-29'), 'year 0 is divisible by 400');
+    assert.ok(!isIsoDate('0099-02-29'), '99 is not a leap year');
   });
 });
 
@@ -590,6 +618,81 @@ describe('cross-reference rules', () => {
     assert.ok(hasProblem(problems, F, '/targets/6/id', /duplicate id "systemic-hearing"/), dump(problems));
     assert.ok(hasProblem(problems, F, '/targets/0/appliesTo/0', /must be a channel/), dump(problems));
     assert.equal(problems.filter((p) => p.path === '/targets/6/id').length, 1, 'duplicate id reported once');
+  });
+
+  it('process targets: coverage the engine depends on (one receipt/routing/response target per case, "ordinary-response" by id, systemic stages on the systemic route)', () => {
+    const F = 'data/process-targets.json';
+    const needs = /every case needs exactly one receipt, one routing and one response target \(src\/workflow\/deadlines\.mjs\)$/;
+    const coverage = (problems) => problems.filter((p) => p.file === F && needs.test(p.message));
+
+    // No receipt target for telephone filings: deadlines() would throw for every such case.
+    let problems = problemsAfter((l) => {
+      l.data['process-targets'].targets[1].appliesTo = ['assisted', 'offline', 'postal'];
+    });
+    assert.ok(hasProblem(problems, F, '/targets', /^0 receipt targets apply to every telephone filing; /), dump(problems));
+    assert.equal(coverage(problems).length, 1, 'one problem per stage and count, not one per channel and route');
+
+    // The digital same-day receipt target loses its appliesTo: two receipt targets would apply to
+    // every non-digital filing and deadlines() would silently keep the last one listed.
+    problems = problemsAfter((l) => {
+      delete l.data['process-targets'].targets[0].appliesTo;
+    });
+    assert.ok(hasProblem(problems, F, '/targets', /^2 receipt targets apply to every assisted, offline, telephone, postal filing; /), dump(problems));
+    assert.equal(coverage(problems).length, 1, dump(problems));
+
+    // A target that applies through a participation route is counted for every channel on that route.
+    problems = problemsAfter((l) => {
+      l.data['process-targets'].targets[2].appliesTo = ['systemic-review'];
+    });
+    assert.ok(hasProblem(problems, F, '/targets', /^0 routing targets apply to assisted, offline, telephone, postal, digital filings on the individual-remedy or policy-or-law route; /), dump(problems));
+
+    // Renaming the response target: inspect.mjs would fall back to a hard-coded 21 and
+    // legalDeadlineDays would no longer override the response stage.
+    problems = problemsAfter((l) => {
+      l.data['process-targets'].targets[3].id = 'ordinary-reply';
+    });
+    assert.ok(hasProblem(problems, F, '/targets', /^must contain a target with id "ordinary-response": src\/workflow\/inspect\.mjs/), dump(problems));
+    assert.equal(coverage(problems).length, 0, 'the response stage is still covered once; only the id is wrong');
+    problems = problemsAfter((l) => {
+      l.data['process-targets'].targets[3].stage = 'routing';
+    });
+    assert.ok(hasProblem(problems, F, '/targets/3/stage', /^must be "response" for id "ordinary-response" \(got "routing"\)$/), dump(problems));
+    assert.ok(hasProblem(problems, F, '/targets', /^2 routing targets apply to every case; /), dump(problems));
+    assert.ok(hasProblem(problems, F, '/targets', /^0 response targets apply to every case; /), dump(problems));
+
+    // Section 4 scopes admission, hearing and decision to the systemic-review route.
+    problems = problemsAfter((l) => {
+      delete l.data['process-targets'].targets[4].appliesTo;
+      l.data['process-targets'].targets[5].appliesTo = ['systemic-review', 'digital'];
+      l.data['process-targets'].targets[6].appliesTo = ['policy-or-law'];
+    });
+    const systemic = /^stage "(admission|hearing|decision)" must apply to participation routes only, including "systemic-review" \(section 4/;
+    assert.ok(hasProblem(problems, F, '/targets/4/appliesTo', systemic), dump(problems));
+    assert.ok(hasProblem(problems, F, '/targets/5/appliesTo', systemic), dump(problems));
+    assert.ok(hasProblem(problems, F, '/targets/6/appliesTo', systemic), dump(problems));
+    assert.equal(coverage(problems).length, 0, 'systemic stages do not count towards per-case coverage');
+  });
+
+  it('blank strings: whitespace-only values are rejected by the cross-reference layer, not the schema checker', () => {
+    const blanked = structuredClone(issues);
+    blanked[0].title = '   ';
+    assert.deepEqual(checkSchema(issuesSchema, blanked).filter((p) => p.path === '/0/title'), [], 'minLength counts whitespace, as JSON Schema requires');
+    const problems = problemsAfter((l) => {
+      l.data.issues[0].title = '   ';
+      l.data.issues[1].raise[0] = ' ';
+      l.data.routes.items[1].description = ' \n ';
+    });
+    const blank = /^must not be whitespace only \(it would render as an empty heading, label or table cell\)$/;
+    assert.ok(hasProblem(problems, 'data/issues.json', '/0/title', blank), dump(problems));
+    assert.ok(hasProblem(problems, 'data/issues.json', '/1/raise/0', blank), dump(problems));
+    assert.ok(hasProblem(problems, 'data/routes.json', '/items/1/description', blank), dump(problems));
+    assert.equal(problems.filter((p) => blank.test(p.message)).length, 3, dump(problems));
+    // An empty string is for the schema (minLength) to accept or reject; the rule does not double-report it.
+    const empty = problemsAfter((l) => {
+      l.data.issues[2].title = '';
+    });
+    assert.ok(!hasProblem(empty, 'data/issues.json', '/2/title', blank), dump(empty));
+    assert.ok(hasProblem(checkSchema(issuesSchema, [{ ...issues[2], title: '' }]).map((p) => ({ file: 'data/issues.json', ...p })), 'data/issues.json', '/0/title', /at least 1 character/));
   });
 
   it('pack.counts must match the data files', () => {
@@ -730,6 +833,16 @@ describe('cross-reference rules', () => {
     assert.equal(personalDataKind('tel:112'), 'a mailto: or tel: link');
     assert.equal(personalDataKind('Mailto: nobody'), 'a mailto: or tel: link');
     assert.equal(personalDataKind('2026-10-13 and 1234567890'), null, 'a 10-digit number not starting 6-9 is not a mobile number');
+    // Kept in step with src/workflow/guards.mjs VALUE_PATTERNS: grouped and prefixed numbers, VID, PAN, EPIC.
+    assert.equal(personalDataKind('call +91 98765 43210'), 'a 10-digit mobile number');
+    assert.equal(personalDataKind('call 0091-98765-43210'), 'a 10-digit mobile number');
+    assert.equal(personalDataKind('call 098765 43210'), 'a 10-digit mobile number');
+    assert.equal(personalDataKind('id 1234.5678.9012'), 'a grouped 12-digit identifier');
+    assert.equal(personalDataKind('VID 1234567890123456'), 'a 16-digit identifier');
+    assert.equal(personalDataKind('PAN ABCDE1234F'), 'a PAN-like identifier');
+    assert.equal(personalDataKind('EPIC ABC1234567'), 'a voter EPIC-like identifier');
+    assert.equal(personalDataKind('issues 001 002 003 004 and 2026-10-13 2026-10-14'), null, 'short numbers are not collapsed into an identifier');
+    assert.equal(personalDataKind('CPGRAMS 2024 and RTI 2005; 60/90 days'), null);
     const problems = problemsAfter((l) => {
       l.data.issues[0].raise.push('9876543210');
       l.data.sources.intro += ' 123456789012';
@@ -737,6 +850,7 @@ describe('cross-reference rules', () => {
       l.data.organisations.items[0].status += ' Write to someone@example.org.';
       l.sections[8].body += '\nContact: mailto:someone@example.org';
       l.sections[7].body += '\nCall tel:112';
+      l.data.issues[1].raise.push('PAN ABCDE1234F');
     });
     /** @param {string} kind */
     const re = (kind) => new RegExp(`^looks like personal contact data \\(${kind}\\); the pack includes only institutional public routes$`);
@@ -746,8 +860,9 @@ describe('cross-reference rules', () => {
     assert.ok(hasProblem(problems, 'data/organisations.json', '/items/0/status', re('an e-mail address')), dump(problems));
     assert.ok(hasProblem(problems, 'content/pack/09-first-organising-cycle.md', '/body', re('an e-mail address')), dump(problems));
     assert.ok(hasProblem(problems, 'content/pack/08-a-short-invitation.md', '/body', re('a mailto: or tel: link')), dump(problems));
+    assert.ok(hasProblem(problems, 'data/issues.json', '/1/raise/3', re('a PAN-like identifier')), dump(problems));
     for (const p of problems) {
-      assert.ok(!p.message.includes('9876543210') && !p.message.includes('someone@example.org') && !p.message.includes('123456789012'), `value echoed: ${formatProblem(p)}`);
+      assert.ok(!p.message.includes('9876543210') && !p.message.includes('someone@example.org') && !p.message.includes('123456789012') && !p.message.includes('ABCDE1234F'), `value echoed: ${formatProblem(p)}`);
     }
   });
 

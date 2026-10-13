@@ -90,15 +90,53 @@ export class UnverifiedTransferError extends WorkflowError {
   }
 }
 
-/** Pack §5 Boilerplate closure: "request case-specific reasons, evidence and appeal information; preserve the challenge." */
+/** Pack §5 Boilerplate closure, the default rule a refused closure quotes. */
+const BOILERPLATE_RULE =
+  'Boilerplate closure refused: request case-specific reasons, evidence and appeal information; preserve the challenge.';
+
+/**
+ * A closure the process refuses. Pack §5 Boilerplate closure: "request
+ * case-specific reasons, evidence and appeal information; preserve the
+ * challenge." The message leads with the pack bullet that applies and ends
+ * with the §1 sentence every closure refusal rests on. The subclasses
+ * `ReferralNotResolutionError` and `PromiseNotRemedyError` lead with their own
+ * bullet; `instanceof BoilerplateClosureError` holds for all three.
+ */
 export class BoilerplateClosureError extends WorkflowError {
-  /** @param {string} [why] */
-  constructor(why = 'the latest response is boilerplate') {
+  /**
+   * @param {string} [why]
+   * @param {string} [rule] the pack bullet to lead with; subclasses supply theirs
+   */
+  constructor(why = 'the latest response is boilerplate', rule = BOILERPLATE_RULE) {
     super(
-      `Boilerplate closure refused: request case-specific reasons, evidence and appeal information; ` +
-        `preserve the challenge. Government should not evade an issue through silence, endless transfer, ` +
+      `${rule} Government should not evade an issue through silence, endless transfer, ` +
         `unexplained closure or a promise labelled as a completed remedy (${why}).`,
     );
+  }
+}
+
+/**
+ * Pack §5 Wrong office: "coordinate a verified transfer; do not call a referral
+ * a resolved problem." Thrown when a closure treats a transfer or referral as
+ * the resolution, or would end a case while a verified transfer still awaits
+ * re-routing to the receiving office.
+ */
+export class ReferralNotResolutionError extends BoilerplateClosureError {
+  /** @param {string} [why] */
+  constructor(why = 'a referral or transfer is not a resolution') {
+    super(why, 'Wrong office: coordinate a verified transfer; do not call a referral a resolved problem.');
+  }
+}
+
+/**
+ * Pack §2 Evidence of change: "distinguish action promised, action completed
+ * and outcome independently verified." Thrown when "action-completed" is
+ * claimed while only a promise is on the ledger.
+ */
+export class PromiseNotRemedyError extends BoilerplateClosureError {
+  /** @param {string} [why] */
+  constructor(why = 'only a promise is recorded') {
+    super(why, 'Evidence of change: distinguish action promised, action completed and outcome independently verified.');
   }
 }
 

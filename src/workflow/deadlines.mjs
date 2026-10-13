@@ -129,6 +129,22 @@ export function transferPendingReroute(kase) {
 }
 
 /**
+ * Silence in the pack's sense (§5): the case is open, some stage is overdue,
+ * and no final response exists. "A final response" is an action or refusal
+ * response, or on the systemic route the panel's decision or a reasoned
+ * refusal of admission; an interim explanation followed by nothing is silence
+ * on the final response. One predicate shared by `status()` and `onSilence()`
+ * so the two cannot drift apart.
+ * @param {Case} kase
+ * @param {string} now ISO date
+ * @returns {boolean}
+ */
+export function isSilent(kase, now) {
+  if (kase.state === 'closed' || satisfiedAt(kase).response !== null) return false;
+  return overdueStages(kase, now).length > 0;
+}
+
+/**
  * Current state, overdue stages and short imperative next actions drawn from
  * the pack's refusal responses (§5).
  * @param {Case} kase
@@ -155,10 +171,14 @@ export function status(kase, options = {}) {
   if (kase.flags.protected) add(NEXT_ACTIONS.protectedReferral);
   if (kase.flags.urgent) add(NEXT_ACTIONS.urgent);
 
-  // Silence: any overdue stage without a final response.
-  if (overdue.length > 0) {
+  // Silence: any overdue stage without a final response, the same predicate onSilence() acts on. Once a
+  // final response exists an overdue stage (a late receipt, a systemic hearing or decision) is still
+  // listed in overdue[] and gets the plain record-it action instead of the supervisor notice.
+  if (isSilent(kase, now)) {
     add(NEXT_ACTIONS.silenceNotify);
     add(NEXT_ACTIONS.silenceRecord);
+  } else if (overdue.length > 0) {
+    add(NEXT_ACTIONS.overdueStage);
   }
 
   // Wrong office: a verified transfer is on the record and the receiving office has not been set as
@@ -214,9 +234,8 @@ export function onSilence(kase, options = {}) {
   assertSafeRecord(kase);
   const now = options.now ?? todayUtc();
   parseDate(now, 'now');
-  if (satisfiedAt(kase).response !== null || kase.state === 'closed') return kase;
+  if (!isSilent(kase, now)) return kase;
   const overdue = overdueStages(kase, now);
-  if (overdue.length === 0) return kase;
   const alreadyNotified = new Set(
     kase.events
       .filter((e) => e.type === 'supervisor-notified')

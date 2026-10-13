@@ -72,7 +72,7 @@ export {
   withEvent,
 } from './case.mjs';
 export { admittedAt, findEvent, firstFinalResponse, lastEventIndex, latestResponse, responseTargetDays, systemicOutcomeAt } from './inspect.mjs';
-export { deadlines, onSilence, overdueStages, satisfiedAt, status, transferPendingReroute } from './deadlines.mjs';
+export { deadlines, isSilent, onSilence, overdueStages, satisfiedAt, status, transferPendingReroute } from './deadlines.mjs';
 export { PUBLIC_SUMMARY_KEYS, toPublicSummary } from './public.mjs';
 export { NEXT_ACTIONS, NOTES } from './vocabulary.mjs';
 export { runScenario } from './simulate.mjs';

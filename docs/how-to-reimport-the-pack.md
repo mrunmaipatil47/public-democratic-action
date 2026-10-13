@@ -58,16 +58,21 @@ You need Python 3.11 or newer, Node 22 or newer, and git. No packages.
    npm run check      # validate, test, build
    ```
 
-   The validator checks ids, slugs, ranges, route codes, agenda links, URLs, counts and schemas, and
-   prints every problem. The tests include data invariants and every synthetic scenario.
+   The validator checks ids, slugs, ranges, route codes, agenda links, URLs, counts and schemas,
+   process-target coverage (one receipt, routing and response target for every channel and
+   participation route), blank strings, pack fidelity of quoted fields and the personal-data
+   patterns, and prints every problem. The tests include data invariants and every synthetic
+   scenario.
 
 6. **Update what reads the version.** Search for the old version string and date:
 
    ```sh
-   grep -rn "v0.1\|13 October 2026" README.md docs/ i18n/ src/ scripts/ .github/ package.json
+   grep -rn "v0.1\|13 October 2026\|2026-10-13" README.md CONTRIBUTING.md SECURITY.md docs/ i18n/ src/ scripts/ tests/ .github/ package.json
    ```
 
    Update `pack.json`'s `date` if the importer still hard-codes it (it does in v0.1; see Gotchas).
+   Expect hits under `tests/`: the suites pin the pack version, the ISO date and the source filename
+   (see Gotchas), so `npm test` stays red until they are updated too.
 
 7. **Open a pull request.** Title it "Import pack v0.2". In the description list the document
    changes in plain words, link the source document, and paste the tail of `npm run check`. CI
@@ -95,6 +100,13 @@ You need Python 3.11 or newer, Node 22 or newer, and git. No packages.
 
 - **`date` is hard-coded.** The importer writes `"date": "2026-10-13"` into `pack.json` because the
   document gives the date as text ("13 October 2026"). When the date changes, update the importer.
+
+- **The tests pin the version too.** `tests/data.test.mjs` asserts `pack.version` and `pack.date`
+  literally, `tests/site.test.mjs` builds its own path to the v0.1 source file and names "Draft
+  v0.1" in test titles, and `tests/fixtures/broken-section.md` carries `source_version: v0.1`. A
+  version bump that skips them ends with a red `npm test` whose first failure is an unequal version
+  string. The step 6 grep covers `tests/` so you find them first; deriving the expected values from
+  `data/pack.json` and `package.json`'s `import` script instead is to be confirmed.
 
 - **Agenda links must parse.** "Agenda links: 004–008, 037" uses an en dash for ranges. A hyphen also
   works. Anything else ("004 to 008") fails.

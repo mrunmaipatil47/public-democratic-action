@@ -5,7 +5,7 @@ project: public-democratic-action
 tags: [type/reference, project/public-democratic-action]
 source: claude-conversation
 created: 2026-10-12
-updated: 2026-10-12
+updated: 2026-10-13
 status: growing
 ---
 
@@ -18,7 +18,8 @@ before publishing names.
 
 Copy the template below. One page. Where the pack is silent or you do not know, write "to be
 confirmed" rather than guess. Indicative owners on the issue cards are not verified owners until a
-named human has validated them.
+human validator with current state/sector knowledge has validated them, recorded by role (Appendix
+A: owners require current state/sector validation).
 
 ---
 
@@ -44,10 +45,11 @@ state/sector validation.
 - Procedure: ___ (name it; link the official text)
 - Statutory or administrative deadline, if any: ___
 - Prerequisites or exclusions: ___
-- Design target that applies (section 4): receipt / routing within 7 days / response within 21 days
-  unless governing law specifies otherwise / admission within 30 days / hearing 60 and decision 90
-  days from admission. These are design targets. Applicable law and urgent safety procedures take
-  precedence.
+- Design target that applies, in the pack's words (section 4): "Suggested process targets: receipt
+  immediately digitally or within two working days with assistance; routing within seven calendar
+  days; ordinary response within 21 calendar days unless governing law specifies otherwise; systemic
+  admission decision within 30 days; hearing/decision normally within 60/90 days of admission. These
+  are design targets. Applicable law and urgent safety procedures take precedence."
 
 ## Evidence
 

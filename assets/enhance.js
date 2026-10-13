@@ -30,8 +30,21 @@
     var template = count.getAttribute('data-template') || '{shown} / {total}';
     var noneText = count.getAttribute('data-none') || '';
     var total = rows.length;
+    var announceTimer = null;
 
-    function apply(updateUrl) {
+    // The count is an aria-live region. Rows filter on every keystroke, but the text is
+    // rewritten only once typing has paused (and only when it changed), so a screen reader
+    // announces one result instead of one announcement per character.
+    function announce(text, immediately) {
+      window.clearTimeout(announceTimer);
+      function write() {
+        if (count.textContent !== text) count.textContent = text;
+      }
+      if (immediately) write();
+      else announceTimer = window.setTimeout(write, 400);
+    }
+
+    function apply(updateUrl, immediately) {
       var domain = domainSelect.value;
       var route = routeSelect.value;
       var words = normalise(textInput.value).split(' ').filter(Boolean);
@@ -54,9 +67,7 @@
         group.hidden = !group.querySelector('[data-issue-row]:not([hidden])');
       });
 
-      count.textContent = shown
-        ? template.replace('{shown}', String(shown)).replace('{total}', String(total))
-        : noneText;
+      announce(shown ? template.replace('{shown}', String(shown)).replace('{total}', String(total)) : noneText, immediately);
 
       if (updateUrl && window.history && typeof window.history.replaceState === 'function') {
         var params = new URLSearchParams();
@@ -70,17 +81,17 @@
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
-      apply(true);
+      apply(true, true);
     });
     form.addEventListener('input', function () {
-      apply(true);
+      apply(true, false);
     });
     form.addEventListener('change', function () {
-      apply(true);
+      apply(true, true);
     });
     form.addEventListener('reset', function () {
       window.setTimeout(function () {
-        apply(true);
+        apply(true, true);
       }, 0);
     });
 
@@ -89,7 +100,7 @@
     if (initial.get('domain')) domainSelect.value = initial.get('domain');
     if (initial.get('route')) routeSelect.value = initial.get('route');
     if (initial.get('q')) textInput.value = initial.get('q');
-    apply(false);
+    apply(false, true);
   }
 
   function setupCopyButton() {

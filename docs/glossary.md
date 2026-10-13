@@ -5,7 +5,7 @@ project: public-democratic-action
 tags: [type/reference, project/public-democratic-action]
 source: claude-conversation
 created: 2026-10-12
-updated: 2026-10-12
+updated: 2026-10-13
 status: growing
 ---
 
@@ -35,8 +35,10 @@ and accessible digital channels. No mandatory Aadhaar, smartphone or English pro
 **Named responsibility** (section 2). Every case has a verified lead office, relevant co-owners,
 applicable rules and an accountable response date.
 
-**Lead office** (section 2). The verified office responsible for answering a case. On the issue
-cards the "Answer" is indicative; it becomes a lead office only after human validation.
+**Lead office** (section 2). From the pack's named responsibility: "every case has a verified lead
+office, relevant co-owners, applicable rules and an accountable response date." Repository reading:
+the "Answer" on an issue card is an indicative owner that requires current state/sector validation
+(Appendix A); the engine records a lead office only with `validatedBy: 'human'`.
 
 **Co-owner** (section 2). Another office with a share of the responsibility, recorded alongside the
 lead office.
@@ -44,14 +46,18 @@ lead office.
 **Reasoned response** (section 2). A response that explains evidence, jurisdiction, proposed action
 or refusal, and how to challenge the decision.
 
-**Boilerplate closure** (section 5). A closure without case-specific reasons, evidence or appeal
-information. The response is to request them and preserve the challenge.
+**Boilerplate closure** (section 5). The pack gives the response, not a definition: "request
+case-specific reasons, evidence and appeal information; preserve the challenge." Repository reading:
+a closure, or the response it rests on, that lacks case-specific reasons, evidence or appeal
+information.
 
 **Affected-person deliberation** (section 2). Serious systemic issues receive a fair hearing,
 including counterarguments and preserved dissent.
 
-**Preserved dissent** (sections 2, 4). Disagreement recorded in the dissenter's words and kept with
-the decision, never summarised away.
+**Preserved dissent** (sections 2, 4). Named by the pack as part of a fair hearing ("including
+counterarguments and preserved dissent") and as a proposed addition; the pack does not define it
+further. Repository reading: disagreement recorded in the dissenter's words and kept with the
+decision, never summarised away.
 
 **Evidence of change** (section 2). Distinguish action promised, action completed and outcome
 independently verified. The engine's change ledger uses these three kinds.
@@ -94,8 +100,9 @@ independent review; and preserved dissent. Proposed, not existing.
 situations: silence, wrong office, boilerplate closure, denied entitlement, systemic failure,
 retaliation or credible harm, alleged corruption.
 
-**Verified transfer** (section 5). Moving a case to the right office with confirmation that it was
-received. Do not call a referral a resolved problem. A transfer never closes a case.
+**Verified transfer** (section 5). Wrong office: "coordinate a verified transfer; do not call a
+referral a resolved problem." Repository reading: a transfer is recorded only with the receiving
+office's acknowledgement, and it never closes a case.
 
 **Protected referral** (section 5). A referral for retaliation or credible harm, made without
 exposing the person on a dashboard.

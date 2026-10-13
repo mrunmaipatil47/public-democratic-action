@@ -35,6 +35,24 @@ describe('calendar: parsing and formatting', () => {
     assert.equal(formatDate(d), '2026-11-03');
   });
 
+  it('takes years 0000-0099 literally, matching the 0000-9999 range formatDate() promises', () => {
+    // Date.UTC() would map 99 to 1999; the engine must not.
+    assert.equal(isIsoDate('0099-12-31'), true);
+    assert.equal(isIsoDate('0100-01-01'), true);
+    assert.equal(isIsoDate('0000-01-01'), true);
+    assert.equal(isIsoDate('0099-02-29'), false); // 99 is not a leap year
+    assert.equal(isIsoDate('0000-02-29'), true); // year 0 is (divisible by 400)
+    assert.equal(isIsoDate('0050-13-01'), false);
+    const d = parseDate('0099-12-31');
+    assert.equal(d.getUTCFullYear(), 99);
+    assert.equal(formatDate(d), '0099-12-31');
+    assert.equal(formatDate(parseDate('0000-01-01')), '0000-01-01');
+    assert.equal(addCalendarDays('0099-12-31', 1), '0100-01-01');
+    assert.equal(addCalendarDays('0100-01-01', -1), '0099-12-31');
+    assert.equal(daysBetween('0099-12-31', '0100-01-01'), 1);
+    assert.throws(() => addCalendarDays('0000-01-01', -1), ValidationError); // below the range
+  });
+
   it('parseDate throws ValidationError naming the label', () => {
     assert.throws(() => parseDate('2026-02-30', 'receivedAt'), (err) => err instanceof ValidationError && /receivedAt/.test(err.message));
   });

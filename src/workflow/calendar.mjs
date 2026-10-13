@@ -23,6 +23,21 @@ const DAY_MS = 86_400_000;
 export const DEFAULT_CALENDAR = Object.freeze({ weekendDays: [0, 6], holidays: [] });
 
 /**
+ * UTC midnight for a year, month (1-12) and day. `Date.UTC()` maps years 0-99
+ * to 1900-1999, so the full-year setter is used instead: every year in the
+ * supported range 0000-9999 is taken literally.
+ * @param {number} y
+ * @param {number} mo
+ * @param {number} d
+ * @returns {Date}
+ */
+function utcMidnight(y, mo, d) {
+  const dt = new Date(0);
+  dt.setUTCFullYear(y, mo - 1, d);
+  return dt;
+}
+
+/**
  * Is the value a well-formed, real ISO date string?
  * @param {unknown} value
  * @returns {value is string}
@@ -32,7 +47,7 @@ export function isIsoDate(value) {
   const m = ISO_DATE.exec(value);
   if (!m) return false;
   const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
-  const dt = new Date(Date.UTC(y, mo - 1, d));
+  const dt = utcMidnight(y, mo, d);
   return dt.getUTCFullYear() === y && dt.getUTCMonth() === mo - 1 && dt.getUTCDate() === d;
 }
 
@@ -47,7 +62,7 @@ export function parseDate(value, label = 'date') {
     throw new ValidationError(`${label} must be an ISO date string (YYYY-MM-DD), got ${JSON.stringify(value)}.`);
   }
   const [y, mo, d] = value.split('-').map(Number);
-  return new Date(Date.UTC(y, mo - 1, d));
+  return utcMidnight(y, mo, d);
 }
 
 /**

@@ -24,7 +24,8 @@ try {
   console.log('typecheck: OK')
 } catch (err) {
   console.error('typecheck: FAILED')
-  process.exitCode = typeof err.status === 'number' && err.status !== 0 ? err.status : 1
+  const status = err && typeof err === 'object' && 'status' in err ? /** @type {{ status?: unknown }} */ (err).status : undefined
+  process.exitCode = typeof status === 'number' && status !== 0 ? status : 1
 } finally {
   rmSync(dir, { recursive: true, force: true })
 }

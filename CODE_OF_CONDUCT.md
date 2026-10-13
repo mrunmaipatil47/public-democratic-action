@@ -62,9 +62,12 @@ Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement. Until a dedicated
 contact is published, the community leader is the repository owner. Report by
 opening a **Private channel request** issue from the issue chooser (the form
-asks for no details), or through the private reporting route described in
-`SECURITY.md`. Do not put
-personal data about yourself or anyone else in a public issue.
+asks for no details and the kind of matter is optional), or through the private
+reporting route described in `SECURITY.md`. Opening that issue is itself public:
+anyone can see that your account asked for a private channel. If that visibility
+is a risk for you, leave the kind of matter blank or contact the repository
+owner through the links on their GitHub profile instead. Do not put personal
+data about yourself or anyone else in a public issue.
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the

@@ -1,6 +1,6 @@
-# generated output
-site/
-exports/
+# generated output (anchored: `site/` unanchored would also ignore src/site/)
+/site/
+/exports/
 # tooling
 node_modules/
 *.log

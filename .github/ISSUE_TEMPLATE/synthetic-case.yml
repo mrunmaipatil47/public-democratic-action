@@ -50,7 +50,7 @@ body:
     id: storyline
     attributes:
       label: Storyline
-      description: What happens, step by step, with approximate days from receipt. Invented ward, invented office, invented records. Start the summary with "SYNTHETIC CASE".
+      description: What happens, step by step, with approximate days from receipt. Invented ward, invented office, invented records; no invented persons, not even fictional names. Owners are offices, never officials. Start the summary with "SYNTHETIC CASE".
     validations:
       required: true
   - type: checkboxes

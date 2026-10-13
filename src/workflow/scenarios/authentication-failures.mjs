@@ -9,7 +9,7 @@ import {
   close, createCase, decide, decideAdmission, issueReceipt, recordChange, recordHearing, requestAdmission,
   respond, routeCase, scheduleHearing,
 } from '../case.mjs';
-import { BoilerplateClosureError } from '../errors.mjs';
+import { PromiseNotRemedyError } from '../errors.mjs';
 import { begin, refused, step } from '../simulate.mjs';
 
 export const id = 'authentication-failures';
@@ -112,7 +112,7 @@ export function run() {
   sim = refused(sim, {
     at: '2026-12-22',
     actorRole: 'lead-office',
-    expect: BoilerplateClosureError,
+    expect: PromiseNotRemedyError,
     attempt: (k) => close(k, { at: '2026-12-22', reason: 'action-completed' }),
     note: 'Closure as action-completed refused: only a promise is recorded.',
   });

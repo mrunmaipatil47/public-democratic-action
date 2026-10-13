@@ -23,7 +23,7 @@ const CLI = resolve(ROOT, 'src', 'cli.mjs');
 const EXPECTED_IDS = ['ration-denial', 'authentication-failures', 'portable-voting', 'silence', 'wrong-office', 'boilerplate-closure', 'retaliation', 'alleged-corruption'];
 const NOV_DEC_2026 = /^2026-1[12]-\d{2}$/;
 const ACTOR_ROLES = ['filer', 'assistant', 'intake', 'lead-office', 'supervisor', 'reviewer', 'hearing-panel', 'verifier', 'system'];
-const ENGINE_REFUSALS = /\b(UnverifiedTransferError|BoilerplateClosureError|NoInventedConsequenceError): /;
+const ENGINE_REFUSALS = /\b(UnverifiedTransferError|BoilerplateClosureError|ReferralNotResolutionError|PromiseNotRemedyError|NoInventedConsequenceError): /;
 
 describe('scenario catalogue', () => {
   it('exports the eight scenarios with id, title, description and run', () => {
@@ -109,7 +109,9 @@ describe('scenario-specific outcomes', () => {
     const { kase, timeline } = by['authentication-failures'];
     assert.equal(kase.state, 'decided');
     assert.equal(kase.dissent.length, 1);
-    assert.deepEqual(timeline.filter((t) => t.type === 'refused').map((t) => t.note.match(ENGINE_REFUSALS)[1]), ['BoilerplateClosureError']);
+    assert.deepEqual(timeline.filter((t) => t.type === 'refused').map((t) => t.note.match(ENGINE_REFUSALS)[1]), ['PromiseNotRemedyError']);
+    // The refusal quotes the pack rule that applies (§2 Evidence of change), not the boilerplate-closure bullet.
+    assert.match(timeline.find((t) => t.type === 'refused').note, /PromiseNotRemedyError: Evidence of change: distinguish action promised/);
     assert.ok(kase.events.some((e) => e.type === 'decision-recorded'));
   });
 
@@ -139,7 +141,7 @@ describe('scenario-specific outcomes', () => {
     const refusals = timeline.filter((t) => t.type === 'refused');
     assert.equal(refusals.length, 2);
     assert.match(refusals[0].note, /^Unverified referral refused\. UnverifiedTransferError: /);
-    assert.match(refusals[1].note, /^Closure called "transferred" refused\. BoilerplateClosureError: /);
+    assert.match(refusals[1].note, /^Closure called "transferred" refused\. ReferralNotResolutionError: Wrong office: coordinate a verified transfer/);
     assert.equal(kase.state, 'closed');
   });
 
@@ -168,7 +170,7 @@ describe('scenario-specific outcomes', () => {
     assert.equal(kase.referrals[0].note, 'Allegations are not findings of guilt.');
     assert.deepEqual(
       timeline.filter((t) => t.type === 'refused').map((t) => t.note.match(ENGINE_REFUSALS)[1]),
-      ['BoilerplateClosureError', 'NoInventedConsequenceError'],
+      ['ReferralNotResolutionError', 'NoInventedConsequenceError'],
     );
     assert.equal(kase.closure, null);
   });
@@ -206,6 +208,21 @@ describe('CLI', () => {
     assert.ok(out.includes('Public summary: null (protected case'));
     assert.equal((out.match(/Public summary:/g) || []).length, scenarios.length);
     assert.equal((out.match(/Status at /g) || []).length, scenarios.length);
+  });
+
+  it('withholds the free text of a protected case and marks it PROTECTED; other cases print their summary', () => {
+    const protectedOut = main(['simulate', 'retaliation']).stdout;
+    const { kase } = scenarios.find((s) => s.id === 'retaliation').run();
+    assert.equal(kase.flags.protected, true);
+    assert.match(protectedOut, /\| PROTECTED$/m);
+    assert.match(protectedOut, /^Summary: withheld \(protected case; do not expose the person on a dashboard\)$/m);
+    assert.ok(!protectedOut.includes(kase.summary), 'the protected summary was printed');
+    assert.doesNotMatch(protectedOut, /refused to register an offence/);
+    assert.match(protectedOut, /Public summary: null \(protected case/);
+    assert.match(protectedOut, /protected-referral-recorded/, 'the timeline (event types and roles) is still shown');
+    const openOut = main(['simulate', 'ration-denial']).stdout;
+    assert.match(openOut, /^Summary: SYNTHETIC CASE/m);
+    assert.doesNotMatch(openOut, /PROTECTED|withheld/);
   });
 
   it('simulate <id>, list, issue, routes and org exit 0 with the expected content', () => {

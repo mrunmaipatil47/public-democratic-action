@@ -5,7 +5,7 @@ project: public-democratic-action
 tags: [type/note, project/public-democratic-action]
 source: claude-conversation
 created: 2026-10-12
-updated: 2026-10-12
+updated: 2026-10-13
 status: growing
 ---
 
@@ -24,7 +24,10 @@ build and run. No `npm install`. The importer uses the Python standard library o
 
 **Consequences.** We write our own small markdown converter, JSON Schema checker, CSV writer and
 static server. Each is a few hundred lines and does less than the library it replaces. The optional
-`npm run typecheck` uses `npx` and is the one exception, because it is not needed to run anything.
+`npm run typecheck` is the one exception, because it is not needed to run anything:
+`scripts/typecheck.mjs` installs TypeScript and `@types/node` into a temporary directory outside
+the repository (network required) and runs `tsc` from there, so nothing lands in the tree.
+(Clarified 2026-10-13; an earlier wording said it used `npx`.)
 
 **Status.** Adopted.
 
@@ -95,8 +98,10 @@ and previewed as an artifact. Each has a different base URL.
 **Decision.** Generated HTML uses relative links only. No `<base>`, no absolute paths.
 
 **Consequences.** The site works wherever it is copied. Tests check that every internal href
-resolves to a generated file. The sitemap is the one place an absolute URL is needed and it is
-configured, not hard-coded.
+resolves to a generated file. `sitemap.xml`, `robots.txt` and `404.html` (which is served at an
+unknown depth) are the only places an absolute URL is used; it defaults to the GitHub Pages project
+URL (`DEFAULT_BASE_URL` in `scripts/build-site.mjs`) and is overridable with `--base-url`.
+(Clarified 2026-10-13; an earlier wording named the sitemap alone.)
 
 **Status.** Adopted.
 
@@ -140,6 +145,54 @@ shows translated chrome, English content, and a visible notice that content tran
 it is. Content translation is a later, separate step. See [[how-to-add-a-language]].
 
 **Status.** Adopted, hi/mr strings need review.
+
+## 2026-10-13 — The validator enforces the engine's process-target invariants
+
+**Context.** `src/workflow/deadlines.mjs` assumes `data/process-targets.json` gives every case
+exactly one receipt, routing and response target, an `ordinary-response` target, and systemic
+stages scoped to the systemic-review route. A re-import that broke this would surface only as a
+failing workflow test, far from the data that caused it.
+
+**Decision.** `scripts/validate.mjs` checks that coverage as a cross-reference rule, with the same
+applicability rule as the engine, so the first gate in `npm run check` names the data problem. It
+also rejects whitespace-only strings and applies the engine's personal-data patterns to `data/` and
+`content/pack/`.
+
+**Consequences.** Module 1 and Module 2 share one description of the patterns ([[architecture]],
+`guards.mjs`) and must be kept in step by hand; `tests/data.test.mjs` and `tests/guards.test.mjs`
+each pin their copy.
+
+**Status.** Adopted.
+
+## 2026-10-13 — Closure refusals name the pack rule they rest on
+
+**Context.** Every refused closure threw `BoilerplateClosureError`, so closing by transfer and
+closing on a promise read as the same problem as a boilerplate response. Re-routing after a
+verified transfer was also impossible once a response existed, which left a wrongly routed case
+stuck with the wrong office.
+
+**Decision.** `ReferralNotResolutionError` (section 5, wrong office) and `PromiseNotRemedyError`
+(section 2, evidence of change) subclass `BoilerplateClosureError`, so `instanceof` checks keep
+working while each message leads with the bullet that applies. `routeCase()` re-routes from any
+open state while a verified transfer awaits it, and `close()` refuses every reason but
+`withdrawn-by-filer` in that window.
+
+**Consequences.** Scenario timelines and the CLI show the specific class. A case that sits with
+the wrong office cannot be closed into silence. Documented in [[workflow-engine]].
+
+**Status.** Adopted.
+
+## 2026-10-13 — Print stylesheet: page breaks before the appendices only
+
+**Context.** The printable pack (`print/pack.html`) broke a page before every section: 51 A4 pages,
+much of it white space, for a document meant to be printed and handed around.
+
+**Decision.** `assets/print.css` forces a page break only before the three appendices. Sections
+1–9 flow one after another.
+
+**Consequences.** 44 A4 pages instead of 51. Paper economy over one-section-per-page.
+
+**Status.** Adopted.
 
 ## Related
 

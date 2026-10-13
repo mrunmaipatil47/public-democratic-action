@@ -34,8 +34,10 @@ These come from section 6 of the pack. For each, here is what a good submission 
 ## The contribution form
 
 Section 6 of the pack gives a simple contribution form. Every issue form in this repository maps
-onto it: the task-specific fields cover 1–4, a shared block of optional fields asks for 5–8, and the
-credit dropdown is 9. Fields 5–8 are optional because effort and availability are chosen by the
+onto it: the task-specific fields cover 1–4 where they apply (a translation or an accessibility
+review has no evidence link; an organisation suggestion's method is the official pages it links;
+a synthetic scenario has neither), a shared block of optional fields asks for 5–8, and the credit
+dropdown is 9. Fields 5–8 are optional because effort and availability are chosen by the
 contributor, not demanded; fill them in where they matter to you. If you write to us another way,
 cover these fields:
 
@@ -75,9 +77,7 @@ npm run export:csv                   # CSV exports into exports/
 npm run import                       # re-run the importer (needs Python 3.11+)
 ```
 
-Troubleshooting: `npm test` is scripted as `node --test tests/`, and Node 22 does not accept a bare
-directory as a test pattern (`Cannot find module .../tests`). Until `package.json` is updated, run
-`node --test 'tests/*.test.mjs'` instead. CI already calls that form directly.
+`npm test` runs `node --test`, which discovers `tests/*.test.mjs`; CI runs the same command.
 
 Tests use `node:test` and `node:assert/strict` only. Scripts exit non-zero on failure and print every
 problem, not only the first.
@@ -96,8 +96,10 @@ Instead:
    `npm run import`. See `docs/how-to-reimport-the-pack.md`.
 3. The resulting diff to `data/` and `content/pack/` is reviewed in a pull request.
 
-Issue numbers are stable references. The pack says local groups should correct, split, merge or add
-issues based on evidence; when that happens the id of an existing issue does not change meaning.
+The pack says: issue numbers are stable references; local groups should correct, split, merge or add
+issues based on evidence. This repository's rule, derived from that: an existing id never changes
+meaning. How a split or merge is represented in the data is to be confirmed; see
+`docs/data-model.md`.
 
 ## What never to submit
 
@@ -113,7 +115,11 @@ issues based on evidence; when that happens the id of an existing issue does not
   commitments are proposals requiring adoption.
 
 The workflow prototype refuses records that are not marked synthetic and rejects personal-data
-patterns. Keep it that way. If you post personal data by accident, see `SECURITY.md`.
+patterns (listed in `SECURITY.md`; `npm run validate` applies the same patterns to `data/` and
+`content/pack/`). Keep it that way. In scenarios and issue briefs, owners are offices, never
+officials: name a lead office, co-owner, receiving office or vigilance body as an institution, and
+never invent a person, even a fictional one. If you post personal data by accident, see
+`SECURITY.md`.
 
 ## Review and consent before names are published
 

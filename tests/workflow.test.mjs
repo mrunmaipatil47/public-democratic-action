@@ -10,6 +10,8 @@ import {
   MAX_LEGAL_DEADLINE_DAYS,
   NoInventedConsequenceError,
   PersonalDataError,
+  PromiseNotRemedyError,
+  ReferralNotResolutionError,
   STATES,
   SyntheticOnlyError,
   UnknownIssueError,
@@ -24,6 +26,7 @@ import {
   decideAdmission,
   flagUrgent,
   getIssue,
+  isSilent,
   issueReceipt,
   markProtected,
   onSilence,
@@ -154,6 +157,22 @@ describe('error classes are thrown in their situations', () => {
     assert.throws(() => recordChange(responded(), { at: '2026-11-19', kind: 'promised', description: 'ok', dob: '1990' }), PersonalDataError);
   });
 
+  it('PersonalDataError: grouped and prefixed mobile numbers are refused in every free-text field, not only the summary', () => {
+    for (const number of ['98765 43210', '98765-43210', '+91 98765 43210', '09876543210']) {
+      assert.throws(() => base({ summary: `SYNTHETIC: ring ${number}` }), PersonalDataError, number);
+      assert.throws(() => routeCase(base(), { ...ROUTING, applicableRules: [`Rule 4; call ${number}`] }), PersonalDataError, number);
+      assert.throws(() => routeCase(base(), { ...ROUTING, coOwners: [`Desk, ${number}`] }), PersonalDataError, number);
+      assert.throws(() => respond(routed(), { ...GOOD_RESPONSE, reasons: `${GOOD_RESPONSE.reasons} Contact ${number}.` }), PersonalDataError, number);
+      assert.throws(() => transfer(routed(), { at: '2026-11-06', toOffice: `Office B, ${number}`, verified: true, acknowledgedAt: '2026-11-06' }), PersonalDataError, number);
+      assert.throws(() => challengeClosure(responded(), { at: '2026-11-19', grounds: `Call ${number} for the register.` }), PersonalDataError, number);
+      assert.throws(() => referToVigilance(routed(), { at: '2026-11-06', body: `Vigilance desk ${number}` }), PersonalDataError, number);
+    }
+    // A record tampered with after creation is refused by the next call as well.
+    const tampered = { ...routed(), owner: { ...routed().owner, applicableRules: ['Rule 4; call 98765 43210'] } };
+    assert.throws(() => respond(tampered, GOOD_RESPONSE), PersonalDataError);
+    assert.throws(() => status(tampered, { now: '2026-11-06' }), PersonalDataError);
+  });
+
   it('PersonalDataError: a case record carrying personal data is refused by every call, not only at creation', () => {
     // Mirrors the tampered-synthetic test: the record is checked again on every call.
     const tampered = { ...base(), summary: 'ring 9876543210 or mail a@b.co' };
@@ -234,6 +253,27 @@ describe('error classes are thrown in their situations', () => {
     assert.throws(() => close(interim, { at: '2026-11-19', reason: 'withdrawn-by-filer' }), BoilerplateClosureError);
     assert.throws(() => close(responded(), { at: '2026-11-19', reason: 'refused-with-reasons' }), BoilerplateClosureError); // action, not refusal
     assert.throws(() => close(responded(), { at: '2026-11-19', reason: 'solved' }), ValidationError); // not an enum value
+  });
+
+  it('closure refusals lead with the pack rule that applies: wrong office for transfers, evidence of change for promises', () => {
+    // Both are closure refusals (instanceof BoilerplateClosureError) but quote their own §5 / §2 bullet first.
+    for (const reason of ['transferred', 'referred-to-vigilance', 'forwarded for necessary action']) {
+      const err = /** @type {Error} */ ((() => { try { close(responded(), { at: '2026-11-19', reason }); } catch (e) { return e; } return null; })());
+      assert.ok(err instanceof ReferralNotResolutionError, reason);
+      assert.ok(err instanceof BoilerplateClosureError, reason);
+      assert.match(err.message, /^Wrong office: coordinate a verified transfer; do not call a referral a resolved problem\./);
+      assert.doesNotMatch(err.message, /^Boilerplate closure refused/);
+    }
+    const promised = recordChange(responded(), { at: '2026-11-19', kind: 'promised', description: 'Will restore (synthetic).' });
+    assert.throws(() => close(promised, { at: '2026-11-19', reason: 'action-completed' }), PromiseNotRemedyError);
+    // assert.throws tests a RegExp against "Name: message".
+    assert.throws(() => close(promised, { at: '2026-11-19', reason: 'action-completed' }), /^PromiseNotRemedyError: Evidence of change: distinguish action promised, action completed and outcome independently verified\./);
+    // The boilerplate case keeps the boilerplate bullet, and the §1 sentence closes every variant.
+    const boiler = respond(routed(), BOILERPLATE_RESPONSE);
+    assert.throws(() => close(boiler, { at: '2026-11-19', reason: 'refused-with-reasons' }), /^BoilerplateClosureError: Boilerplate closure refused: request case-specific reasons/);
+    for (const fn of [() => close(boiler, { at: '2026-11-19', reason: 'refused-with-reasons' }), () => close(responded(), { at: '2026-11-19', reason: 'transferred' }), () => close(promised, { at: '2026-11-19', reason: 'action-completed' })]) {
+      assert.throws(fn, /a promise labelled as a completed remedy \(/);
+    }
   });
 
   it('IndependentVerifierRequiredError: verified changes need a verifier or reviewer', () => {
@@ -525,6 +565,66 @@ describe('transfers never close', () => {
     assert.ok(status(t, { now: '2026-11-03' }).nextActions.includes('Coordinate a verified transfer; a referral is not a resolution'));
   });
 
+  it('re-routes after a response once a verified transfer is on the record; the state and the response date are unchanged', () => {
+    const WRONG_OFFICE = 'Coordinate a verified transfer; a referral is not a resolution';
+    const CORRECT = { at: '2026-11-20', toOffice: 'Correct office (synthetic)', verified: true, acknowledgedAt: '2026-11-20' };
+    // Pack §5 Wrong office realistically begins with an interim "we are checking jurisdiction" answer.
+    const interim = respond(routed(), { ...GOOD_RESPONSE, decision: 'interim' });
+    assert.throws(() => routeCase(interim, { ...ROUTING, at: '2026-11-19', leadOffice: 'Correct office (synthetic)' }), InvalidTransitionError, 'no transfer on the record yet');
+    assert.throws(() => routeCase(interim, { ...ROUTING, at: '2026-11-19', leadOffice: 'Correct office (synthetic)' }), /needs a verified transfer on the record/);
+    const moved = transfer(interim, CORRECT);
+    assert.ok(status(moved, { now: '2026-11-20' }).nextActions.includes(WRONG_OFFICE));
+    const re = routeCase(moved, { ...ROUTING, at: '2026-11-21', leadOffice: 'Correct office (synthetic)' });
+    assert.equal(re.state, 'responded', 'a re-route after a response does not rewind the state');
+    assert.equal(re.owner.leadOffice, 'Correct office (synthetic)');
+    assert.equal(re.owner.responseDueAt, '2026-11-23', 'the response target still counts from filing');
+    assert.equal(re.events.at(-1).type, 'case-routed');
+    assert.equal(re.events.at(-1).data.previousLeadOffice, ROUTING.leadOffice);
+    assert.equal(re.events.at(-1).data.afterTransfer, true);
+    assert.equal(re.responses.length, 1, 'the interim response stays on the record');
+    assert.ok(!status(re, { now: '2026-11-21' }).nextActions.includes(WRONG_OFFICE));
+    assert.throws(() => routeCase(re, { ...ROUTING, at: '2026-11-22', leadOffice: 'Third office (synthetic)' }), InvalidTransitionError, 'one re-route per verified transfer');
+    // The receiving office then answers and the case closes normally.
+    const answered = respond(re, { ...GOOD_RESPONSE, at: '2026-11-22', jurisdiction: 'The correct office holds the record (synthetic).' });
+    assert.equal(answered.responses.at(-1).actorRole, 'lead-office');
+    const done = recordChange(answered, { at: '2026-11-23', kind: 'completed', description: 'Entitlement restored (synthetic).' });
+    assert.equal(close(done, { at: '2026-11-24', reason: 'action-completed' }).state, 'closed');
+    // The same after a final response, and on the systemic path, where the state is left alone too.
+    const afterFinal = routeCase(transfer(responded(), CORRECT), { ...ROUTING, at: '2026-11-21', leadOffice: 'Correct office (synthetic)' });
+    assert.equal(afterFinal.state, 'responded');
+    assert.equal(afterFinal.owner.leadOffice, 'Correct office (synthetic)');
+    const pending = requestAdmission(routeCase(base({ participationRoute: 'systemic-review' }), ROUTING), { at: '2026-11-06' });
+    const rePending = routeCase(transfer(pending, { ...CORRECT, at: '2026-11-07', acknowledgedAt: '2026-11-07' }), { ...ROUTING, at: '2026-11-08', leadOffice: 'Correct office (synthetic)' });
+    assert.equal(rePending.state, 'admission-pending');
+    assert.equal(rePending.owner.leadOffice, 'Correct office (synthetic)');
+    // From received or routed the re-route still lands in "routed", as before.
+    assert.equal(routeCase(transfer(routed(), { ...CORRECT, at: '2026-11-06', acknowledgedAt: '2026-11-06' }), { ...ROUTING, at: '2026-11-07', leadOffice: 'Correct office (synthetic)' }).state, 'routed');
+    assert.equal(routeCase(transfer(base(), { ...CORRECT, at: '2026-11-03', acknowledgedAt: '2026-11-03' }), { ...ROUTING, at: '2026-11-04', leadOffice: 'Correct office (synthetic)' }).state, 'routed');
+  });
+
+  it('close() refuses while a verified transfer awaits re-routing, except a withdrawal by the filer', () => {
+    const WRONG_OFFICE = 'Coordinate a verified transfer; a referral is not a resolution';
+    const CORRECT = { at: '2026-11-21', toOffice: 'Correct office (synthetic)', verified: true, acknowledgedAt: '2026-11-21' };
+    const moved = transfer(completed(), CORRECT);
+    assert.ok(status(moved, { now: '2026-11-22' }).nextActions.includes(WRONG_OFFICE));
+    assert.throws(() => close(moved, { at: '2026-11-22', reason: 'action-completed' }), ReferralNotResolutionError);
+    assert.throws(() => close(moved, { at: '2026-11-22', reason: 'duplicate' }), /a verified transfer is pending; route the case to the receiving office/);
+    assert.throws(() => close(moved, { at: '2026-11-22', reason: 'action-completed' }), BoilerplateClosureError, 'still a closure refusal');
+    // A jurisdiction refusal followed by a transfer is the §1 "endless transfer / unexplained closure" pattern.
+    const refusal = respond(routed(), { ...GOOD_RESPONSE, decision: 'refusal', jurisdiction: 'The billing authority holds it (synthetic).' });
+    const refusalMoved = transfer(refusal, { ...CORRECT, at: '2026-11-19', acknowledgedAt: '2026-11-19' });
+    assert.throws(() => close(refusalMoved, { at: '2026-11-20', reason: 'refused-with-reasons' }), ReferralNotResolutionError);
+    // Once the receiving office is named the closure rules apply as usual.
+    const re = routeCase(moved, { ...ROUTING, at: '2026-11-22', leadOffice: 'Correct office (synthetic)' });
+    assert.equal(close(re, { at: '2026-11-23', reason: 'action-completed' }).state, 'closed');
+    // The filer can always withdraw.
+    const withdrawn = close(moved, { at: '2026-11-22', reason: 'withdrawn-by-filer' });
+    assert.equal(withdrawn.state, 'closed');
+    assert.equal(withdrawn.events.at(-1).actorRole, 'filer');
+    // A pending transfer on a closed case (after withdrawal) cannot be routed: the case is closed.
+    assert.throws(() => routeCase(withdrawn, { ...ROUTING, at: '2026-11-23', leadOffice: 'Correct office (synthetic)' }), InvalidTransitionError);
+  });
+
   it('rejects a transfer to the same office and from a closed case', () => {
     assert.throws(() => transfer(routed(), { at: '2026-11-06', toOffice: ROUTING.leadOffice, verified: true, acknowledgedAt: '2026-11-06' }), ValidationError);
     const closed = close(completed(), { at: '2026-11-21', reason: 'action-completed' });
@@ -760,6 +860,59 @@ describe('onSilence', () => {
     // A final response ends the silence.
     const final = respond(interim, { ...GOOD_RESPONSE, at: '2026-11-25' });
     assert.equal(onSilence(final, { now: '2027-03-01' }), final);
+  });
+
+  it('agrees with status(): the supervisor-notice actions appear exactly when onSilence() would append events', () => {
+    const SILENCE = 'Notify the responsible supervisor and enable review';
+    const RECORD = 'Record overdue status safely; filing time is preserved';
+    const systemic = () => routeCase(base({ participationRoute: 'systemic-review', issueId: '092' }), ROUTING);
+    const admittedAfterFinal = decideAdmission(requestAdmission(respond(systemic(), { ...GOOD_RESPONSE, at: '2026-11-06' }), { at: '2026-11-07' }), { at: '2026-11-08', admitted: true, reasons: 'Recurring fault (synthetic).' });
+    const fixtures = [
+      [base({ channel: 'telephone' }), '2026-11-10', true], // receipt and routing overdue, nothing answered
+      [base(), '2026-11-02', false], // nothing overdue yet (a digital receipt is due the same day)
+      [routed(), '2026-11-30', true], // response overdue
+      [respond(routed(), { ...GOOD_RESPONSE, decision: 'interim' }), '2027-03-01', true], // interim only is silence on the final response
+      [responded(), '2026-12-31', false], // final response; the unissued receipt is overdue but it is not silence
+      [admittedAfterFinal, '2027-03-01', false], // final response; receipt, hearing and decision overdue
+      [requestAdmission(systemic(), { at: '2026-11-06' }), '2027-03-01', true], // no response, admission overdue
+      [close(completed(), { at: '2026-11-21', reason: 'action-completed' }), '2027-01-31', false], // closed
+    ];
+    for (const [k, now, expected] of fixtures) {
+      const st = status(k, { now });
+      const appended = onSilence(k, { now }).events.length - k.events.length;
+      assert.equal(isSilent(k, now), expected, `isSilent ${k.state} at ${now}`);
+      assert.equal(st.nextActions.includes(SILENCE), expected, `status ${k.state} at ${now}`);
+      assert.equal(st.nextActions.includes(RECORD), expected, `status record ${k.state} at ${now}`);
+      assert.equal(appended, expected ? 2 : 0, `onSilence ${k.state} at ${now}`);
+    }
+  });
+
+  it('a final response with an overdue stage lists the stage without the silence actions', () => {
+    const OVERDUE = 'Record overdue status safely; a response exists but a process target was missed';
+    const r = responded(); // no receipt was ever issued
+    const st = status(r, { now: '2026-12-31' });
+    assert.deepEqual(st.overdue.map((o) => o.stage), ['receipt']);
+    assert.ok(!st.nextActions.includes('Notify the responsible supervisor and enable review'));
+    assert.ok(!st.nextActions.includes('Record overdue status safely; filing time is preserved'));
+    assert.ok(st.nextActions.includes(OVERDUE));
+    assert.equal(onSilence(r, { now: '2026-12-31' }), r);
+    // Nothing overdue: no overdue action either.
+    const tidy = respond(routeCase(issueReceipt(base(), { at: '2026-11-02' }), ROUTING), GOOD_RESPONSE);
+    assert.deepEqual(status(tidy, { now: '2026-11-19' }).overdue, []);
+    assert.ok(!status(tidy, { now: '2026-11-19' }).nextActions.includes(OVERDUE));
+    assert.ok(!status(issueReceipt(base(), { at: '2026-11-02' }), { now: '2026-11-03' }).nextActions.includes(OVERDUE));
+    // While silent, the silence pair is shown and the plain overdue action is not.
+    const silent = status(routed(), { now: '2026-11-30' });
+    assert.ok(silent.nextActions.includes('Notify the responsible supervisor and enable review'));
+    assert.ok(!silent.nextActions.includes(OVERDUE));
+    // Systemic: a final response and admission, hearing and decision long overdue.
+    let k = respond(routeCase(base({ participationRoute: 'systemic-review', issueId: '092' }), ROUTING), { ...GOOD_RESPONSE, at: '2026-11-06' });
+    k = decideAdmission(requestAdmission(k, { at: '2026-11-07' }), { at: '2026-11-08', admitted: true, reasons: 'Recurring fault (synthetic).' });
+    const late = status(k, { now: '2027-03-01' });
+    assert.deepEqual(late.overdue.map((o) => o.stage), ['receipt', 'hearing', 'decision']);
+    assert.ok(!late.nextActions.includes('Notify the responsible supervisor and enable review'));
+    assert.ok(late.nextActions.includes(OVERDUE));
+    assert.equal(onSilence(k, { now: '2027-03-01' }), k);
   });
 
   it('is a no-op when nothing is overdue, when a response exists, or when already notified', () => {

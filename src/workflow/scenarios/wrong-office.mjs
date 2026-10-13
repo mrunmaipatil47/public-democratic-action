@@ -4,7 +4,7 @@
  */
 
 import { close, createCase, issueReceipt, recordChange, respond, routeCase, transfer } from '../case.mjs';
-import { BoilerplateClosureError, UnverifiedTransferError } from '../errors.mjs';
+import { ReferralNotResolutionError, UnverifiedTransferError } from '../errors.mjs';
 import { begin, refused, remark, step } from '../simulate.mjs';
 
 export const id = 'wrong-office';
@@ -48,7 +48,7 @@ export function run() {
   sim = refused(sim, {
     at: '2026-11-13',
     actorRole: 'lead-office',
-    expect: BoilerplateClosureError,
+    expect: ReferralNotResolutionError,
     // Deliberately invalid input: the engine must refuse it.
     attempt: (k) => close(k, /** @type {any} */ ({ at: '2026-11-13', reason: 'transferred-to-utility' })),
     note: 'Closure called "transferred" refused.',

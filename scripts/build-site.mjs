@@ -25,7 +25,7 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 
 import { escapeHtml, makeTranslator, relRootFor } from '../src/site/html.mjs';
-import { DATA_FILES, loadSite, loadStrings, throwProblems } from '../src/site/load.mjs';
+import { DATA_FILES, loadSite, loadStrings, must, throwProblems } from '../src/site/load.mjs';
 import { PAGE_RENDERERS, notFound } from '../src/site/pages/index.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -75,7 +75,8 @@ export const ASSET_FILES = ['styles.css', 'print.css', 'enhance.js'];
  */
 
 /**
- * Ensure the base URL is absolute and ends with a slash.
+ * Ensure the base URL is absolute, carries no query string or fragment (a page path is appended
+ * to it, so `…?x=1/index.html` would be wrong everywhere) and ends with a slash.
  * @param {string} url
  * @returns {string}
  */
@@ -87,6 +88,7 @@ export function normaliseBaseUrl(url) {
     throw new Error(`--base-url must be an absolute URL, got "${url}"`);
   }
   if (!/^https?:$/.test(parsed.protocol)) throw new Error(`--base-url must use http or https, got "${url}"`);
+  if (parsed.search || parsed.hash) throw new Error(`--base-url must not carry a query string or fragment, got "${url}"`);
   const text = parsed.toString();
   return text.endsWith('/') ? text : `${text}/`;
 }
@@ -98,7 +100,7 @@ export function normaliseBaseUrl(url) {
  */
 export function searchIndex(site) {
   return site.data.issues.map((issue) => {
-    const domain = site.index.domainsById.get(issue.domainId);
+    const domain = must(site.index.domainsById.get(issue.domainId), `domain ${issue.domainId}`);
     const text = [
       `Raise: ${issue.raise.join(', ')}.`,
       `Answer: ${issue.answer.join('; ')}.`,
@@ -209,7 +211,7 @@ export function build(options = {}) {
 
   for (const lang of buildLangs) {
     const t = makeTranslator(lang.strings);
-    const langInfo = publicLangs.find((info) => info.code === lang.code);
+    const langInfo = must(publicLangs.find((info) => info.code === lang.code), `language ${lang.code}`);
     /** @type {BuildContext} */
     const base = {
       lang: lang.code,
@@ -250,7 +252,7 @@ export function build(options = {}) {
   for (const relative of sorted) {
     const target = path.join(out, relative);
     fs.mkdirSync(path.dirname(target), { recursive: true });
-    fs.writeFileSync(target, files.get(relative));
+    fs.writeFileSync(target, must(files.get(relative), `content of ${relative}`));
   }
 
   return { out, files: sorted, pages: [...pages].sort(), langs, baseUrl, durationMs: performance.now() - started };

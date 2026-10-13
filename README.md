@@ -20,6 +20,7 @@ listed here has agreed to participate. Nothing here is legal advice.
 | Website | `npm run build` → `site/` | Accessible static site: browse and filter the 100 issues, read every card, see which organisations touch which issue, copy the invitation |
 | Workflow prototype | `src/workflow/`, `npm run simulate` | A synthetic intake, routing, response, challenge and review engine that encodes the pack's process targets and refusal rules |
 | Importer | `tools/import-pack.py` | Re-creates `data/` and `content/pack/` from the exported Google Doc, so the next version of the pack can be imported and diffed |
+| CSV exports | `npm run export:csv` → `exports/` | `issues.csv`, `organisations.csv` and `organisation-issue-links.csv` (RFC 4180, UTF-8, no BOM) for spreadsheets; generated, not committed |
 
 ## Quick start
 
@@ -31,8 +32,12 @@ cd public-democratic-action
 npm run validate     # check data integrity and cross-references
 npm test             # run the test suites
 npm run build        # generate the site into site/
+npm run check        # validate, test and build, in that order
 npm run serve        # preview at http://localhost:8080
 npm run simulate -- ration-denial   # walk a synthetic case through the process
+npm run export:csv   # write the CSV exports into exports/
+npm run build:all    # also build the draft Hindi and Marathi interface roots (site/hi/, site/mr/)
+npm run typecheck    # optional: strict JSDoc type check (downloads TypeScript into a temp dir)
 ```
 
 Python 3.11+ is only needed to re-run the importer: `npm run import`.
@@ -44,8 +49,9 @@ Python 3.11+ is only needed to re-run the importer: `npm run import`.
 3. What can change?
 4. What happens when power refuses to listen?
 
-Each of the 100 issue cards answers the first three for one issue family and names the
-challenge routes for the fourth. The routes are options, not a compulsory ladder:
+Each of the 100 issue cards names, for one issue family, who can raise it, an indicative owner
+(owners require current state/sector validation) and possible lawful changes, and names the
+challenge routes for the fourth question. The routes are options, not a compulsory ladder:
 
 | Code | Route |
 |------|-------|
@@ -77,7 +83,8 @@ To propose a change to an issue card, open a correction issue rather than editin
 - Source: the Google Doc export in `content/source/`, imported by `tools/import-pack.py`.
 - The pack was prepared with AI assistance. Check substantive claims, legal routes,
   translations and participant consent before adopting any text as a movement statement.
-- Institutional sources were checked by the pack's authors on 13 October 2026; see `data/sources.json`.
+- The pack's Appendix C: "Institutional sources were checked on 13 October 2026." See
+  `data/sources.json`.
 
 ## Licences
 

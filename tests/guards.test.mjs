@@ -8,6 +8,7 @@ import {
   containsPersonalData,
   rejectPersonalData,
 } from '../src/workflow/index.mjs';
+import { isPersonalKey } from '../src/workflow/guards.mjs';
 
 describe('guards: assertSynthetic', () => {
   it('accepts synthetic: true with a SYN- id', () => {
@@ -66,6 +67,24 @@ describe('guards: rejectPersonalData on keys', () => {
     assert.equal(err, undefined);
   });
 
+  it('recognises common variants of personal-data keys, not only the canonical spellings', () => {
+    const variants = ['whatsapp', 'WhatsApp_No', 'contactNo', 'contact', 'altPhone', 'tel', 'telNo', 'officerName', 'complainantName',
+      'applicant_name', 'displayName', 'rationCardNo', 'passportNo', 'passport', 'bankAccount', 'accountNumber', 'ifsc', 'upiId', 'vid', 'drivingLicence'];
+    for (const key of variants) {
+      assert.throws(() => rejectPersonalData({ summary: 'synthetic', [key]: 'x' }), PersonalDataError, key);
+      assert.equal(isPersonalKey(key), true, key);
+    }
+    assert.throws(() => rejectPersonalData({ contact: { whatsapp: 'x' } }), PersonalDataError);
+    assert.equal(containsPersonalData({ complainantName: 'x', officerName: 'y' }), true);
+  });
+
+  it('keys ending in "name" that name a thing, not a person, stay allowed', () => {
+    for (const key of ['hostname', 'filename', 'pathname', 'username', 'officeName', 'leadOfficeName', 'schemeName', 'issueName', 'eventName']) {
+      assert.equal(isPersonalKey(key), false, key);
+      assert.doesNotThrow(() => rejectPersonalData({ [key]: 'x' }), key);
+    }
+  });
+
   it('leaves engine vocabulary keys alone', () => {
     assert.doesNotThrow(() =>
       rejectPersonalData({
@@ -83,12 +102,43 @@ describe('guards: rejectPersonalData on values', () => {
     assert.throws(() => rejectPersonalData({ summary: 'card 1234 5678 9012 shown' }), PersonalDataError);
     assert.throws(() => rejectPersonalData({ summary: 'card 1234-5678-9012 shown' }), PersonalDataError);
     assert.throws(() => rejectPersonalData({ n: 123456789012 }), PersonalDataError);
+    // Grouping with double spaces, dots or mixed separators is the same identifier.
+    assert.throws(() => rejectPersonalData({ summary: 'card 1234  5678  9012 shown' }), PersonalDataError);
+    assert.throws(() => rejectPersonalData({ summary: 'card 1234.5678.9012 shown' }), PersonalDataError);
+    assert.throws(() => rejectPersonalData({ summary: 'card 1234 - 5678 - 9012 shown' }), PersonalDataError);
+  });
+
+  it('rejects a 16-digit number (Aadhaar VID-like), a PAN and a voter EPIC, with non-matching controls', () => {
+    assert.throws(() => rejectPersonalData({ summary: 'VID 1234567890123456' }), /16-digit identifier/);
+    assert.throws(() => rejectPersonalData({ summary: 'PAN ABCDE1234F on file' }), /PAN-like identifier/);
+    assert.throws(() => rejectPersonalData({ summary: 'voter id ABC1234567' }), /EPIC-like identifier/);
+    assert.throws(() => rejectPersonalData({ list: ['fine', 'XYZ9876543'] }), PersonalDataError);
+    // Controls: synthetic references with a hyphen, lower case, and the wrong lengths.
+    assert.doesNotThrow(() => rejectPersonalData({ text: 'SYN-0001 and REF-1234567 and REF-12345678' }));
+    assert.doesNotThrow(() => rejectPersonalData({ text: 'abcde1234f is not a PAN as written' }));
+    assert.doesNotThrow(() => rejectPersonalData({ text: 'ABCD1234F ABCDEF1234F ABCDE123F AB1234567 ABCD1234567' }));
+    assert.doesNotThrow(() => rejectPersonalData({ text: 'fifteen digits 123456789012345 and seventeen 12345678901234567' }));
+    assert.doesNotThrow(() => rejectPersonalData({ text: 'ward 14' }));
   });
 
   it('rejects a 10-digit mobile number starting 6-9', () => {
     assert.throws(() => rejectPersonalData({ summary: 'call 9876543210' }), PersonalDataError);
     assert.throws(() => rejectPersonalData({ summary: 'call 6000000000 now' }), PersonalDataError);
     assert.throws(() => rejectPersonalData({ list: ['fine', 'ring 7123456789'] }), PersonalDataError);
+  });
+
+  it('rejects the common grouped and prefixed mobile formats too', () => {
+    const formats = ['ring 98765 43210', 'ring 98765-43210', 'ring 98765.43210', 'ring +91 98765 43210', 'ring +91-9876543210',
+      'ring +919876543210', 'ring 0091 98765 43210', 'ring 09876543210', 'ring 0 98765 43210', 'ring 91 98765 43210'];
+    for (const text of formats) {
+      assert.throws(() => rejectPersonalData({ summary: text }), PersonalDataError, text);
+      assert.equal(containsPersonalData({ nested: { list: [text] } }), true, text);
+    }
+    // Controls: lists of short numbers and adjacent dates never merge into a number.
+    for (const text of ['issues 001 002 003 004', 'Rules 12 14 16 18 20 22', 'pin 400001 and 400002', 'between 2026-11-03 2026-11-10',
+      'between 60000 and 70000 households', 'Rs 65000.00 was paid on 2026-11-03', '7 lakh = 700000', 'reference 1234567890', 'ring 5876543210']) {
+      assert.doesNotThrow(() => rejectPersonalData({ text }), text);
+    }
   });
 
   it('rejects an email address', () => {

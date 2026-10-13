@@ -11,6 +11,9 @@ export const NEXT_ACTIONS = Object.freeze({
   // Silence: preserve filing time, notify the responsible supervisor and enable review; record overdue status safely.
   silenceNotify: 'Notify the responsible supervisor and enable review',
   silenceRecord: 'Record overdue status safely; filing time is preserved',
+  // §5 Silence "record overdue status safely", for a stage still overdue once a final response exists (a late
+  // receipt, a systemic hearing or decision); §4: these are design targets.
+  overdueStage: 'Record overdue status safely; a response exists but a process target was missed',
   // Wrong office: coordinate a verified transfer; do not call a referral a resolved problem.
   wrongOffice: 'Coordinate a verified transfer; a referral is not a resolution',
   // Boilerplate closure: request case-specific reasons, evidence and appeal information; preserve the challenge.

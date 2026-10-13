@@ -1,4 +1,5 @@
 {
+  // Read by `npm run typecheck` (scripts/typecheck.mjs) only; TypeScript accepts comments here.
   "compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",

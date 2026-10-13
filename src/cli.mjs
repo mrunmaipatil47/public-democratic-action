@@ -65,8 +65,11 @@ export function renderScenario(scenario) {
   out.push(`== ${scenario.title} [${scenario.id}]`);
   out.push(scenario.description);
   out.push('');
-  out.push(`Case ${kase.id} | issue ${kase.issueId} | ${kase.participationRoute} | channel ${kase.channel} | received ${kase.receivedAt}`);
-  out.push(`Summary: ${kase.summary}`);
+  // Pack §5 Retaliation: "do not expose the person on a dashboard." The CLI is a human-readable export too, so a
+  // protected case's own free text is withheld here as well; the scenario's narration is the author's, not the record's.
+  const shielded = kase.flags.protected;
+  out.push(`Case ${kase.id} | issue ${kase.issueId} | ${kase.participationRoute} | channel ${kase.channel} | received ${kase.receivedAt}${shielded ? ' | PROTECTED' : ''}`);
+  out.push(shielded ? 'Summary: withheld (protected case; do not expose the person on a dashboard)' : `Summary: ${kase.summary}`);
   out.push('');
   out.push(renderTable(['date', 'event', 'actor', 'note'], timeline.map((t) => [t.at, t.type, t.actorRole, t.note])));
   out.push('');

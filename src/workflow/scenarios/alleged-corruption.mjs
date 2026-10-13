@@ -4,7 +4,7 @@
  */
 
 import { close, createCase, issueReceipt, referToVigilance, respond, routeCase } from '../case.mjs';
-import { BoilerplateClosureError, NoInventedConsequenceError } from '../errors.mjs';
+import { NoInventedConsequenceError, ReferralNotResolutionError } from '../errors.mjs';
 import { begin, refused, step } from '../simulate.mjs';
 
 export const id = 'alleged-corruption';
@@ -52,7 +52,7 @@ export function run() {
   sim = refused(sim, {
     at: '2026-11-13',
     actorRole: 'lead-office',
-    expect: BoilerplateClosureError,
+    expect: ReferralNotResolutionError,
     // Deliberately invalid input: the engine must refuse it.
     attempt: (k) => close(k, /** @type {any} */ ({ at: '2026-11-13', reason: 'referred-to-vigilance' })),
     note: 'Closure as "referred" refused: a referral is not a resolution.',

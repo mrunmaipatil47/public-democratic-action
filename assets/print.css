@@ -24,22 +24,23 @@ h4 {
   font-size: 11.5pt;
 }
 
-/* Each appendix and each pack section starts on its own page in the full pack. */
-.print-pack .pack-section {
+/*
+  In the full pack only the three appendices start on a fresh page. Sections 1–9 and the
+  domain groups within Appendix A flow on: a forced break before each of them left about
+  eight of fifty-one A4 pages half empty, and a postal copy should not cost that paper.
+  Headings keep `break-after: avoid` and cards `break-inside: avoid` (assets/styles.css), so
+  nothing is orphaned.
+*/
+.print-pack #appendix-a,
+.print-pack #appendix-b,
+.print-pack #appendix-c {
   break-before: page;
 }
 
-.print-pack .pack-section:first-of-type {
-  break-before: auto;
-}
-
-/* Domain groups within Appendix A start on a fresh page; cards never split. */
-.print-pack #appendix-a h3 {
-  break-before: page;
-}
-
-.print-pack #appendix-a h3:first-of-type {
-  break-before: auto;
+/* The closing section already prints the AI-assisted notice; the footer repeats it on every
+   other page, so it is dropped here only. */
+main.print-pack + .site-footer .ai-notice {
+  display: none;
 }
 
 .issue-card {

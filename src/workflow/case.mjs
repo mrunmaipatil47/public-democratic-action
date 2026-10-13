@@ -10,13 +10,15 @@
 
 import { compareDates, normaliseCalendar, parseDate } from './calendar.mjs';
 import { ROUTE_CODES, getIssue, normaliseIssueId } from './data.mjs';
-import { deadlines } from './deadlines.mjs';
+import { deadlines, transferPendingReroute } from './deadlines.mjs';
 import {
   BoilerplateClosureError,
   HumanValidationRequiredError,
   IndependentVerifierRequiredError,
   InvalidTransitionError,
   NoInventedConsequenceError,
+  PromiseNotRemedyError,
+  ReferralNotResolutionError,
   UnverifiedTransferError,
   ValidationError,
 } from './errors.mjs';
@@ -405,30 +407,45 @@ export function suggestOwner(issueId) {
 /**
  * Set the verified lead office, co-owners, applicable rules and response date.
  * Throws HumanValidationRequiredError unless validatedBy === "human".
+ *
+ * Routing happens from `received` or `routed`. Once a verified `transfer()` is
+ * on the record and has not been re-routed yet, the case can be re-routed from
+ * any open state (pack §5 Wrong office: an office that has already answered,
+ * even with an interim explanation, may still turn out not to hold the
+ * matter). A re-route replaces the owner and leaves the state alone unless the
+ * case is still `received` or `routed`; the response date keeps counting from
+ * the original filing.
  * @param {Case} kase
  * @param {{ at: string, leadOffice: string, coOwners?: string[], applicableRules?: string[], validatedBy: 'human', actorRole?: ActorRole }} params
  * @returns {Case}
  */
 export function routeCase(kase, params) {
   const p = prepare(kase, params, 'routeCase');
-  requireState(kase, 'route the case', ['received', 'routed'], 'Routing (or re-routing after a verified transfer) happens before a response.');
+  const afterTransfer = transferPendingReroute(kase);
+  if (afterTransfer) {
+    requireState(kase, 'route the case', STATES.filter((s) => s !== 'closed'));
+  } else {
+    requireState(kase, 'route the case', ['received', 'routed'],
+      'Routing happens before a response; re-routing afterwards needs a verified transfer on the record (transfer()).');
+  }
   if (p.validatedBy !== 'human') throw new HumanValidationRequiredError();
   const leadOffice = requireText(p.leadOffice, 'leadOffice');
   const coOwners = optionalTextList(p.coOwners, 'coOwners');
   const applicableRules = optionalTextList(p.applicableRules, 'applicableRules');
   const responseDueAt = deadlines(kase).responseDue;
   const previous = kase.owner ? kase.owner.leadOffice : null;
+  const movesToRouted = kase.state === 'received' || kase.state === 'routed';
   return withEvent(
     kase,
     {
       at: p.at,
       type: 'case-routed',
       actorRole: actorRoleOr(p.actorRole, 'intake'),
-      data: { leadOffice, coOwners, applicableRules, validatedBy: 'human', responseDueAt, previousLeadOffice: previous },
+      data: { leadOffice, coOwners, applicableRules, validatedBy: 'human', responseDueAt, previousLeadOffice: previous, afterTransfer },
     },
     (next) => {
       next.owner = { leadOffice, coOwners, applicableRules, validatedBy: 'human', responseDueAt };
-      next.state = 'routed';
+      if (movesToRouted) next.state = 'routed';
     },
   );
 }
@@ -871,8 +888,10 @@ export function flagUrgent(kase, params) {
  * final response, or on the systemic route a decision or a reasoned refusal of
  * admission), when the latest response is boilerplate, when a challenge has
  * been recorded and no response has addressed it since, when the reason is a
- * transfer or referral, when the reason names an enforcement consequence, or
- * when "action-completed" is claimed while only a promise is recorded.
+ * transfer or referral, when a verified transfer still awaits re-routing (the
+ * office that gave the case away cannot end it; only the filer's withdrawal is
+ * allowed), when the reason names an enforcement consequence, or when
+ * "action-completed" is claimed while only a promise is recorded.
  * @param {Case} kase
  * @param {{ at: string, reason: import('./types.mjs').CloseReason, note?: string, actorRole?: ActorRole }} params
  * @returns {Case}
@@ -882,11 +901,16 @@ export function close(kase, params) {
   const reasonText = typeof p.reason === 'string' ? p.reason : JSON.stringify(p.reason);
   assertNoInventedConsequence(reasonText, 'close reason');
   if (/transfer|referr|forward|redirect|escalat/i.test(reasonText)) {
-    throw new BoilerplateClosureError(`"${reasonText}" treats a transfer or referral as a resolution`);
+    throw new ReferralNotResolutionError(`"${reasonText}" treats a transfer or referral as a resolution`);
   }
   const reason = /** @type {import('./types.mjs').CloseReason} */ (requireEnum(p.reason, CLOSE_REASONS, 'reason'));
   requireState(kase, 'close the case', ['responded', 'decided', 'declined'],
     'A case closes only after a reasoned response, a systemic decision, or a reasoned refusal of admission.');
+  // Pack §5 Wrong office: after a verified transfer the matter sits with the receiving office until routeCase()
+  // names it. Closing in between would be closure by transfer.
+  if (transferPendingReroute(kase) && reason !== 'withdrawn-by-filer') {
+    throw new ReferralNotResolutionError('a verified transfer is pending; route the case to the receiving office (routeCase) before closing');
+  }
   const latest = latestResponse(kase);
   // On the systemic route the panel's decision, or the reviewer's refusal of admission with public
   // reasons, is the reasoned outcome; the lead office need not also have filed a final response.
@@ -908,7 +932,7 @@ export function close(kase, params) {
     throw new BoilerplateClosureError('a challenge is pending; record a new reasoned response addressing it before closing');
   }
   if (reason === 'action-completed' && !kase.changes.some((c) => c.kind === 'completed' || c.kind === 'verified')) {
-    throw new BoilerplateClosureError('only a promise is recorded; a promise labelled as a completed remedy is not a completed action');
+    throw new PromiseNotRemedyError('only a promise is recorded; a promise labelled as a completed remedy is not a completed action');
   }
   if (reason === 'refused-with-reasons' && latest?.decision !== 'refusal' && kase.state !== 'declined') {
     throw new BoilerplateClosureError('refused-with-reasons needs a refusal decision with case-specific reasons');

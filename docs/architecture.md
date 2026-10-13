@@ -5,7 +5,7 @@ project: public-democratic-action
 tags: [type/reference, project/public-democratic-action]
 source: claude-conversation
 created: 2026-10-12
-updated: 2026-10-12
+updated: 2026-10-13
 status: growing
 ---
 
@@ -49,7 +49,7 @@ scripts/             validate.mjs, export-csv.mjs, build-site.mjs, serve.mjs
 src/workflow/        case-workflow engine (pure functions) + scenarios/
 src/site/            site generator modules (markdown, html, pages)
 src/cli.mjs          command-line entry: simulate, issue, routes, org
-assets/              styles.css, enhance.js (copied into site/assets/)
+assets/              styles.css, print.css, enhance.js (copied into site/assets/)
 i18n/                UI strings: en.json complete; hi.json, mr.json draft
 tests/               node:test suites (*.test.mjs)
 docs/                project docs in doc-flow format (frontmatter, kebab-case)
@@ -61,7 +61,9 @@ site/                generated output (gitignored)
 
 - ES modules, `.mjs` extension, JSDoc type annotations, `"use strict"` implied.
 - Tests use `node:test` and `node:assert/strict`; run with `node --test` (default discovery finds `tests/*.test.mjs`; Node 22 rejects a bare directory argument).
-- No third-party packages at runtime or in tests. `npm run typecheck` is optional and uses `npx`.
+- No third-party packages at runtime or in tests. `npm run typecheck` is optional: `scripts/typecheck.mjs`
+  installs TypeScript and `@types/node` into a temporary directory outside the repository (network
+  required) and runs `tsc` from there against `tsconfig.json`; nothing is added to the tree.
 - Dates are ISO 8601 `YYYY-MM-DD` strings in data and APIs; computations use UTC.
 - Use the pack's vocabulary: *issue family*, *challenge route*, *lead office*, *co-owner*,
   *reasoned response*, *verified transfer*, *preserved dissent*, *evidence of change*.
@@ -73,7 +75,7 @@ site/                generated output (gitignored)
 
 | File | Shape |
 |------|-------|
-| `pack.json` | title, subtitle, tagline, version, date, disclaimer, workingContext, aiAssistedNotice, sourceDocument, counts |
+| `pack.json` | title, subtitle, tagline, version, dateText, date, purpose, disclaimer, workingContext, aiAssistedNotice, sourceDocument, counts, appendices (A/B/C titles and the Appendix A intro) |
 | `issues.json` | array of 100: `id` ("001"–"100"), `slug`, `title`, `domainId`, `raise[]`, `answer[]`, `possibleChange`, `evidence[]`, `challengeRoutes[]` (codes) |
 | `domains.json` | array of 10: `id` ("d01"–"d10"), `slug`, `name`, `range` [from,to], `issueIds[]` |
 | `routes.json` | `items[]` of 7: `code` (A I R H J P V), `name`, `slug`, `description`; `caveat` |
@@ -97,7 +99,15 @@ P Policy hearing / legislative scrutiny / lawful advocacy · V Vigilance or audi
   organisation `agendaIssueIds` resolve and match `agendaLinksText`, every URL is `https://`
   and parses, route codes are exactly the seven, process-target ids unique and `from`/`dayType`
   enums valid, `pack.counts` match actual counts, nine pack sections with frontmatter
-  `section: 1..9`. Prints all errors as `file: path: message`; exit 1 if any.
+  `section: 1..9`. It also enforces the process-target coverage the engine depends on, as a
+  cross-reference rule: exactly one receipt, routing and response target applies to every
+  channel × participation route (the same `applies()` rule as `src/workflow/deadlines.mjs`), a
+  target with id `ordinary-response` and stage `response` exists, and admission/hearing/decision
+  targets apply to participation routes only and include `systemic-review`. No data string may be
+  whitespace only (the schema's `minLength` counts whitespace), and no data string or pack section
+  may match the personal-data patterns listed under Module 2 `guards.mjs` (plus `mailto:`/`tel:`
+  links), so the validator and the engine share one description. Prints all errors as
+  `file: path: message`; exit 1 if any.
 - `schema/*.schema.json`: one JSON Schema (draft 2020-12) per data file, with `$id`,
   `title`, `description`, `additionalProperties: false` where safe. The validator also
   checks data against these schemas with a small built-in checker (type, required, enum,
@@ -153,7 +163,11 @@ verifier, system. No personal identities anywhere.
   Advisory only.
 - `routeCase(kase, { at, leadOffice, coOwners, applicableRules, validatedBy })` — throws
   `HumanValidationRequiredError` unless `validatedBy === 'human'`; sets `owner.responseDueAt`
-  from the 21-day target or `legalDeadlineDays`.
+  from the 21-day target or `legalDeadlineDays`, always counted from filing. Allowed from
+  `received` or `routed`, and from any open state while a verified transfer is pending re-route;
+  the state becomes `routed` only from `received`/`routed` and is otherwise unchanged (the owner is
+  replaced). Without a pending transfer, routing after a response is `InvalidTransitionError`.
+  The event data carries `previousLeadOffice` and `afterTransfer`.
 - `respond(kase, { at, decision: 'action' | 'refusal' | 'interim', evidence, jurisdiction,
   reasons, challengeRoutes })` — appends a response with `assessResponse()` result.
 - `assessResponse(response)` → `{ boilerplate: boolean, missing: string[] }`. Boilerplate when
@@ -177,21 +191,35 @@ verifier, system. No personal identities anywhere.
 - `flagUrgent(kase, { at })` — records the emergency-services notice; the engine is not a
   responder.
 - `close(kase, { at, reason: 'action-completed' | 'refused-with-reasons' | 'withdrawn-by-filer'
-  | 'duplicate' })` — throws if there is no response, if the latest response is boilerplate, or
-  if `reason` is anything like transfer/referral.
+  | 'duplicate' })` — throws if there is no reasoned response (except on the systemic route once the
+  case is `decided` or `declined`), if the latest response is interim or boilerplate, if a challenge is pending since the last response or decision, or if `reason` is
+  anything like transfer/referral; also refuses every reason except `withdrawn-by-filer` while a
+  verified transfer awaits `routeCase()`. Transfer-like reasons and closure during a pending
+  transfer throw `ReferralNotResolutionError`; `action-completed` with only a promise on the ledger
+  throws `PromiseNotRemedyError`; both are subclasses of `BoilerplateClosureError`. A reason or a
+  `decide()` decision text that names a fine, removal, court order or mandatory hearing throws
+  `NoInventedConsequenceError`.
 - `deadlines(kase)` → due dates per stage derived from `data/process-targets.json`.
 - `status(kase, { now })` → `{ state, overdue: [{ stage, dueAt, daysOverdue }], nextActions }`.
-- `onSilence(kase, { now })` — if any stage is overdue and no response exists, appends
-  `supervisor-notified` and `review-enabled` events with `filingTimePreserved: true`.
+  Silence is one shared predicate, `isSilent(kase, now)`: the case is open, a stage is overdue and
+  no final (action or refusal) response or systemic outcome exists; an interim response does not
+  count. `status()` lists the two silence actions only while silent, and otherwise shows
+  "Record overdue status safely; a response exists but a process target was missed" for a stage
+  still overdue after a final response.
+- `onSilence(kase, { now })` — if `isSilent(kase, now)`, appends `supervisor-notified` and
+  `review-enabled` events with `filingTimePreserved: true`, once per overdue stage.
 - `toPublicSummary(kase, { now })` → `null` when protected; otherwise only `issueId`,
   `participationRoute`, `state`, `overdueStages`, `changeCounts`, `hasPreservedChallenge`.
   Never free text, never ids that could be traced.
 - `guards.mjs`: `assertSynthetic`, `rejectPersonalData(obj)` (throws `PersonalDataError` on keys
   such as name, phone, mobile, email, aadhaar, aadhar, uid, address, dob, dateOfBirth, voterId,
-  epic, pan, or on values matching a 12-digit number, a 10-digit number starting 6–9, or an
-  email address).
+  epic, pan, their common variants and any key ending in "name" outside a small allow-list of
+  things-not-persons; or on values matching a 12-digit number (plain or grouped 4-4-4 with
+  spaces, dots or hyphens), a 16-digit VID, a 10-digit mobile number starting 6–9 (plain, grouped
+  5-5, or behind `+91`, `0091` or a trunk `0`), a PAN, a voter EPIC, or an email address).
+  Owner fields name offices, never officials.
 - `calendar.mjs`: `addCalendarDays`, `addWorkingDays(date, n, { weekendDays, holidays })`,
-  `daysBetween`.
+  `daysBetween`. ISO dates with years `0000`–`0099` are accepted.
 - `scenarios/`: one file per scenario exporting `{ id, title, run() }`: `ration-denial`
   (individual remedy), `authentication-failures` (systemic), `portable-voting` (policy),
   `silence`, `wrong-office`, `boilerplate-closure`, `retaliation`, `alleged-corruption`.
@@ -203,8 +231,10 @@ Tests: `tests/workflow.test.mjs`, `tests/guards.test.mjs`, `tests/calendar.test.
 
 ## Module 3: site generator (`scripts/build-site.mjs`, `src/site/`, `assets/`, `i18n/`)
 
-Output in `site/`. Pages (all with the shared layout: skip link, header nav, disclaimer banner,
-main, footer with licence, version and source link):
+Output in `site/`. Pages (all with the shared layout: skip link; a `<header>` landmark holding the
+nav, the translation notice when a language build is not English, and the disclaimer banner, so
+landmark navigation does not skip the disclaimer; main; footer with licence, version and source
+link). Every page sets `<meta name="referrer" content="no-referrer">`:
 
 - `index.html` — why, the four questions, commitments, three routes, calls to action.
 - `issues/index.html` — all 100 grouped by domain, with a no-JS-safe filter form (domain,
@@ -248,13 +278,16 @@ domain pages, each page has `<html lang`, exactly one `<h1>`, a `<main>`, a skip
   data, no personal activist contacts), `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1),
   `SECURITY.md` (privacy and vulnerability reporting; no PII in issues), `.github/ISSUE_TEMPLATE/`
   forms (`correction.yml`, `evidence-check.yml`, `legal-route-map.yml`, `translation.yml`,
-  `accessibility-review.yml`, `organisation-suggestion.yml`, `synthetic-case.yml`, `config.yml`),
+  `accessibility-review.yml`, `organisation-suggestion.yml`, `synthetic-case.yml`,
+  `private-channel.yml` for a no-details request for a private route, `config.yml`),
   `.github/pull_request_template.md`, `.github/workflows/ci.yml` (validate, test, build on
   Node 22; upload site artifact) and `.github/workflows/pages.yml` (deploy `site/` to GitHub
   Pages on the default branch).
 - `docs/` in doc-flow format: `decision-log.md`, `data-model.md`, `workflow-engine.md`,
   `how-to-reimport-the-pack.md`, `how-to-add-a-language.md`, `issue-brief-template.md`,
   `invitation-letter.md`, `glossary.md`, `log/2026-10-12-build-log.md`.
+- Tests: `tests/docs.test.mjs` (doc-flow convention, issue-form fields and privacy checkbox,
+  workflow test commands, and the engine behaviour `docs/workflow-engine.md` describes).
 
 ## Related
 

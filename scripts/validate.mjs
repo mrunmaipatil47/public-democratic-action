@@ -14,15 +14,19 @@
  *   3. the cross-reference rules of docs/architecture.md, Module 1: issue ids 001..100 in
  *      order, unique slugs, domain membership by range, valid unique challenge-route codes,
  *      organisation agendaIssueIds equal to the expansion of agendaLinksText, https URLs that
- *      parse, exactly the seven route codes, process-target ids and enums, pack.counts, and
- *      nine content/pack sections with frontmatter section 1..9 and the full key set;
+ *      parse, exactly the seven route codes, process-target ids and enums plus the coverage the
+ *      workflow engine depends on (exactly one receipt, routing and response target for every
+ *      channel and participation route, the "ordinary-response" id, systemic stages scoped to the
+ *      systemic-review route), pack.counts, and nine content/pack sections with frontmatter
+ *      section 1..9 and the full key set;
  *   4. pack fidelity: organisation fields, caveats, commitments, refusal responses, participation
  *      routes and contribution types must occur verbatim in the body of the pack section they
  *      come from, and pinned sentences (the title-page disclaimer, the Appendix B caveat) stay;
  *   5. privacy and export safety: no data string or section body looks like personal contact
- *      data (e-mail, 12-digit identifier, 10-digit mobile number, mailto:/tel:), no data string
- *      starts with a spreadsheet formula character, and no list item contains the CSV list
- *      separator used by scripts/export-csv.mjs.
+ *      data (e-mail, 12- or 16-digit identifier, 10-digit mobile number with or without a +91
+ *      prefix, PAN- or voter-EPIC-like identifier, mailto:/tel:), no data string is whitespace
+ *      only, no data string starts with a spreadsheet formula character, and no list item
+ *      contains the CSV list separator used by scripts/export-csv.mjs.
  *
  * Every problem is printed as "<file>: <json-pointer>: <message>". Exit code 0 and a one-line
  * summary when clean, exit code 1 otherwise. --quiet suppresses the summary.
@@ -99,6 +103,16 @@ export const CHANNELS = ['assisted', 'offline', 'telephone', 'postal', 'digital'
  * counting receipt, routing, response and admission from receipt is this repository's reading.
  */
 export const STAGES_FROM_ADMISSION = ['hearing', 'decision'];
+/**
+ * Stages every case passes through. src/workflow/deadlines.mjs needs exactly one applicable target
+ * for each of them, whatever the channel and participation route, and would otherwise throw (none)
+ * or silently keep the last one listed (several).
+ */
+export const STAGES_PER_CASE = ['receipt', 'routing', 'response'];
+/** Section 4 counts admission, hearing and decision on the systemic-review route only. */
+export const STAGES_SYSTEMIC = ['admission', 'hearing', 'decision'];
+/** Target id src/workflow/inspect.mjs looks up to apply a case's `legalDeadlineDays` ("unless governing law specifies otherwise"). */
+export const RESPONSE_TARGET_ID = 'ordinary-response';
 
 /** Title page of the pack: data/pack.json `disclaimer` must keep this sentence. */
 export const PACK_DISCLAIMER_SENTENCE = 'No organisation listed here has agreed to participate.';
@@ -115,12 +129,20 @@ export const CSV_LIST_FIELDS = Object.freeze(['raise', 'answer', 'evidence', 'ch
  * mailto:/tel: schemes) so Module 1 stays self-contained; keep both lists in step. Section 7:
  * "Use institutional public routes; no personal activist contact database is included." A
  * matched value is never echoed in a message.
+ *
+ * Digit groups may be separated by spaces, dots or hyphens where Indian usage groups them: an
+ * Aadhaar as 4-4-4 and a mobile number as 5-5, optionally behind a +91, 0091 or trunk-0 prefix.
+ * Separators are matched in place, never collapsed out of the text first, so lists of short numbers
+ * ("issues 001 002 003 004", two adjacent dates) do not merge into a false identifier.
  * @type {ReadonlyArray<readonly [string, RegExp]>}
  */
 export const PERSONAL_DATA_PATTERNS = Object.freeze([
   ['a 12-digit identifier', /(?<!\d)\d{12}(?!\d)/],
-  ['a grouped 12-digit identifier', /(?<!\d)\d{4}[ -]\d{4}[ -]\d{4}(?!\d)/],
-  ['a 10-digit mobile number', /(?<!\d)[6-9]\d{9}(?!\d)/],
+  ['a grouped 12-digit identifier', /(?<!\d)\d{4}[\s.-]+\d{4}[\s.-]+\d{4}(?!\d)/],
+  ['a 16-digit identifier', /(?<!\d)\d{16}(?!\d)/],
+  ['a 10-digit mobile number', /(?<!\d)(?:(?:\+|00)?91[\s.-]?|0)?[6-9]\d{4}[\s.-]?\d{5}(?!\d)/],
+  ['a PAN-like identifier', /(?<![A-Z0-9])[A-Z]{5}\d{4}[A-Z](?![A-Z0-9])/],
+  ['a voter EPIC-like identifier', /(?<![A-Z0-9])[A-Z]{3}\d{7}(?![A-Z0-9])/],
   ['an e-mail address', /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/],
   ['a mailto: or tel: link', /\b(?:mailto|tel):/i],
 ]);
@@ -934,7 +956,51 @@ export function crossCheck(loaded) {
       asArray(t.appliesTo).forEach((v, j) => {
         if (!appliesToValues.has(v)) push(F, `/targets/${i}/appliesTo/${j}`, `must be a channel (${CHANNELS.join(', ')}) or a participation route id (${participationIds.join(', ')}); got ${describe(v)}`);
       });
+      // Section 4 counts admission, hearing and decision on the systemic-review route; a target that
+      // also named a channel or lacked appliesTo would give every case a systemic stage to miss.
+      if (typeof t.stage === 'string' && STAGES_SYSTEMIC.includes(t.stage)) {
+        const routesOnly = Array.isArray(t.appliesTo) && t.appliesTo.every((v) => participationIds.includes(v));
+        if (!routesOnly || !t.appliesTo.includes('systemic-review')) {
+          push(F, `/targets/${i}/appliesTo`, `stage "${t.stage}" must apply to participation routes only, including "systemic-review" (section 4: systemic admission, hearing and decision; got ${describe(t.appliesTo)})`);
+        }
+      }
     });
+    // Coverage, mirroring applies() in src/workflow/deadlines.mjs: a target without appliesTo applies
+    // to every case, otherwise it applies when it names the case's channel or participation route.
+    // Each case needs exactly one receipt, routing and response target; none makes deadlines() throw,
+    // two makes it keep whichever is listed last (a postal filing would inherit the digital receipt day).
+    /** @param {Record<string, any>} t @param {string} channel @param {string} route */
+    const appliesToCase = (t, channel, route) => !Object.hasOwn(t, 'appliesTo') || (Array.isArray(t.appliesTo) && (t.appliesTo.includes(channel) || t.appliesTo.includes(route)));
+    const routes = participationIds.filter((r) => typeof r === 'string');
+    /** One problem per stage and count, naming the affected filings. @type {Map<string, [string, string][]>} */
+    const uncovered = new Map();
+    for (const channel of CHANNELS) {
+      for (const route of routes) {
+        for (const stage of STAGES_PER_CASE) {
+          const n = targets.filter((t) => t.stage === stage && appliesToCase(t, channel, route)).length;
+          if (n === 1) continue;
+          const key = `${n} ${stage} targets apply to`;
+          uncovered.set(key, [...(uncovered.get(key) ?? []), [channel, route]]);
+        }
+      }
+    }
+    /** "every telephone filing", "assisted, postal filings on the systemic-review route", "every case". @param {[string, string][]} pairs */
+    const describeFilings = (pairs) => {
+      if (pairs.length === CHANNELS.length * routes.length) return 'every case';
+      /** @type {Map<string, string[]>} */ const routesByChannel = new Map();
+      for (const [c, r] of pairs) routesByChannel.set(c, [...(routesByChannel.get(c) ?? []), r]);
+      /** @type {Map<string, string[]>} */ const channelsByRoutes = new Map();
+      for (const [c, rs] of routesByChannel) channelsByRoutes.set(rs.join(' or '), [...(channelsByRoutes.get(rs.join(' or ')) ?? []), c]);
+      return [...channelsByRoutes]
+        .map(([rs, cs]) => (rs.split(' or ').length === routes.length ? `every ${cs.join(', ')} filing` : `${cs.join(', ')} filings on the ${rs} route`))
+        .join('; ');
+    };
+    for (const [key, pairs] of uncovered) {
+      push(F, '/targets', `${key} ${describeFilings(pairs)}; every case needs exactly one receipt, one routing and one response target (src/workflow/deadlines.mjs)`);
+    }
+    const responseIdx = targets.findIndex((t) => t.id === RESPONSE_TARGET_ID);
+    if (responseIdx === -1) push(F, '/targets', `must contain a target with id "${RESPONSE_TARGET_ID}": src/workflow/inspect.mjs looks the response stage up by this id to apply a case's legalDeadlineDays ("unless governing law specifies otherwise")`);
+    else if (targets[responseIdx].stage !== 'response') push(F, `/targets/${responseIdx}/stage`, `must be "response" for id "${RESPONSE_TARGET_ID}" (got ${describe(targets[responseIdx].stage)})`);
   }
 
   // --- participation routes and other fixed lists ----------------------------
@@ -996,6 +1062,9 @@ export function crossCheck(loaded) {
    */
   const walk = (file, value, ptr, key) => {
     if (typeof value === 'string') {
+      // JSON Schema minLength counts whitespace, so a blank string passes the schema layer and would
+      // render as an empty heading, label or cell; an empty string is the schema's to accept or reject.
+      if (value !== '' && value.trim() === '') push(file, ptr, 'must not be whitespace only (it would render as an empty heading, label or table cell)');
       if (isUrlKey(key) || SCHEME_RE.test(value)) checkUrl(file, ptr, value);
       else for (const m of value.matchAll(EMBEDDED_URL_RE)) checkUrl(file, ptr, m[0]);
       checkPersonalData(file, ptr, value);

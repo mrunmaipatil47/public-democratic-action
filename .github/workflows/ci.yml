@@ -24,9 +24,9 @@ jobs:
         run: npm run validate
 
       - name: Run test suites
-        # Calls node directly rather than `npm test`: Node 22 rejects the bare directory pattern in
-        # package.json's test script, and this step must not depend on that script being fixed.
-        run: node --test 'tests/*.test.mjs'
+        # package.json's test script is `node --test`, which discovers tests/*.test.mjs on Node 22;
+        # tests/docs.test.mjs pins the script to a form Node 22 accepts.
+        run: npm test
 
       - name: Build the site
         run: npm run build

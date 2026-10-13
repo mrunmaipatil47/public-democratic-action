@@ -27,7 +27,9 @@ in `i18n/README.md`, which is authoritative where the two differ. Check the key 
   name in that language), `_status`, and `_note`.
 - `i18n/<code>.json` holds the same keys for another language. `<code>` is the language's BCP 47
   code (`hi`, `mr`, `ta`, `pa-Guru`). It becomes the output folder `site/<code>/` and the page's
-  `lang` attribute, so use a correct code. Missing keys fall back to English.
+  `lang` attribute, so use a correct code. A key missing from a translation file fails the build,
+  which lists every missing key; there is no fallback to English, so copy `en.json` and keep every
+  key.
 - A translation file carries `"_status": "draft-unreviewed"` until a meaning check with users has
   been done and recorded. The site shows a visible notice while the status is draft.
 - `npm run build -- --lang en --lang hi` writes the English site and `site/hi/` with translated
@@ -50,7 +52,8 @@ in `i18n/README.md`, which is authoritative where the two differ. Check the key 
    generator and belongs in a separate issue.
 
 3. **Translate the values.** Keep placeholders like `{count}` or `{title}` exactly as they are. Keep
-   the pack's hedges: "proposed", "indicative", "not legal advice". Where a term has no clean
+   the pack's hedges ("proposed", "indicative", "suggested", "not confirmed") and the repository's
+   own ("not legal advice"). Where a term has no clean
    equivalent, choose one, use it consistently, and list it in the issue under "Terms that need a
    decision". The glossary in [[glossary]] gives the English definitions.
 

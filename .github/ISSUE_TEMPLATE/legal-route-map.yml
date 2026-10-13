@@ -66,7 +66,7 @@ body:
     id: method
     attributes:
       label: Method
-      description: How you established the owner and procedure (which official texts you read, which office or practitioner confirmed it), in a few lines.
+      description: How you established the owner and procedure, in a few lines - which official texts you read, and which office or kind of practitioner confirmed it (a role or an organisation, never a named person or their contact details).
     validations:
       required: false
   - type: input

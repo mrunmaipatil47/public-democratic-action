@@ -8,19 +8,22 @@ body:
       value: |
         Use this when `SECURITY.md` or `CODE_OF_CONDUCT.md` tells you to ask for a private channel: a vulnerability, personal data posted by accident, or a code of conduct report.
         Put nothing about the matter itself in this issue. Do not name people, quote data or describe what happened. A maintainer will reply here with a private way to send the report.
-        If GitHub's private vulnerability reporting is enabled on this repository (Security tab, "Report a vulnerability"), prefer that for security problems.
+        Opening this issue is itself public: anyone can see that your account asked for a private channel, and the kind of matter if you choose one. If that visibility is a risk for you, leave the kind blank, or use GitHub's private vulnerability reporting if it is enabled on this repository (Security tab, "Report a vulnerability"), or contact the repository owner through the links on their GitHub profile.
+        Every request gets the same reply at the same speed whether or not you say what kind of matter it is.
   - type: dropdown
     id: kind
     attributes:
-      label: What kind of matter is this?
-      description: One word of context so the maintainer knows how quickly to respond. No details.
+      label: What kind of matter is this? (optional)
+      description: One word of context, visible to everyone. Leave it as "Prefer not to say" if naming the kind of matter could expose you. No details.
       options:
+        - Prefer not to say
         - Security vulnerability
         - Personal data posted by accident
         - Code of conduct
         - Other
+      default: 0
     validations:
-      required: true
+      required: false
   - type: checkboxes
     id: privacy
     attributes:

@@ -127,8 +127,6 @@ body {
 }
 
 .site-header,
-.disclaimer,
-.translation-notice,
 main,
 .site-footer {
   width: 100%;
@@ -297,13 +295,13 @@ time {
 
 /* ---- Notes, disclaimer, caveats ---- */
 
+/* Both notes live inside the header (the banner landmark), filling its content box. */
 .disclaimer,
 .translation-notice {
   background: var(--note-bg);
   border-left: 4px solid var(--note-border);
   padding: 0.6rem 1rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin: 0.75rem 0;
   font-size: 0.95rem;
 }
 
@@ -412,6 +410,8 @@ time {
 
 /* ---- Route badges: the letter is always shown; colour is only a secondary cue ---- */
 
+/* 0.85rem × 1.65 line height + 2px border keeps the badge at least 24 × 24 CSS px at the 16px
+   base, the WCAG 2.5.8 target size, without relying on the spacing exception. */
 .badge {
   display: inline-block;
   min-width: 1.8em;
@@ -421,7 +421,7 @@ time {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-weight: 700;
   font-size: 0.85rem;
-  line-height: 1.6;
+  line-height: 1.65;
   text-align: center;
   text-decoration: none;
   color: var(--badge-fg);
@@ -458,6 +458,18 @@ a.badge:focus-visible {
   flex-wrap: wrap;
   gap: 0.35rem 1.25rem;
   font-size: 0.95rem;
+}
+
+/* A long route name wraps beside its badge, not under it. */
+.route-key-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+}
+
+/* `[A] Administrative review` as one link: the badge keeps its own colours inside it. */
+.route-link {
+  text-underline-offset: 0.2em;
 }
 
 /* ---- Issue list ---- */
@@ -578,9 +590,30 @@ button.secondary {
 
 /* ---- Tables ---- */
 
+/* The title sits outside the scroll container so it wraps at the viewport width (the
+   `<caption>` inside the table is visually hidden and names the table for assistive technology). */
+.table-title {
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+}
+
+/*
+  A wide table scrolls sideways inside this focusable region. The background paints a scroll
+  cue without images or JavaScript: the two outer layers are shadows fixed to the box's edges,
+  the two inner layers are covers in the page colour that travel with the content
+  (`background-attachment: local`) and sit over the shadows exactly when there is nothing more
+  to scroll in that direction, so a table that fits shows no shadow at all.
+*/
 .table-wrap {
   overflow-x: auto;
-  margin: 1rem 0;
+  margin: 0 0 1rem;
+  background:
+    linear-gradient(to right, var(--bg) 40%, transparent) left / 3rem 100%,
+    linear-gradient(to left, var(--bg) 40%, transparent) right / 3rem 100%,
+    linear-gradient(to right, var(--border), transparent) left / 0.75rem 100%,
+    linear-gradient(to left, var(--border), transparent) right / 0.75rem 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
 }
 
 table {
@@ -589,10 +622,10 @@ table {
   font-size: 0.95rem;
 }
 
-caption {
-  text-align: left;
-  font-weight: 700;
-  padding: 0 0 0.5rem;
+/* The sentence column of the process-targets table reads in a few lines while scrolling
+   instead of one word per line. */
+.targets td:nth-child(2) {
+  min-width: 16rem;
 }
 
 th,
@@ -731,13 +764,17 @@ a.external::after {
   }
 
   .site-header,
-  .disclaimer,
-  .translation-notice,
   main,
   .site-footer {
     max-width: none;
     padding-left: 0;
     padding-right: 0;
+  }
+
+  /* Paper does not scroll: a wide table flows (or is reduced) instead of being clipped. */
+  .table-wrap {
+    overflow: visible;
+    background: none;
   }
 
   a {

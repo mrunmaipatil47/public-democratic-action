@@ -12,20 +12,47 @@ import { PersonalDataError, SyntheticOnlyError } from './errors.mjs';
 /** Keys that signal personal data, compared after lower-casing and stripping non-alphanumerics. */
 const PERSONAL_KEYS = new Set([
   'name', 'fullname', 'firstname', 'lastname', 'surname', 'fathername', 'mothername', 'spousename',
-  'phone', 'phoneno', 'phonenumber', 'telephone', 'mobile', 'mobileno', 'mobilenumber', 'contactnumber',
+  'phone', 'phoneno', 'phonenumber', 'telephone', 'telephoneno', 'telephonenumber', 'tel', 'telno',
+  'mobile', 'mobileno', 'mobilenumber', 'altphone', 'alternatephone', 'alternatenumber',
+  'contact', 'contactno', 'contactnumber', 'contactdetails', 'whatsapp', 'whatsappno', 'whatsappnumber',
   'email', 'emailid', 'emailaddress',
-  'aadhaar', 'aadhaarno', 'aadhaarnumber', 'aadhar', 'aadharno', 'aadharnumber', 'uid', 'uidai',
+  'aadhaar', 'aadhaarno', 'aadhaarnumber', 'aadhar', 'aadharno', 'aadharnumber', 'uid', 'uidai', 'vid',
   'address', 'homeaddress', 'residentialaddress', 'postaladdress',
   'dob', 'dateofbirth', 'birthdate',
   'voterid', 'voteridno', 'voteridnumber', 'epic', 'epicno', 'epicnumber',
   'pan', 'panno', 'pannumber',
+  'passport', 'passportno', 'passportnumber', 'rationcard', 'rationcardno', 'rationcardnumber',
+  'drivinglicence', 'drivinglicense', 'dlno',
+  'bankaccount', 'bankaccountno', 'bankaccountnumber', 'accountno', 'accountnumber', 'ifsc', 'ifsccode', 'upi', 'upiid',
 ]);
 
-/** Value patterns: [description, regex]. Values are never echoed in error messages. */
+/**
+ * A key ending in "name" names a person unless it is one of these, which name
+ * a thing (a file, a host, an office, a scheme, an engine object).
+ */
+const NAME_KEYS_ALLOWED = new Set([
+  'hostname', 'filename', 'pathname', 'dirname', 'basename', 'username',
+  'classname', 'tagname', 'typename', 'fieldname', 'keyname', 'eventname',
+  'officename', 'leadofficename', 'bodyname', 'departmentname', 'schemename',
+  'issuename', 'domainname', 'routename', 'scenarioname',
+]);
+
+/**
+ * Value patterns: [description, regex]. Values are never echoed in error messages.
+ *
+ * Digit groups may be separated by spaces, dots or hyphens where Indian usage
+ * groups them: an Aadhaar as 4-4-4 and a mobile number as 5-5, optionally
+ * behind a +91, 0091 or trunk-0 prefix. Separators are matched in place, never
+ * collapsed out of the text first, so lists of short numbers ("issues 001 002
+ * 003 004", two adjacent dates) do not merge into a false identifier.
+ */
 const VALUE_PATTERNS = /** @type {const} */ ([
   ['12-digit identifier (Aadhaar-like)', /(?<![\d])\d{12}(?![\d])/],
-  ['12-digit identifier (Aadhaar-like, grouped)', /(?<![\d])\d{4}[ -]\d{4}[ -]\d{4}(?![\d])/],
-  ['10-digit mobile number (starting 6-9)', /(?<![\d])[6-9]\d{9}(?![\d])/],
+  ['12-digit identifier (Aadhaar-like, grouped)', /(?<![\d])\d{4}[\s.-]+\d{4}[\s.-]+\d{4}(?![\d])/],
+  ['16-digit identifier (Aadhaar VID-like)', /(?<![\d])\d{16}(?![\d])/],
+  ['10-digit mobile number (starting 6-9)', /(?<![\d])(?:(?:\+|00)?91[\s.-]?|0)?[6-9]\d{4}[\s.-]?\d{5}(?![\d])/],
+  ['PAN-like identifier (5 letters, 4 digits, 1 letter)', /(?<![A-Z0-9])[A-Z]{5}\d{4}[A-Z](?![A-Z0-9])/],
+  ['voter EPIC-like identifier (3 letters, 7 digits)', /(?<![A-Z0-9])[A-Z]{3}\d{7}(?![A-Z0-9])/],
   ['email address', /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/],
 ]);
 
@@ -73,9 +100,24 @@ export function assertSafeRecord(record) {
 }
 
 /**
+ * Does the key, after normalisation, signal personal data? Exact matches on
+ * `PERSONAL_KEYS`, plus any key ending in "name" that is not on the allow-list
+ * of things-not-persons.
+ * @param {string} key
+ * @returns {boolean}
+ */
+export function isPersonalKey(key) {
+  const norm = normaliseKey(key);
+  if (PERSONAL_KEYS.has(norm)) return true;
+  return norm.endsWith('name') && !NAME_KEYS_ALLOWED.has(norm);
+}
+
+/**
  * Walk an object and throw `PersonalDataError` on a personal-data key or a
- * value that looks like a 12-digit number, a 10-digit mobile number starting
- * 6-9, or an email address. Returns the input unchanged when clean.
+ * value that looks like a 12-digit (or 16-digit VID) identifier, a 10-digit
+ * mobile number starting 6-9 (plain, grouped 5-5 or with a +91/0 prefix), a
+ * PAN, a voter EPIC, or an email address. Returns the input unchanged when
+ * clean.
  * @template T
  * @param {T} obj
  * @param {string} [path] prefix used in error messages
@@ -105,7 +147,7 @@ export function rejectPersonalData(obj, path = '') {
     }
     for (const [key, child] of Object.entries(value)) {
       const here = where ? `${where}.${key}` : key;
-      if (PERSONAL_KEYS.has(normaliseKey(key))) throw new PersonalDataError(here, `key "${key}"`);
+      if (isPersonalKey(key)) throw new PersonalDataError(here, `key "${key}"`);
       visit(child, here);
     }
   }
