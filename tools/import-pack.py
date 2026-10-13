@@ -373,6 +373,11 @@ def parse(lines: list[str]) -> dict:
         "aiAssistedNotice": c_trailer[1] if len(c_trailer) > 1 else None,
         "sourceDocument": "https://docs.google.com/document/d/1An_lifVztuO6YpC2VEJX4jfV9z8WT7DjQ2RfXCGYAio/",
         "counts": {"issues": len(issues), "domains": len(domains), "routes": len(routes), "organisations": len(orgs), "sources": len(sources)},
+        "appendices": {
+            "A": {"title": app_sections["A"]["title"], "intro": " ".join(appendix_a_intro).strip()},
+            "B": {"title": app_sections["B"]["title"]},
+            "C": {"title": app_sections["C"]["title"]},
+        },
     }
 
     return {
@@ -411,7 +416,19 @@ def md_to_clean(lines: list[str]) -> str:
     return "\n".join(out).strip() + "\n"
 
 
+def deep_unescape(obj):
+    """Apply unescape() to every string in a parsed structure (dicts, lists, scalars)."""
+    if isinstance(obj, str):
+        return unescape(obj)
+    if isinstance(obj, list):
+        return [deep_unescape(x) for x in obj]
+    if isinstance(obj, dict):
+        return {k: deep_unescape(v) for k, v in obj.items()}
+    return obj
+
+
 def write_json(path: Path, obj) -> None:
+    obj = deep_unescape(obj)
     path.write_text(json.dumps(obj, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 

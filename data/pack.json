@@ -16,5 +16,17 @@
     "routes": 7,
     "organisations": 13,
     "sources": 8
+  },
+  "appendices": {
+    "A": {
+      "title": "The 100 public-interest issue families",
+      "intro": "Each card names examples of who can raise it, an indicative owner, possible lawful changes, evidence to collect and conditional refusal routes. Owners require current state/sector validation. No evidence listed below is asserted to have already been collected."
+    },
+    "B": {
+      "title": "What the challenge routes mean"
+    },
+    "C": {
+      "title": "Evidence and primary sources"
+    }
   }
 }
