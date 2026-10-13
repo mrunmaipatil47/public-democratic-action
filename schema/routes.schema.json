@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mrunmaipatil47/public-democratic-action/schema/routes.schema.json",
+  "title": "Challenge routes",
+  "description": "Appendix B: what the seven challenge routes mean (A Administrative review, I Information / RTI, R Regulator or specialist redress, H Rights or protection route, J Qualified legal review / competent court or tribunal, P Policy hearing / legislative scrutiny / lawful advocacy, V Vigilance or audit referral). These routes are options, not a compulsory ladder.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items", "caveat"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "name", "slug", "description"],
+        "properties": {
+          "code": { "type": "string", "enum": ["A", "I", "R", "H", "J", "P", "V"] },
+          "name": { "type": "string", "minLength": 1 },
+          "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "description": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "caveat": { "type": "string", "minLength": 1 }
+  }
+}

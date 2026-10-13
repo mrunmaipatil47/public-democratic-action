@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mrunmaipatil47/public-democratic-action/schema/contribution-types.schema.json",
+  "title": "Bounded contribution types",
+  "description": "Section 6: the eight kinds of useful first contribution that do not require attending a street action, plus the fields of the simple contribution form and its caveat. Remote contribution does not imply endorsement or membership.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items", "form"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "description"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "name": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "form": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fields", "caveat"],
+      "properties": {
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "caveat": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

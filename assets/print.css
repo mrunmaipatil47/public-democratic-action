@@ -1,0 +1,89 @@
+/*
+  Print stylesheet, loaded with media="print" on every page. assets/styles.css
+  already carries the general print rules; this file adds page geometry and the
+  page-break rules that make print/pack.html usable as a postal copy of the pack.
+*/
+
+@page {
+  margin: 20mm 18mm;
+}
+
+h1 {
+  font-size: 20pt;
+}
+
+h2 {
+  font-size: 15pt;
+}
+
+h3 {
+  font-size: 13pt;
+}
+
+h4 {
+  font-size: 11.5pt;
+}
+
+/* Each appendix and each pack section starts on its own page in the full pack. */
+.print-pack .pack-section {
+  break-before: page;
+}
+
+.print-pack .pack-section:first-of-type {
+  break-before: auto;
+}
+
+/* Domain groups within Appendix A start on a fresh page; cards never split. */
+.print-pack #appendix-a h3 {
+  break-before: page;
+}
+
+.print-pack #appendix-a h3:first-of-type {
+  break-before: auto;
+}
+
+.issue-card {
+  break-inside: avoid;
+  border: 1px solid #999999;
+  padding: 6pt 8pt;
+  margin: 6pt 0;
+}
+
+.issue-card .fields .field {
+  display: block;
+}
+
+.issue-card .fields dt {
+  display: inline;
+}
+
+.issue-card .fields dt::after {
+  content: ": ";
+}
+
+.issue-card .fields dd {
+  display: inline;
+}
+
+.issue-card .fields dd::after {
+  content: "";
+  display: block;
+}
+
+/* Tables keep their header on every printed page. */
+thead {
+  display: table-header-group;
+}
+
+/* Long source URLs are printed in full and allowed to wrap anywhere. */
+.url,
+.sources a {
+  word-break: break-all;
+}
+
+/* The disclaimer and the footer notice must survive on paper. */
+.disclaimer,
+.ai-notice {
+  border: 1px solid #000000;
+  padding: 6pt 8pt;
+}

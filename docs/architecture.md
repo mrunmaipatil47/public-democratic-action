@@ -60,7 +60,7 @@ site/                generated output (gitignored)
 ## Conventions
 
 - ES modules, `.mjs` extension, JSDoc type annotations, `"use strict"` implied.
-- Tests use `node:test` and `node:assert/strict`; run with `node --test tests/`.
+- Tests use `node:test` and `node:assert/strict`; run with `node --test` (default discovery finds `tests/*.test.mjs`; Node 22 rejects a bare directory argument).
 - No third-party packages at runtime or in tests. `npm run typecheck` is optional and uses `npx`.
 - Dates are ISO 8601 `YYYY-MM-DD` strings in data and APIs; computations use UTC.
 - Use the pack's vocabulary: *issue family*, *challenge route*, *lead office*, *co-owner*,

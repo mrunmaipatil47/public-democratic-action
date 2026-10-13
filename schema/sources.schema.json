@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mrunmaipatil47/public-democratic-action/schema/sources.schema.json",
+  "title": "Evidence and primary sources",
+  "description": "Appendix C: the institutional sources checked on 13 October 2026, numbered as cited in the pack, with https links. Source statistics are not quoted as proof of national severity rankings.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["intro", "items"],
+  "properties": {
+    "intro": { "type": "string", "minLength": 1 },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["number", "title", "url"],
+        "properties": {
+          "number": { "type": "integer", "minimum": 1 },
+          "title": { "type": "string", "minLength": 1 },
+          "url": { "type": "string", "pattern": "^https://" }
+        }
+      }
+    }
+  }
+}

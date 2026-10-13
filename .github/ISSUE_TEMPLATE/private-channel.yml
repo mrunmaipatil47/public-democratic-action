@@ -1,0 +1,30 @@
+name: Private channel request
+description: Ask a maintainer for a private way to report a security, privacy or conduct matter. Give no details here.
+title: "[Private channel] request"
+labels: ["private-channel"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this when `SECURITY.md` or `CODE_OF_CONDUCT.md` tells you to ask for a private channel: a vulnerability, personal data posted by accident, or a code of conduct report.
+        Put nothing about the matter itself in this issue. Do not name people, quote data or describe what happened. A maintainer will reply here with a private way to send the report.
+        If GitHub's private vulnerability reporting is enabled on this repository (Security tab, "Report a vulnerability"), prefer that for security problems.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of matter is this?
+      description: One word of context so the maintainer knows how quickly to respond. No details.
+      options:
+        - Security vulnerability
+        - Personal data posted by accident
+        - Code of conduct
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: This contains no real complainant data or personal contact details.
+          required: true

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mrunmaipatil47/public-democratic-action/schema/participation-routes.schema.json",
+  "title": "Participation routes",
+  "description": "Section 3: the three routes with different outcomes (individual remedy, systemic review, policy or law), each with the pack's example, expected result and note. The project is not an emergency responder; filing here must not make people miss statutory appeal or litigation deadlines.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items", "caveat"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "text", "example", "expectedResult", "note"],
+        "properties": {
+          "id": { "type": "string", "enum": ["individual-remedy", "systemic-review", "policy-or-law"] },
+          "name": { "type": "string", "minLength": 1 },
+          "text": { "type": "string", "minLength": 1 },
+          "example": { "type": "string", "minLength": 1 },
+          "expectedResult": { "type": "string", "minLength": 1 },
+          "note": {
+            "oneOf": [
+              { "type": "string", "minLength": 1 },
+              { "type": "null" }
+            ]
+          }
+        }
+      }
+    },
+    "caveat": { "type": "string", "minLength": 1 }
+  }
+}

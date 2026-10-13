@@ -1,0 +1,68 @@
+[
+  {
+    "id": "001",
+    "title": "Missing required property: slug",
+    "domainId": "d01",
+    "raise": ["Voters"],
+    "answer": ["Electoral Registration Officer"],
+    "possibleChange": "Correct entries",
+    "evidence": ["Deletion notices"],
+    "challengeRoutes": ["A"]
+  },
+  {
+    "id": "002",
+    "slug": "wrong-enum",
+    "title": "Wrong enum: route code X is not one of A I R H J P V",
+    "domainId": "d01",
+    "raise": ["Absent voters"],
+    "answer": ["Election authorities"],
+    "possibleChange": "Authorised remote/postal access",
+    "evidence": ["Journey costs"],
+    "challengeRoutes": ["A", "X"]
+  },
+  {
+    "id": "003",
+    "slug": "extra-property",
+    "title": "Extra property not allowed by additionalProperties: false",
+    "domainId": "d01",
+    "raise": ["Citizens"],
+    "answer": ["Election authorities"],
+    "possibleChange": "Disclosure rules",
+    "evidence": ["Disclosed contributions"],
+    "challengeRoutes": ["I"],
+    "extra": "not allowed"
+  },
+  {
+    "id": "4",
+    "slug": "bad-pattern",
+    "title": "Bad pattern: id must be three digits",
+    "domainId": "d01",
+    "raise": ["Service users"],
+    "answer": ["Department head"],
+    "possibleChange": "Investigate allegations",
+    "evidence": ["Transaction records"],
+    "challengeRoutes": ["V"]
+  },
+  {
+    "id": "005",
+    "slug": "wrong-type",
+    "title": "Wrong type: raise must be an array",
+    "domainId": "d01",
+    "raise": "Residents",
+    "answer": ["Procuring authority"],
+    "possibleChange": "Publish contract changes",
+    "evidence": ["Tender criteria"],
+    "challengeRoutes": ["I"]
+  },
+  {
+    "id": "006",
+    "slug": "empty-and-duplicate-routes",
+    "title": "minItems and uniqueItems: empty evidence, duplicate route",
+    "domainId": "d1",
+    "raise": ["Residents"],
+    "answer": ["Local executive"],
+    "possibleChange": "Devolve responsibilities",
+    "evidence": [],
+    "challengeRoutes": ["A", "A"]
+  }
+]

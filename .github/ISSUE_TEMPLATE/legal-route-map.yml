@@ -1,0 +1,124 @@
+name: Legal route map
+description: Correct one owner/remedy map and explain the governing procedure
+title: "[Route map] Issue "
+labels: ["law-and-jurisdiction", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the "Law and jurisdiction" contribution type from section 6 of the pack. Owners on the issue cards are indicative and require current state/sector validation.
+        Nothing here is legal advice, and submitting this does not mean you are offering legal representation or ongoing support.
+  - type: input
+    id: issue-id
+    attributes:
+      label: Issue id
+      description: 001 to 100.
+      placeholder: "077"
+    validations:
+      required: true
+  - type: textarea
+    id: current-map
+    attributes:
+      label: Current owner and routes on the card
+      description: Quote the card's "Answer" and "Challenge routes" as they are now.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-map
+    attributes:
+      label: Proposed owner and remedy map
+      description: Lead office, co-owners if any, and the challenge routes (A, I, R, H, J, P, V) you think apply.
+    validations:
+      required: true
+  - type: textarea
+    id: procedure
+    attributes:
+      label: Governing procedure
+      description: Name the rule, statute, scheme guideline or procedure, its deadline if any, and link the official text.
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Jurisdiction scope
+      options:
+        - All India
+        - One state or union territory (name it below)
+        - One sector or scheme (name it below)
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: scope-detail
+    attributes:
+      label: State, sector or scheme
+      placeholder: "Maharashtra; public distribution system"
+    validations:
+      required: false
+  - type: textarea
+    id: uncertain
+    attributes:
+      label: What remains uncertain
+      description: Prerequisites, exclusions, limitation periods or mandates you could not confirm.
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: Method
+      description: How you established the owner and procedure (which official texts you read, which office or practitioner confirmed it), in a few lines.
+    validations:
+      required: false
+  - type: input
+    id: effort-availability
+    attributes:
+      label: Effort and availability
+      description: How much time you are offering and when, chosen by you. A bounded task, not a promise of indefinite support.
+      placeholder: "About two hours this month"
+    validations:
+      required: false
+  - type: textarea
+    id: privacy-needs
+    attributes:
+      label: Privacy needs
+      description: Anything we must not publish or must handle with care, in general terms. Do not put the sensitive detail itself here; use the Private channel request form instead.
+    validations:
+      required: false
+  - type: input
+    id: reviewer
+    attributes:
+      label: Reviewer
+      description: Who should check this, as a role or an organisation, not a person's contact details. Leave blank if you do not know.
+    validations:
+      required: false
+  - type: input
+    id: expected-output
+    attributes:
+      label: Expected output
+      description: What exists when this is done, such as a corrected card, a new owner map or a reviewed translation.
+    validations:
+      required: false
+  - type: dropdown
+    id: credit
+    attributes:
+      label: Credit and consent preference
+      options:
+        - No name (default)
+        - Credit my organisation by name
+        - Credit me by name
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope-caveat
+    attributes:
+      label: Scope of this contribution
+      options:
+        - label: I am correcting a map, not offering legal representation or indefinite support.
+          required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: This contains no real complainant data or personal contact details.
+          required: true

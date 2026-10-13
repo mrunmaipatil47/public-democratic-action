@@ -13,10 +13,11 @@
     "validate": "node scripts/validate.mjs",
     "export:csv": "node scripts/export-csv.mjs",
     "build": "node scripts/build-site.mjs",
+    "build:all": "node scripts/build-site.mjs --lang en --lang hi --lang mr",
     "serve": "node scripts/serve.mjs",
     "simulate": "node src/cli.mjs simulate",
-    "test": "node --test tests/",
-    "typecheck": "npx -y -p typescript@5.6.3 tsc -p tsconfig.json",
+    "test": "node --test",
+    "typecheck": "node scripts/typecheck.mjs",
     "check": "npm run validate && npm test && npm run build"
   },
   "repository": {

@@ -1,0 +1,107 @@
+name: Correction
+description: Fix a fact or wording in an issue card or a pack section
+title: "[Correction] "
+labels: ["correction", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. Corrections are applied to the source document and re-imported, not edited in `data/` or `content/pack/` directly. See `CONTRIBUTING.md`.
+        Quote the pack rather than paraphrase it. Never upgrade a proposed commitment into an existing legal guarantee.
+  - type: input
+    id: target
+    attributes:
+      label: Issue id or section
+      description: An issue id from 001 to 100, or a pack section (1 to 9, Appendix A, B or C).
+      placeholder: "077, or section 4"
+    validations:
+      required: true
+  - type: textarea
+    id: current-text
+    attributes:
+      label: Current text
+      description: Quote the text exactly as it appears now.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-text
+    attributes:
+      label: Proposed text
+      description: The wording you propose instead.
+    validations:
+      required: true
+  - type: input
+    id: evidence-link
+    attributes:
+      label: Evidence link
+      description: An https link to the official or primary source that supports the change.
+      placeholder: "https://"
+    validations:
+      required: true
+  - type: textarea
+    id: source-denominator
+    attributes:
+      label: Source and denominator
+      description: Who published the source, when, and what the figures are counted against (the denominator), if any.
+    validations:
+      required: true
+  - type: textarea
+    id: uncertain
+    attributes:
+      label: What remains uncertain
+      description: What the evidence does not settle. "Nothing" is rarely true.
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: Method
+      description: How you checked the current and proposed text against the source, in a few lines.
+    validations:
+      required: false
+  - type: input
+    id: effort-availability
+    attributes:
+      label: Effort and availability
+      description: How much time you are offering and when, chosen by you. A bounded task, not a promise of indefinite support.
+      placeholder: "About two hours this month"
+    validations:
+      required: false
+  - type: textarea
+    id: privacy-needs
+    attributes:
+      label: Privacy needs
+      description: Anything we must not publish or must handle with care, in general terms. Do not put the sensitive detail itself here; use the Private channel request form instead.
+    validations:
+      required: false
+  - type: input
+    id: reviewer
+    attributes:
+      label: Reviewer
+      description: Who should check this, as a role or an organisation, not a person's contact details. Leave blank if you do not know.
+    validations:
+      required: false
+  - type: input
+    id: expected-output
+    attributes:
+      label: Expected output
+      description: What exists when this is done, such as a corrected card, a new owner map or a reviewed translation.
+    validations:
+      required: false
+  - type: dropdown
+    id: credit
+    attributes:
+      label: Credit and consent preference
+      options:
+        - No name (default)
+        - Credit my organisation by name
+        - Credit me by name
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: This contains no real complainant data or personal contact details.
+          required: true

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mrunmaipatil47/public-democratic-action/schema/process-targets.schema.json",
+  "title": "Suggested process targets",
+  "description": "Section 4: the pack's suggested process targets (receipt, routing, ordinary reasoned response, systemic admission, hearing and decision) as structured stages with day counts. These are design targets, not statutory deadlines; applicable law and urgent safety procedures take precedence. existingLawReference quotes the pack's sources and is not a universal guarantee.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sourceText", "caveat", "targets", "existingLawReference"],
+  "properties": {
+    "sourceText": { "type": "string", "minLength": 1 },
+    "caveat": { "type": "string", "minLength": 1 },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "stage", "description", "days", "dayType", "from"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "stage": {
+            "type": "string",
+            "enum": ["receipt", "routing", "response", "admission", "hearing", "decision"]
+          },
+          "description": { "type": "string", "minLength": 1 },
+          "days": { "type": "integer", "minimum": 0, "maximum": 365 },
+          "dayType": { "type": "string", "enum": ["calendar", "working"] },
+          "from": { "type": "string", "enum": ["received", "admitted"] },
+          "appliesTo": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "assisted",
+                "offline",
+                "telephone",
+                "postal",
+                "digital",
+                "individual-remedy",
+                "systemic-review",
+                "policy-or-law"
+              ]
+            }
+          },
+          "overridableByLaw": { "type": "boolean" }
+        }
+      }
+    },
+    "existingLawReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "cpgramsDays", "rtiDays", "rtiLifeOrLibertyHours", "note"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "cpgramsDays": { "type": "integer", "minimum": 0 },
+        "rtiDays": { "type": "integer", "minimum": 0 },
+        "rtiLifeOrLibertyHours": { "type": "integer", "minimum": 0 },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

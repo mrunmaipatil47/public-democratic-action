@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mrunmaipatil47/public-democratic-action/schema/organisations.schema.json",
+  "title": "Existing organisations to approach",
+  "description": "Section 7: existing organisations with publicly documented relevant work, the issue families their agenda links touch, a suggested bounded remote contribution, a verbatim status line and two institutional https links. Willingness, capacity, affiliation and remote arrangements remain unconfirmed for every entry; no personal activist contact database is included.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["selectionBasis", "items", "additionalNetworkLead"],
+  "properties": {
+    "selectionBasis": { "type": "string", "minLength": 1 },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "number",
+          "name",
+          "documentedRelevance",
+          "agendaLinksText",
+          "agendaIssueIds",
+          "suggestedRemoteContribution",
+          "status",
+          "officialEvidenceUrl",
+          "publicRouteUrl",
+          "slug"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^org-\\d{2}$" },
+          "number": { "type": "integer", "minimum": 1, "maximum": 99 },
+          "name": { "type": "string", "minLength": 1 },
+          "documentedRelevance": { "type": "string", "minLength": 1 },
+          "agendaLinksText": {
+            "type": "string",
+            "pattern": "^\\d{3}(?:[\u2013-]\\d{3})?(?:, \\d{3}(?:[\u2013-]\\d{3})?)*$"
+          },
+          "agendaIssueIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^\\d{3}$" }
+          },
+          "suggestedRemoteContribution": { "type": "string", "minLength": 1 },
+          "status": { "type": "string", "minLength": 1 },
+          "officialEvidenceUrl": { "type": "string", "pattern": "^https://" },
+          "publicRouteUrl": { "type": "string", "pattern": "^https://" },
+          "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+        }
+      }
+    },
+    "additionalNetworkLead": { "type": "string", "minLength": 1 }
+  }
+}

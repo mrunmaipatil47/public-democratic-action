@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mrunmaipatil47/public-democratic-action/schema/issues.schema.json",
+  "title": "Issue families",
+  "description": "The 100 public-interest issue families of Appendix A. Each card names examples of who can raise it, an indicative owner who must answer, possible lawful changes, evidence to collect and conditional challenge routes (codes A I R H J P V). Owners require current state/sector validation; no evidence is asserted to have already been collected.",
+  "type": "array",
+  "minItems": 100,
+  "maxItems": 100,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "slug",
+      "title",
+      "domainId",
+      "raise",
+      "answer",
+      "possibleChange",
+      "evidence",
+      "challengeRoutes"
+    ],
+    "properties": {
+      "id": { "type": "string", "pattern": "^\\d{3}$" },
+      "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+      "title": { "type": "string", "minLength": 1 },
+      "domainId": { "type": "string", "pattern": "^d\\d{2}$" },
+      "raise": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "type": "string", "minLength": 1 }
+      },
+      "answer": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "type": "string", "minLength": 1 }
+      },
+      "possibleChange": { "type": "string", "minLength": 1 },
+      "evidence": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "type": "string", "minLength": 1 }
+      },
+      "challengeRoutes": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 7,
+        "uniqueItems": true,
+        "items": { "type": "string", "enum": ["A", "I", "R", "H", "J", "P", "V"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+name: Translation
+description: Translate one issue brief, one section or the UI strings; check meaning with users
+title: "[Translation] "
+labels: ["translation", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the "Language and communication" contribution type from section 6 of the pack: translate one issue brief into Marathi, Hindi or another relevant language; check meaning with users.
+        UI strings live in `i18n/<code>.json`. See `docs/how-to-add-a-language.md`.
+  - type: input
+    id: language
+    attributes:
+      label: Language
+      description: Language name and its code, for example "Marathi (mr)".
+      placeholder: "Marathi (mr)"
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - UI strings (i18n/<code>.json)
+        - One issue brief (name the issue id below)
+        - One pack section (name it below)
+        - Other (describe below)
+    validations:
+      required: true
+  - type: input
+    id: scope-detail
+    attributes:
+      label: Issue id, section or other scope
+      placeholder: "077"
+    validations:
+      required: false
+  - type: textarea
+    id: method
+    attributes:
+      label: Method
+      description: How the translation was produced and reviewed. Say if machine translation was used and who corrected it.
+    validations:
+      required: true
+  - type: dropdown
+    id: meaning-check
+    attributes:
+      label: Meaning check with users
+      options:
+        - Done with speakers of the language
+        - Planned (say when and how below)
+        - Not yet
+    validations:
+      required: true
+  - type: textarea
+    id: meaning-check-detail
+    attributes:
+      label: Meaning check details
+      description: What was checked, with how many people, and what changed as a result. No names.
+    validations:
+      required: false
+  - type: textarea
+    id: terms
+    attributes:
+      label: Terms that need a decision
+      description: Pack terms with no clean equivalent (issue family, challenge route, lead office, reasoned response, verified transfer, preserved dissent) and what you chose.
+    validations:
+      required: false
+  - type: input
+    id: effort-availability
+    attributes:
+      label: Effort and availability
+      description: How much time you are offering and when, chosen by you. A bounded task, not a promise of indefinite support.
+      placeholder: "About two hours this month"
+    validations:
+      required: false
+  - type: textarea
+    id: privacy-needs
+    attributes:
+      label: Privacy needs
+      description: Anything we must not publish or must handle with care, in general terms. Do not put the sensitive detail itself here; use the Private channel request form instead.
+    validations:
+      required: false
+  - type: input
+    id: reviewer
+    attributes:
+      label: Reviewer
+      description: Who should check this, as a role or an organisation, not a person's contact details. Leave blank if you do not know.
+    validations:
+      required: false
+  - type: input
+    id: expected-output
+    attributes:
+      label: Expected output
+      description: What exists when this is done, such as a corrected card, a new owner map or a reviewed translation.
+    validations:
+      required: false
+  - type: dropdown
+    id: credit
+    attributes:
+      label: Credit and consent preference
+      options:
+        - No name (default)
+        - Credit my organisation by name
+        - Credit me by name
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: This contains no real complainant data or personal contact details.
+          required: true

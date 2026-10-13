@@ -1,0 +1,70 @@
+# Deploys the generated site to GitHub Pages.
+#
+# Repository settings this workflow depends on:
+#   1. The repository's default branch must be `main`. This workflow runs on pushes to main.
+#   2. Settings > Pages > Build and deployment > Source must be set to "GitHub Actions"
+#      (not "Deploy from a branch"). Without that, deploy-pages fails with a permissions error.
+#
+# The site uses relative links only, so it works at the project path
+# https://<owner>.github.io/public-democratic-action/ without a base-path setting.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build the site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate data, schemas and pack sections
+        run: npm run validate
+
+      - name: Run test suites
+        # Calls node directly rather than `npm test`: Node 22 rejects the bare directory pattern in
+        # package.json's test script, and this step must not depend on that script being fixed.
+        run: node --test 'tests/*.test.mjs'
+
+      - name: Build the site
+        run: npm run build
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

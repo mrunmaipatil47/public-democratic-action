@@ -1,0 +1,779 @@
+/*
+  Public Voice Between Elections — site stylesheet.
+
+  Rules (docs/architecture.md, Module 3): system font stack, 18px base on desktop,
+  ~70ch line length, colour tokens on :root with a dark-mode media query, contrast
+  >= 4.5:1, visible :focus-visible, route badges that never rely on colour alone,
+  print rules, prefers-reduced-motion, and no external requests of any kind
+  (no @import, no url(), no fonts).
+
+  Contrast pairs, WCAG 2.x relative luminance, computed numerically before release
+  (text pairs need >= 4.5:1, the focus ring is non-text and needs >= 3:1):
+
+    light  fg      #1b1b1b on bg       #ffffff  17.22:1
+    light  muted   #4a4a4a on bg       #ffffff   8.86:1
+    light  link    #0b4f9c on bg       #ffffff   8.04:1
+    light  visited #5b2a86 on bg       #ffffff   9.90:1
+    light  fg      #1b1b1b on surface  #f3f3f0  15.49:1
+    light  link    #0b4f9c on surface  #f3f3f0   7.23:1
+    light  muted   #4a4a4a on surface  #f3f3f0   7.97:1
+    light  fg      #1b1b1b on note     #fff3cd  15.55:1
+    light  link    #0b4f9c on note     #fff3cd   7.25:1
+    light  focus   #b45309 on bg       #ffffff   5.02:1  (non-text)
+    light  focus   #b45309 on surface  #f3f3f0   4.52:1  (non-text)
+    light  button  #ffffff on link     #0b4f9c   8.04:1
+    light  badge fg #1b1b1b on A #dbeafe 14.12 · I #dcfce7 15.68 · R #fef3c7 15.47
+                               · H #fce7f3 14.65 · J #ede9fe 14.51 · P #ffedd5 15.03 · V #e5e7eb 13.91
+    dark   fg      #e6e6e6 on bg       #14171a  14.42:1
+    dark   muted   #b5b5b5 on bg       #14171a   8.77:1
+    dark   link    #8fbcf5 on bg       #14171a   9.15:1
+    dark   visited #cdb4f0 on bg       #14171a   9.75:1
+    dark   fg      #e6e6e6 on surface  #1f242a  12.52:1
+    dark   link    #8fbcf5 on surface  #1f242a   7.95:1
+    dark   muted   #b5b5b5 on surface  #1f242a   7.62:1
+    dark   fg      #e6e6e6 on note     #332b12  11.25:1
+    dark   link    #8fbcf5 on note     #332b12   7.14:1
+    dark   focus   #f5a524 on bg       #14171a   8.82:1  (non-text)
+    dark   button  #14171a on link     #8fbcf5   9.15:1
+    dark   badge fg #e6e6e6 on A #1e3a5f 9.22 · I #14532d 7.30 · R #713f12 6.95
+                               · H #831843 7.73 · J #4c1d95 8.78 · P #7c2d12 7.51 · V #374151 8.26
+*/
+
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1b1b1b;
+  --muted: #4a4a4a;
+  --link: #0b4f9c;
+  --visited: #5b2a86;
+  --surface: #f3f3f0;
+  --border: #c9c9c9;
+  --note-bg: #fff3cd;
+  --note-border: #b45309;
+  --focus: #b45309;
+  --badge-fg: #1b1b1b;
+  --badge-default: #e5e7eb;
+  --badge-A: #dbeafe;
+  --badge-I: #dcfce7;
+  --badge-R: #fef3c7;
+  --badge-H: #fce7f3;
+  --badge-J: #ede9fe;
+  --badge-P: #ffedd5;
+  --badge-V: #e5e7eb;
+  --measure: 70ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171a;
+    --fg: #e6e6e6;
+    --muted: #b5b5b5;
+    --link: #8fbcf5;
+    --visited: #cdb4f0;
+    --surface: #1f242a;
+    --border: #4b5563;
+    --note-bg: #332b12;
+    --note-border: #f5a524;
+    --focus: #f5a524;
+    --badge-fg: #e6e6e6;
+    --badge-default: #374151;
+    --badge-A: #1e3a5f;
+    --badge-I: #14532d;
+    --badge-R: #713f12;
+    --badge-H: #831843;
+    --badge-J: #4c1d95;
+    --badge-P: #7c2d12;
+    --badge-V: #374151;
+  }
+}
+
+/* ---- Base ---- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 100%;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (min-width: 48em) {
+  html {
+    font-size: 112.5%; /* 18px on desktop */
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-wrap: break-word;
+}
+
+.site-header,
+.disclaimer,
+.translation-notice,
+main,
+.site-footer {
+  width: 100%;
+  max-width: calc(var(--measure) + 2rem);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+main {
+  flex: 1 0 auto;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+}
+
+main:focus {
+  outline: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+  margin: 1.5em 0 0.5em;
+}
+
+h1 {
+  font-size: 1.9rem;
+  margin-top: 0.75em;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+}
+
+h4 {
+  font-size: 1.05rem;
+}
+
+p,
+ul,
+ol,
+dl {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--link);
+  text-underline-offset: 0.15em;
+}
+
+a:visited {
+  color: var(--visited);
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+code,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.95em;
+}
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+}
+
+blockquote {
+  margin: 1rem 0;
+}
+
+time {
+  font-variant-numeric: tabular-nums;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Skip link, header, navigation ---- */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  color: var(--fg);
+  border: 2px solid var(--focus);
+}
+
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+.site-header {
+  padding-top: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.site-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem;
+}
+
+.site-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-name a:hover,
+.site-name a:focus-visible {
+  text-decoration: underline;
+}
+
+.main-nav ul,
+.lang-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+
+.main-nav a[aria-current="page"],
+.lang-nav a[aria-current="page"] {
+  font-weight: 700;
+  text-decoration-thickness: 3px;
+}
+
+.lang-nav {
+  font-size: 0.95rem;
+}
+
+/* ---- Notes, disclaimer, caveats ---- */
+
+.disclaimer,
+.translation-notice {
+  background: var(--note-bg);
+  border-left: 4px solid var(--note-border);
+  padding: 0.6rem 1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.caveat,
+.hint {
+  color: var(--muted);
+}
+
+.caveat {
+  border-left: 3px solid var(--border);
+  padding-left: 0.75rem;
+}
+
+.hint {
+  font-size: 0.95rem;
+}
+
+/* "(not stated in the pack)" beside a process-target cell the pack leaves unspecified. */
+.not-stated {
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.lead {
+  font-size: 1.2rem;
+}
+
+.tagline,
+.meta,
+.count {
+  color: var(--muted);
+}
+
+.count {
+  font-weight: 600;
+}
+
+/* ---- Cards and definition lists ---- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+
+.card > h2:first-child,
+.card > h3:first-child,
+.card > h4:first-child {
+  margin-top: 0.25em;
+}
+
+.fields {
+  margin: 0.5rem 0 1rem;
+}
+
+.fields .field {
+  margin: 0.5rem 0;
+}
+
+.fields dt {
+  font-weight: 700;
+}
+
+.fields dd {
+  margin: 0;
+}
+
+.fields dd ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+@media (min-width: 40em) {
+  .fields .field {
+    display: grid;
+    grid-template-columns: minmax(10ch, 15rem) 1fr;
+    gap: 0.25rem 1rem;
+  }
+}
+
+.route-links {
+  list-style: none;
+  padding: 0;
+}
+
+.route-links li {
+  margin: 0.2rem 0;
+}
+
+.status,
+.selection-basis,
+.network-lead {
+  color: var(--muted);
+}
+
+.org .links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ---- Route badges: the letter is always shown; colour is only a secondary cue ---- */
+
+.badge {
+  display: inline-block;
+  min-width: 1.8em;
+  padding: 0 0.35em;
+  border: 1px solid currentColor;
+  border-radius: 0.3em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  text-align: center;
+  text-decoration: none;
+  color: var(--badge-fg);
+  background: var(--badge-default);
+  vertical-align: middle;
+}
+
+.badge:visited {
+  color: var(--badge-fg);
+}
+
+a.badge:hover,
+a.badge:focus-visible {
+  text-decoration: underline;
+}
+
+.badge-A { background: var(--badge-A); }
+.badge-I { background: var(--badge-I); }
+.badge-R { background: var(--badge-R); }
+.badge-H { background: var(--badge-H); }
+.badge-J { background: var(--badge-J); }
+.badge-P { background: var(--badge-P); }
+.badge-V { background: var(--badge-V); }
+
+.route-key h2 {
+  font-size: 1rem;
+  margin: 1rem 0 0.25rem;
+}
+
+.route-key-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  font-size: 0.95rem;
+}
+
+/* ---- Issue list ---- */
+
+.issue-list {
+  list-style: none;
+  padding: 0;
+}
+
+.issue-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.issue-id {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  min-width: 3ch;
+}
+
+.issue-title {
+  flex: 1 1 18ch;
+}
+
+.routes {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
+.domain-group h2 {
+  margin-top: 2rem;
+}
+
+.domain-link {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.id-list a {
+  font-variant-numeric: tabular-nums;
+}
+
+.id-list .label {
+  font-weight: 600;
+}
+
+/* ---- Filter form ---- */
+
+.filter fieldset {
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  padding: 0.75rem 1rem 1rem;
+  margin: 1rem 0;
+}
+
+.filter legend {
+  font-weight: 700;
+  padding: 0 0.3rem;
+}
+
+.control {
+  margin: 0.6rem 0;
+}
+
+.control label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.control .hint {
+  margin: 0.25rem 0 0;
+}
+
+select,
+input[type="search"] {
+  font: inherit;
+  width: 100%;
+  max-width: 32rem;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid var(--muted);
+  border-radius: 0.25rem;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+button {
+  font: inherit;
+  padding: 0.45rem 1rem;
+  border: 2px solid var(--link);
+  border-radius: 0.25rem;
+  background: var(--link);
+  color: var(--bg);
+  cursor: pointer;
+}
+
+button[type="reset"],
+button.secondary {
+  background: transparent;
+  color: var(--link);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+}
+
+.actions .status-message {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ---- Tables ---- */
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.95rem;
+}
+
+caption {
+  text-align: left;
+  font-weight: 700;
+  padding: 0 0 0.5rem;
+}
+
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+thead th {
+  background: var(--surface);
+}
+
+tbody th {
+  font-weight: 600;
+}
+
+/* ---- Pager, calls to action, misc ---- */
+
+.pager ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 2rem 0 0;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.cta {
+  padding-left: 1.2rem;
+}
+
+.cta li {
+  margin: 0.3rem 0;
+}
+
+.questions li {
+  margin: 0.25rem 0;
+}
+
+.invitation {
+  border-left: 4px solid var(--link);
+  background: var(--surface);
+  padding: 0.5rem 1rem;
+}
+
+.invitation p:last-child {
+  margin-bottom: 0;
+}
+
+.sources .url,
+.url {
+  font-size: 0.9em;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.toc ol {
+  padding-left: 1.5rem;
+}
+
+.pack-section {
+  margin-top: 2rem;
+}
+
+/* External links: an arrow drawn by CSS (alt text empty so it is not read aloud). */
+
+a.external::after {
+  content: " \2197";
+  content: " \2197" / "";
+  font-size: 0.8em;
+}
+
+/* ---- Footer ---- */
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.site-footer p {
+  margin-bottom: 0.5em;
+}
+
+/* ---- Motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Print (assets/print.css adds pack-specific page rules) ---- */
+
+@media print {
+  :root {
+    --bg: #ffffff;
+    --fg: #000000;
+    --muted: #333333;
+    --link: #000000;
+    --visited: #000000;
+    --surface: #ffffff;
+    --border: #999999;
+    --note-bg: #ffffff;
+    --note-border: #000000;
+  }
+
+  html {
+    font-size: 11pt;
+  }
+
+  body {
+    display: block;
+  }
+
+  .skip-link,
+  .main-nav,
+  .lang-nav,
+  .filter,
+  .pager,
+  .no-print,
+  button,
+  script {
+    display: none !important;
+  }
+
+  .site-header,
+  .disclaimer,
+  .translation-notice,
+  main,
+  .site-footer {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  a.external::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+
+  .badge,
+  .badge-A,
+  .badge-I,
+  .badge-R,
+  .badge-H,
+  .badge-J,
+  .badge-P,
+  .badge-V {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: #000000;
+  }
+
+  .card,
+  .issue-row,
+  .field,
+  tr {
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+}

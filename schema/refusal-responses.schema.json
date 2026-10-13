@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mrunmaipatil47/public-democratic-action/schema/refusal-responses.schema.json",
+  "title": "Responses when power refuses to listen",
+  "description": "Section 5: the pack's suggested response to each refusal situation (silence, wrong office, boilerplate closure, denied entitlement, systemic failure, retaliation or credible harm, alleged corruption). No automatic fine, removal, court order or mandatory hearing is invented by the proposal.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items", "caveat"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "situation", "response"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "situation": { "type": "string", "minLength": 1 },
+          "response": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "caveat": { "type": "string", "minLength": 1 }
+  }
+}

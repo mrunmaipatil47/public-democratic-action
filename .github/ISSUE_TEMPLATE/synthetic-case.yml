@@ -1,0 +1,128 @@
+name: Synthetic case scenario
+description: Propose a synthetic scenario for the case-workflow prototype
+title: "[Scenario] "
+labels: ["design-and-software", "synthetic", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the "Design and software" contribution type from section 6 of the pack: test a synthetic intake/appeal workflow for routing, privacy, failure recovery and harmful automation.
+        Section 9: test the process with synthetic records before handling sensitive complaints. The engine refuses anything not marked synthetic. So do we.
+  - type: input
+    id: scenario-id
+    attributes:
+      label: Proposed scenario id
+      description: Lower-case words joined by hyphens.
+      placeholder: "pension-silence"
+    validations:
+      required: true
+  - type: dropdown
+    id: participation-route
+    attributes:
+      label: Participation route
+      options:
+        - Individual remedy
+        - Systemic review
+        - Policy or law
+    validations:
+      required: true
+  - type: input
+    id: issue-id
+    attributes:
+      label: Issue id
+      description: 001 to 100.
+      placeholder: "026"
+    validations:
+      required: true
+  - type: dropdown
+    id: channel
+    attributes:
+      label: Intake channel
+      options:
+        - Assisted
+        - Offline
+        - Telephone
+        - Postal
+        - Digital
+    validations:
+      required: true
+  - type: textarea
+    id: storyline
+    attributes:
+      label: Storyline
+      description: What happens, step by step, with approximate days from receipt. Invented ward, invented office, invented records. Start the summary with "SYNTHETIC CASE".
+    validations:
+      required: true
+  - type: checkboxes
+    id: refusals
+    attributes:
+      label: Refusal responses this scenario exercises
+      description: From section 5 of the pack.
+      options:
+        - label: Silence
+        - label: Wrong office
+        - label: Boilerplate closure
+        - label: Denied entitlement
+        - label: Systemic failure
+        - label: Retaliation or credible harm
+        - label: Alleged corruption
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected end state and what should be on record
+      description: For example, "closed as refused-with-reasons with one preserved challenge" or "protected, absent from public summaries".
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: What the engine should refuse to do
+      description: Any step the engine must reject, such as closing after a boilerplate response or an unverified transfer.
+    validations:
+      required: false
+  - type: input
+    id: effort-availability
+    attributes:
+      label: Effort and availability
+      description: How much time you are offering and when, chosen by you. A bounded task, not a promise of indefinite support.
+      placeholder: "About two hours this month"
+    validations:
+      required: false
+  - type: textarea
+    id: privacy-needs
+    attributes:
+      label: Privacy needs
+      description: Anything we must not publish or must handle with care, in general terms. Do not put the sensitive detail itself here; use the Private channel request form instead.
+    validations:
+      required: false
+  - type: input
+    id: reviewer
+    attributes:
+      label: Reviewer
+      description: Who should check this, as a role or an organisation, not a person's contact details. Leave blank if you do not know.
+    validations:
+      required: false
+  - type: dropdown
+    id: credit
+    attributes:
+      label: Credit and consent preference
+      options:
+        - No name (default)
+        - Credit my organisation by name
+        - Credit me by name
+    validations:
+      required: true
+  - type: checkboxes
+    id: synthetic
+    attributes:
+      label: Synthetic declaration
+      options:
+        - label: This scenario is synthetic. It describes no real person, place, record or complaint, and contains no personal data.
+          required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: This contains no real complainant data or personal contact details.
+          required: true

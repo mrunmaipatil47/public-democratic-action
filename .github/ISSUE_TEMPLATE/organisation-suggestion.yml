@@ -1,0 +1,114 @@
+name: Organisation suggestion
+description: Suggest an existing organisation to approach, with documented relevance and public routes only
+title: "[Organisation] "
+labels: ["organisations", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Section 7 of the pack lists organisations on one basis: publicly documented relevant work and a plausible contribution to this agenda. Willingness, capacity and affiliation remain unconfirmed for every entry.
+        Use institutional public routes only. No personal activist contact database is included, and none will be accepted.
+  - type: input
+    id: name
+    attributes:
+      label: Organisation name
+    validations:
+      required: true
+  - type: textarea
+    id: relevance
+    attributes:
+      label: Documented relevance
+      description: What the organisation publicly does that is relevant, in one or two sentences, based on its official pages.
+    validations:
+      required: true
+  - type: input
+    id: agenda-links
+    attributes:
+      label: Agenda links
+      description: Issue ids this organisation's work touches, as ids or ranges.
+      placeholder: "065, 070, 088"
+    validations:
+      required: true
+  - type: input
+    id: evidence-url
+    attributes:
+      label: Official evidence URL
+      description: An https page on the organisation's own site that shows the relevant work.
+      placeholder: "https://"
+    validations:
+      required: true
+  - type: input
+    id: route-url
+    attributes:
+      label: Public institutional route URL
+      description: The organisation's own public contact or volunteer page. Not a person.
+      placeholder: "https://"
+    validations:
+      required: true
+  - type: textarea
+    id: contribution
+    attributes:
+      label: Suggested bounded remote contribution
+      description: One task, in one sentence. This is our suggested request, not an advertised opening.
+    validations:
+      required: true
+  - type: textarea
+    id: status
+    attributes:
+      label: Status
+      description: What is verified and what is not, in the pack's style. For example, "Public volunteer invitation found; remote arrangements need confirmation."
+    validations:
+      required: true
+  - type: input
+    id: effort-availability
+    attributes:
+      label: Effort and availability
+      description: How much time you are offering and when, chosen by you. A bounded task, not a promise of indefinite support.
+      placeholder: "About two hours this month"
+    validations:
+      required: false
+  - type: textarea
+    id: privacy-needs
+    attributes:
+      label: Privacy needs
+      description: Anything we must not publish or must handle with care, in general terms. Do not put the sensitive detail itself here; use the Private channel request form instead.
+    validations:
+      required: false
+  - type: input
+    id: reviewer
+    attributes:
+      label: Reviewer
+      description: Who should check this, as a role or an organisation, not a person's contact details. Leave blank if you do not know.
+    validations:
+      required: false
+  - type: input
+    id: expected-output
+    attributes:
+      label: Expected output
+      description: What exists when this is done, such as a corrected card, a new owner map or a reviewed translation.
+    validations:
+      required: false
+  - type: dropdown
+    id: credit
+    attributes:
+      label: Credit and consent preference
+      options:
+        - No name (default)
+        - Credit my organisation by name
+        - Credit me by name
+    validations:
+      required: true
+  - type: checkboxes
+    id: no-personal-contacts
+    attributes:
+      label: Contact details
+      options:
+        - label: No personal contact details are included. Both URLs are institutional public routes.
+          required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: This contains no real complainant data or personal contact details.
+          required: true

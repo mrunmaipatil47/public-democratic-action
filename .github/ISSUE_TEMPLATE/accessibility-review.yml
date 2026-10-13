@@ -1,0 +1,121 @@
+name: Accessibility review
+description: Review an intake journey, page or document for access barriers
+title: "[Accessibility] "
+labels: ["accessibility", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the "Accessibility" contribution type from section 6 of the pack: review an intake journey or document with disabled participants and compensate specialist review where possible.
+        The site must stay usable at 320px width, in print, with a screen reader and without JavaScript.
+  - type: dropdown
+    id: reviewed
+    attributes:
+      label: What was reviewed
+      options:
+        - A site page (name it below)
+        - The synthetic intake or appeal workflow
+        - A document or issue brief
+        - An issue form or the contribution process
+        - Other (describe below)
+    validations:
+      required: true
+  - type: input
+    id: reviewed-detail
+    attributes:
+      label: Page, document or scenario
+      placeholder: "issues/077.html"
+    validations:
+      required: false
+  - type: textarea
+    id: setup
+    attributes:
+      label: Assistive technology and settings
+      description: Screen reader, magnification, keyboard only, high contrast, reduced motion, mobile width, print, no JavaScript, and so on.
+    validations:
+      required: true
+  - type: textarea
+    id: barriers
+    attributes:
+      label: What failed
+      description: Each barrier, where it is, and what happened. Reference a WCAG criterion if you know it.
+    validations:
+      required: true
+  - type: textarea
+    id: worked
+    attributes:
+      label: What worked
+    validations:
+      required: false
+  - type: textarea
+    id: fix
+    attributes:
+      label: Suggested fix
+    validations:
+      required: false
+  - type: dropdown
+    id: participants
+    attributes:
+      label: Did disabled participants take part in this review?
+      options:
+        - Yes
+        - No
+        - Partly (explain below)
+    validations:
+      required: true
+  - type: dropdown
+    id: compensation
+    attributes:
+      label: Was specialist review compensated?
+      options:
+        - Yes
+        - No
+        - Not applicable
+    validations:
+      required: true
+  - type: input
+    id: effort-availability
+    attributes:
+      label: Effort and availability
+      description: How much time you are offering and when, chosen by you. A bounded task, not a promise of indefinite support.
+      placeholder: "About two hours this month"
+    validations:
+      required: false
+  - type: textarea
+    id: privacy-needs
+    attributes:
+      label: Privacy needs
+      description: Anything we must not publish or must handle with care, in general terms. Do not put the sensitive detail itself here; use the Private channel request form instead.
+    validations:
+      required: false
+  - type: input
+    id: reviewer
+    attributes:
+      label: Reviewer
+      description: Who should check this, as a role or an organisation, not a person's contact details. Leave blank if you do not know.
+    validations:
+      required: false
+  - type: input
+    id: expected-output
+    attributes:
+      label: Expected output
+      description: What exists when this is done, such as a corrected card, a new owner map or a reviewed translation.
+    validations:
+      required: false
+  - type: dropdown
+    id: credit
+    attributes:
+      label: Credit and consent preference
+      options:
+        - No name (default)
+        - Credit my organisation by name
+        - Credit me by name
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: This contains no real complainant data or personal contact details.
+          required: true

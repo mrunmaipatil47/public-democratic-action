@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the README first
+    url: https://github.com/mrunmaipatil47/public-democratic-action#readme
+    about: What this repository is, how to run it, and the eight bounded contribution types.
+  - name: Report a security or privacy problem privately
+    url: https://github.com/mrunmaipatil47/public-democratic-action/blob/HEAD/SECURITY.md
+    about: How to reach a maintainer without putting details in a public issue.
